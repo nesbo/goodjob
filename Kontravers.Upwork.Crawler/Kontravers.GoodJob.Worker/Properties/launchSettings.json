@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "Kontravers.Upwork.Crawler.Worker": {
+    "Kontravers.GoodJob.Worker": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {

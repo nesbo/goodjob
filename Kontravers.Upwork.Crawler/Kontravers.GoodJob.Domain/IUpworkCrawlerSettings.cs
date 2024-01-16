@@ -1,4 +1,4 @@
-namespace Kontravers.GoodJob.Domain.Upwork;
+namespace Kontravers.GoodJob.Domain;
 
 public interface IUpworkCrawlerSettings
 {

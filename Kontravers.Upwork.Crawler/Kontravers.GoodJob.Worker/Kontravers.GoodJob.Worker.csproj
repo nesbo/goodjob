@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Kontravers.GoodJob.Data\Kontravers.GoodJob.Data.csproj" />
       <ProjectReference Include="..\Kontravers.GoodJob.Domain\Kontravers.GoodJob.Domain.csproj" />
     </ItemGroup>
 </Project>

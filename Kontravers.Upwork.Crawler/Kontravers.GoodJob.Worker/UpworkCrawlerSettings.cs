@@ -1,4 +1,4 @@
-using Kontravers.GoodJob.Domain.Upwork;
+using Kontravers.GoodJob.Domain;
 
 namespace Kontravers.GoodJob.Worker;
 

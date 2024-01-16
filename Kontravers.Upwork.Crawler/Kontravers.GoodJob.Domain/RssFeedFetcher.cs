@@ -1,4 +1,4 @@
-using Kontravers.GoodJob.Domain.Upwork;
+using Kontravers.GoodJob.Domain.Work;
 using Microsoft.Extensions.Logging;
 
 namespace Kontravers.GoodJob.Domain;
