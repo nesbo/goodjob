@@ -4,7 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-Kontravers.Upwork.Crawler.Worker-ABCC9808-E614-4613-90DC-945A84FCAEDB</UserSecretsId>
+        <UserSecretsId>dotnet-Kontravers.GoodJob.Worker-ABCC9808-E614-4613-90DC-945A84FCAEDB</UserSecretsId>
+        <RootNamespace>Kontravers.GoodJob.Worker</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,6 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Kontravers.Upwork.Crawler.Domain\Kontravers.Upwork.Crawler.Domain.csproj" />
+      <ProjectReference Include="..\Kontravers.GoodJob.Domain\Kontravers.GoodJob.Domain.csproj" />
     </ItemGroup>
 </Project>

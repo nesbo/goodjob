@@ -1,4 +1,4 @@
-namespace Kontravers.Upwork.Crawler.Domain;
+namespace Kontravers.GoodJob.Domain;
 
 public interface IRssFeedFetcher
 {

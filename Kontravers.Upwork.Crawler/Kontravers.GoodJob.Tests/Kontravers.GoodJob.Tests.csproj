@@ -7,6 +7,7 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <RootNamespace>Kontravers.GoodJob.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Kontravers.Upwork.Crawler.Domain\Kontravers.Upwork.Crawler.Domain.csproj" />
+      <ProjectReference Include="..\Kontravers.GoodJob.Domain\Kontravers.GoodJob.Domain.csproj" />
     </ItemGroup>
 
 </Project>

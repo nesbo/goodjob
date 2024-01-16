@@ -1,7 +1,7 @@
-using Kontravers.Upwork.Crawler.Domain;
-using Kontravers.Upwork.Crawler.Domain.Upwork;
+using Kontravers.GoodJob.Domain;
+using Kontravers.GoodJob.Domain.Upwork;
 
-namespace Kontravers.Upwork.Crawler.Worker;
+namespace Kontravers.GoodJob.Worker;
 
 public class RssFeedRunner : BackgroundService
 {

@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontravers.Upwork.Crawler.Domain", "Kontravers.Upwork.Crawler.Domain\Kontravers.Upwork.Crawler.Domain.csproj", "{2131174D-39DF-486E-B3A9-A760BF8AF490}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontravers.GoodJob.Domain", "Kontravers.GoodJob.Domain\Kontravers.GoodJob.Domain.csproj", "{2131174D-39DF-486E-B3A9-A760BF8AF490}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontravers.Upwork.Crawler.Tests", "Kontravers.Upwork.Crawler.Tests\Kontravers.Upwork.Crawler.Tests.csproj", "{5A9C04AC-ABA4-40A5-BF78-61C171C36C34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontravers.GoodJob.Tests", "Kontravers.GoodJob.Tests\Kontravers.GoodJob.Tests.csproj", "{5A9C04AC-ABA4-40A5-BF78-61C171C36C34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontravers.Upwork.Crawler.Worker", "Kontravers.Upwork.Crawler.Worker\Kontravers.Upwork.Crawler.Worker.csproj", "{8A8A7DFD-02FF-4B15-9A97-754CCCF978B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontravers.GoodJob.Worker", "Kontravers.GoodJob.Worker\Kontravers.GoodJob.Worker.csproj", "{8A8A7DFD-02FF-4B15-9A97-754CCCF978B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{A6003BB5-CFE7-4206-B1A2-AE9E2F67638F}"
 EndProject

@@ -1,7 +1,7 @@
-using Kontravers.Upwork.Crawler.Domain.Upwork;
+using Kontravers.GoodJob.Domain.Upwork;
 using Microsoft.Extensions.Logging;
 
-namespace Kontravers.Upwork.Crawler.Domain;
+namespace Kontravers.GoodJob.Domain;
 
 public class RssFeedFetcher : IRssFeedFetcher
 {

@@ -1,6 +1,6 @@
-using Kontravers.Upwork.Crawler.Domain;
-using Kontravers.Upwork.Crawler.Domain.Upwork;
-using Kontravers.Upwork.Crawler.Worker;
+using Kontravers.GoodJob.Domain;
+using Kontravers.GoodJob.Domain.Upwork;
+using Kontravers.GoodJob.Worker;
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
