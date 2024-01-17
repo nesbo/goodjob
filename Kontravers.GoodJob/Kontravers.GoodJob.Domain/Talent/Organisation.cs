@@ -4,13 +4,12 @@ public class Organisation : IAggregate
 {
     protected Organisation() { }
     
-    public Organisation(int id, string name, string? description, IEnumerable<string> personIds,
+    public Organisation(int id, string name, string? description,
         DateTime createdUtc, DateTime insertedUtc)
     {
         Id = id;
         Name = name;
         Description = description;
-        PersonIds = personIds;
         CreatedUtc = createdUtc;
         InsertedUtc = insertedUtc;
     }
@@ -18,10 +17,6 @@ public class Organisation : IAggregate
     public int Id { get; protected set; }
     public DateTime CreatedUtc { get; }
     public DateTime InsertedUtc { get; }
-
     public string Name { get; }
-    
     public string? Description { get; }
-    
-    public IEnumerable<string> PersonIds { get; }
 }

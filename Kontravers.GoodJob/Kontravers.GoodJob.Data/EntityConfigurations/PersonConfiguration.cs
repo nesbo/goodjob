@@ -17,8 +17,6 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
             .HasMaxLength(128);
         builder.Property(p => p.Email)
             .HasMaxLength(128);
-        builder.Property(p => p.OrganisationId)
-            .HasMaxLength(16);
 
         builder.HasMany(p => p.UpworkRssFeeds)
             .WithOne()

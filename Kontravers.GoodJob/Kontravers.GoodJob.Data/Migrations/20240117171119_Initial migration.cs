@@ -44,6 +44,23 @@ namespace Kontravers.GoodJob.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Organisation",
+                schema: "Talent",
+                columns: table => new
+                {
+                    OrganisationId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InsertedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    Description = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organisation", x => x.OrganisationId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Person",
                 schema: "Talent",
                 columns: table => new
@@ -55,7 +72,7 @@ namespace Kontravers.GoodJob.Data.Migrations
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     IsEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    OrganisationId = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: false)
+                    OrganisationId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,6 +134,10 @@ namespace Kontravers.GoodJob.Data.Migrations
             migrationBuilder.DropTable(
                 name: "Job",
                 schema: "Work");
+
+            migrationBuilder.DropTable(
+                name: "Organisation",
+                schema: "Talent");
 
             migrationBuilder.DropTable(
                 name: "PersonUpworkRssFeed",

@@ -9,7 +9,7 @@ public class Person : IAggregate
     public string Name { get; }
     public string Email { get; }
     public bool IsEnabled { get; }
-    public string OrganisationId { get; }
+    public int OrganisationId { get; }
     
     public IReadOnlyCollection<PersonUpworkRssFeed> UpworkRssFeeds  {
         get => _upworkRssFeeds;
@@ -18,7 +18,7 @@ public class Person : IAggregate
 
     protected Person() { }
     
-    public Person(bool isEnabled, string email, string name, int id, string organisationId,
+    public Person(bool isEnabled, string email, string name, int id, int organisationId,
         DateTime createdUtc, DateTime insertedUtc)
     {
         IsEnabled = isEnabled;

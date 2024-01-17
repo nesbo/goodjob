@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kontravers.GoodJob.Data.Migrations
 {
     [DbContext(typeof(GoodJobDbContext))]
-    [Migration("20240117165911_Initial migration")]
+    [Migration("20240117171119_Initial migration")]
     partial class Initialmigration
     {
         /// <inheritdoc />
@@ -24,6 +24,35 @@ namespace Kontravers.GoodJob.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Kontravers.GoodJob.Domain.Talent.Organisation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("OrganisationId");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
+
+                    b.Property<DateTime>("InsertedUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Organisation", "Talent");
+                });
 
             modelBuilder.Entity("Kontravers.GoodJob.Domain.Talent.Person", b =>
                 {
@@ -53,10 +82,8 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
-                    b.Property<string>("OrganisationId")
-                        .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("character varying(16)");
+                    b.Property<int>("OrganisationId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
