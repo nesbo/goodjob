@@ -1,3 +1,4 @@
+using System.Xml;
 using Kontravers.GoodJob.Domain.Talent;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
 using Microsoft.Extensions.Logging;
@@ -47,13 +48,13 @@ public class UpworkRssFeedFetcher
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Error fetching Upwork RSS feeds");
+            _logger.LogError(e, "Error fetching Upwork RSS feeds for some persons");
         }
         
         _logger.LogInformation("Finished fetching all Upwork RSS feeds");
     }
 
-    private Task FetchPersonUpworkRssFeedsAsync(Person person, CancellationToken cancellationToken)
+    private async Task FetchPersonUpworkRssFeedsAsync(Person person, CancellationToken cancellationToken)
     {
         foreach (var personUpworkRssFeed in person.UpworkRssFeeds)
         {
@@ -68,6 +69,56 @@ public class UpworkRssFeedFetcher
             
             using var restClient = new RestClient(personUpworkRssFeed.RootUrl);
             var request = new RestRequest(personUpworkRssFeed.RelativeUrl);
+
+            RestResponse response;
+            try
+            {
+                response = await restClient.ExecuteAsync(request, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                    personUpworkRssFeed.Id, person.Id);
+                throw;
+            }
+            
+            if (!response.IsSuccessful)
+            {
+                _logger.LogError("Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}. " +
+                                 "Response status code: {StatusCode}, response content: {ResponseContent}",
+                    personUpworkRssFeed.Id, person.Id, response.StatusCode, response.Content);
+                continue;
+            }
+            
+            var responseContent = response.Content!;
+            
+            try
+            {
+                await ParseAndSaveRssFeedAsync(personUpworkRssFeed, responseContent, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error parsing and saving Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                    personUpworkRssFeed.Id, person.Id);
+            }
         }
+    }
+
+    private async Task ParseAndSaveRssFeedAsync(PersonUpworkRssFeed personUpworkRssFeed,
+        string responseContent, CancellationToken cancellationToken)
+    {
+        var xmlDocument = new XmlDocument();
+        xmlDocument.LoadXml(responseContent);
+        
+        var items = xmlDocument.SelectNodes("/rss/channel/item");
+        
+        if (items is null)
+        {
+            _logger.LogWarning("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
+            return;
+        }
+        
+        
     }
 }

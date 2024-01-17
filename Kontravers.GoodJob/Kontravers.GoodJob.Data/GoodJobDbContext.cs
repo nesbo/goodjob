@@ -6,10 +6,7 @@ public class GoodJobDbContext : DbContext
 {
     public GoodJobDbContext() { }
     
-    public GoodJobDbContext(DbContextOptions<GoodJobDbContext> options) : base(options)
-    {
-        
-    }
+    public GoodJobDbContext(DbContextOptions options) : base(options) { }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

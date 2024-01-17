@@ -1,0 +1,55 @@
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    command: "azurite --loose --blobHost 0.0.0.0 --blobPort 10000 --location /workspace --debug /workspace/debug.log"
+    ports:
+      - "10000:10000"
+      - "10012:10002"
+    volumes:
+      - ./azurite:/workspace
+
+  connect_worker:
+    build:
+      context: ./src
+      dockerfile: Dockerfile-CommandsWorker
+#  deploy:
+#      replicas: 4
+    depends_on:
+      - postgres
+      - rabbitmq
+  
+  connect_api:
+    build:
+      context: ./src
+      dockerfile: Dockerfile-WebAPI
+    ports:
+      - "8070:8070"
+    depends_on:
+      - postgres
+      - rabbitmq
+      - azurite
+  
+  postgres:
+    image: postgres:15.3
+    container_name: fleetstep-connect-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      PGDATA: '/var/lib/postgresql/data/pgdata'
+      POSTGRES_PASSWORD: 'Password1!'
+    volumes:
+      - psql:/var/lib/postgresql/data
+
+  rabbitmq:
+    build: ./infrastructure/local/rabbitmq
+    container_name: fleetstep-conect-rabbitmq
+    ports:
+      - "8080:15672"
+      - "5672:5672"
+      
+networks:
+    default:
+        external:
+            name: fleetstep-connect
+volumes:
+  psql:
