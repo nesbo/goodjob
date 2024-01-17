@@ -6,6 +6,7 @@ namespace Kontravers.GoodJob.Tests.Builders;
 public class TestDbContextFactory
 {
     private readonly string _inMemoryDatabaseName;
+    private GoodJobDbContext? _context;
 
     public TestDbContextFactory(string? inMemoryDatabaseName = null)
     {
@@ -16,16 +17,15 @@ public class TestDbContextFactory
         string inMemoryDatabaseName)
     {
         var dbOptionsBuilder = new DbContextOptionsBuilder();
-
         dbOptionsBuilder.UseInMemoryDatabase(inMemoryDatabaseName);
         
-
         var options = dbOptionsBuilder.Options;
-        var connectDbContext = new GoodJobDbContext(options);
-        connectDbContext.Database.EnsureCreated();
+        var goodJobDbContext = new GoodJobDbContext(options);
+        goodJobDbContext.Database.EnsureCreated();
+        _context = goodJobDbContext;
 
-        return connectDbContext;
+        return goodJobDbContext;
     }
 
-    public GoodJobDbContext Context => CreateContext(_inMemoryDatabaseName);
+    public GoodJobDbContext Context => _context ?? CreateContext(_inMemoryDatabaseName);
 }

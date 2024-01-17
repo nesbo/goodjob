@@ -1,6 +1,6 @@
 using Kontravers.GoodJob.Domain;
 
-namespace Kontravers.GoodJob.Worker;
+namespace Kontravers.GoodJob.Infra.Shared;
 
 public class UpworkCrawlerSettings : IUpworkCrawlerSettings
 {

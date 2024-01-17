@@ -1,6 +1,6 @@
 using Kontravers.GoodJob.Domain;
 
-namespace Kontravers.GoodJob.Tests;
+namespace Kontravers.GoodJob.Tests.Fakes;
 
 public class FakeClock : IClock
 {

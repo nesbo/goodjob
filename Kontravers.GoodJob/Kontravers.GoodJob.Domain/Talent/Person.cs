@@ -3,7 +3,7 @@ namespace Kontravers.GoodJob.Domain.Talent;
 public class Person : IAggregate
 {
     private List<PersonUpworkRssFeed> _upworkRssFeeds = new ();
-    public int Id { get; }
+    public int Id { get; protected set; }
     public DateTime CreatedUtc { get; }
     public DateTime InsertedUtc { get; }
     public string Name { get; }
@@ -18,15 +18,22 @@ public class Person : IAggregate
 
     protected Person() { }
     
-    public Person(bool isEnabled, string email, string name, int id, int organisationId,
+    public Person(bool isEnabled, string email, string name, int organisationId,
         DateTime createdUtc, DateTime insertedUtc)
     {
         IsEnabled = isEnabled;
         Email = email;
         Name = name;
-        Id = id;
         OrganisationId = organisationId;
         CreatedUtc = createdUtc;
         InsertedUtc = insertedUtc;
+    }
+
+    public void AddUpworkRssFeed(string rootUrl, string relativeUrl, DateTime lastFetchedAtUtc,
+        byte minFetchIntervalInMinutes, DateTime createdUtc, DateTime insertedUtc)
+    {
+        var upworkRssFeed = new PersonUpworkRssFeed(Id, rootUrl, lastFetchedAtUtc,
+            minFetchIntervalInMinutes, relativeUrl, createdUtc, insertedUtc);
+        _upworkRssFeeds.Add(upworkRssFeed);
     }
 }

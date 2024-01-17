@@ -1,6 +1,6 @@
 using Paramore.Brighter;
 
-namespace Kontravers.GoodJob.Messaging;
+namespace Kontravers.GoodJob.Domain.Messaging;
 
 public interface ICommand : IRequest
 {

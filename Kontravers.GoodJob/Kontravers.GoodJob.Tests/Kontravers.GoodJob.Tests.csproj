@@ -23,4 +23,8 @@
       <ProjectReference Include="..\Kontravers.GoodJob.Domain\Kontravers.GoodJob.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Work\" />
+    </ItemGroup>
+
 </Project>

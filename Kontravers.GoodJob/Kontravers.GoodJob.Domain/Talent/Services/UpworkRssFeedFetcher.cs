@@ -1,6 +1,8 @@
+using System.Xml;
+using Kontravers.GoodJob.Domain.Messaging;
+using Kontravers.GoodJob.Domain.Messaging.Commands;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
 using Microsoft.Extensions.Logging;
-using RestSharp;
 
 namespace Kontravers.GoodJob.Domain.Talent.Services;
 
@@ -9,13 +11,18 @@ public class UpworkRssFeedFetcher
     private readonly IPersonQueryRepository _personQueryRepository;
     private readonly ILogger<UpworkRssFeedFetcher> _logger;
     private readonly IClock _clock;
+    private readonly ICommandPublisher _commandPublisher;
+    private readonly IHttpClient _httpClient;
 
     public UpworkRssFeedFetcher(IPersonQueryRepository personQueryRepository,
-        ILogger<UpworkRssFeedFetcher> logger, IClock clock)
+        ILogger<UpworkRssFeedFetcher> logger, IClock clock,
+        ICommandPublisher commandPublisher, IHttpClient httpClient)
     {
         _personQueryRepository = personQueryRepository;
         _logger = logger;
         _clock = clock;
+        _commandPublisher = commandPublisher;
+        _httpClient = httpClient;
     }
     
     public async Task StartFetchingAllAsync(CancellationToken cancellationToken)
@@ -45,6 +52,7 @@ public class UpworkRssFeedFetcher
         catch (Exception e)
         {
             _logger.LogError(e, "Error fetching Upwork RSS feeds for some persons");
+            throw;
         }
         
         _logger.LogInformation("Finished fetching all Upwork RSS feeds");
@@ -65,13 +73,11 @@ public class UpworkRssFeedFetcher
                     return;
                 }
 
-                using var restClient = new RestClient(personUpworkRssFeed.RootUrl);
-                var request = new RestRequest(personUpworkRssFeed.RelativeUrl);
-
-                RestResponse response;
+                string response;
                 try
                 {
-                    response = await restClient.ExecuteAsync(request, cancellationToken);
+                    response = await _httpClient.GetStringAsync(personUpworkRssFeed.RootUrl,
+                        personUpworkRssFeed.RelativeUrl, cancellationToken);
                 }
                 catch (Exception e)
                 {
@@ -81,19 +87,44 @@ public class UpworkRssFeedFetcher
                     throw;
                 }
 
-                if (!response.IsSuccessful)
+                if (string.IsNullOrEmpty(response))
                 {
                     _logger.LogError("Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}. "
-                                     + "Response status code: {StatusCode}, response content: {ResponseContent}",
-                        personUpworkRssFeed.Id, person.Id, response.StatusCode, response.Content);
+                                     + "Response was empty",
+                        personUpworkRssFeed.Id, person.Id);
                     return;
                 }
-
-                var responseContent = response.Content!;
+                
+                await ParseRssFeedAndPublishJobCommandsAsync(personUpworkRssFeed, response, cancellationToken);
 
             }, cancellationToken))
             .ToList();
 
         return Task.WhenAll(personUpworkRssFeedFetchTasks);
-    } 
+    }
+
+    private async Task ParseRssFeedAndPublishJobCommandsAsync(PersonUpworkRssFeed personUpworkRssFeed,
+        string responseContent, CancellationToken cancellationToken)
+    {
+        var xmlDocument = new XmlDocument();
+        xmlDocument.LoadXml(responseContent);
+        var items = xmlDocument.SelectNodes("/rss/channel/item");
+        
+        if (items == null || items.Count == 0)
+        {
+            _logger.LogTrace("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
+            return;
+        }
+        
+        _logger.LogTrace("Found {ItemCount} items in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+            items.Count, personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
+
+        for (var i = 0; i < items.Count; i++)
+        {
+            var item = items.Item(i);
+            var command = CreateJobCommand.FromUpworkRssFeedItem(item!, _clock.UtcNow);
+            await _commandPublisher.PublishAsync(command, cancellationToken);
+        }
+    }
 }
