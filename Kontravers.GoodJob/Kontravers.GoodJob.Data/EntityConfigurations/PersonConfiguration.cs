@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Kontravers.GoodJob.Data.EntityConfigurations;
 
-public class PersonEntityConfiguration : IEntityTypeConfiguration<Person>
+public class PersonConfiguration : IEntityTypeConfiguration<Person>
 {
     public void Configure(EntityTypeBuilder<Person> builder)
     {
         builder.Property(c => c.Id)
             .HasColumnName("PersonId");
-        builder.ToTable("Person")
+        builder.ToTable("Person", ConfigHelper.TalentSchema)
             .HasKey(p => p.Id);
 
         builder.Property(p => p.Name)
@@ -24,7 +24,8 @@ public class PersonEntityConfiguration : IEntityTypeConfiguration<Person>
             .WithOne()
             .HasForeignKey(r=> r.PersonId);
 
-        builder.SetRequired(p => p.Id);
+        builder.HasIndex(p=> new { p.Email, p.OrganisationId }).IsUnique();
+        
         builder.SetRequired(p=> p.IsEnabled);
         builder.SetRequired(p=> p.Name);
         builder.SetRequired(p=> p.OrganisationId);

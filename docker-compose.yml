@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile-GoodJobWorker
     depends_on:
       - postgres
+    networks:
+      - kontravers-goodjob
   
   postgres:
     image: postgres:15.3
@@ -16,10 +18,12 @@ services:
       POSTGRES_PASSWORD: 'Password1!'
     volumes:
       - psql:/var/lib/postgresql/data
+    networks:
+      - kontravers-goodjob
       
 networks:
-    default:
-        external:
-            name: kontravers-goodjob
+    kontravers-goodjob:
+      external: true
+      
 volumes:
   psql:

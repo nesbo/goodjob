@@ -114,7 +114,7 @@ public class UpworkRssFeedFetcher
         
         if (items is null)
         {
-            _logger.LogWarning("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+            _logger.LogInformation("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
                 personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
             return;
         }

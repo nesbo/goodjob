@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Kontravers.GoodJob.Data.EntityConfigurations;
 
-public class PersonUpworkRssFeedTypeConfiguration : IEntityTypeConfiguration<PersonUpworkRssFeed>
+public class PersonUpworkRssFeedConfiguration : IEntityTypeConfiguration<PersonUpworkRssFeed>
 {
     public void Configure(EntityTypeBuilder<PersonUpworkRssFeed> builder)
     {
-        builder.ToTable("PersonUpworkRssFeed")
+        builder.ToTable("PersonUpworkRssFeed", ConfigHelper.TalentSchema)
             .HasKey(p => p.Id);
         builder.Property(p=> p.Id)
             .HasColumnName("PersonUpworkRssFeedId");
@@ -23,5 +23,7 @@ public class PersonUpworkRssFeedTypeConfiguration : IEntityTypeConfiguration<Per
             .HasMaxLength(128);
         builder.Property(r=> r.RelativeUrl)
             .HasMaxLength(512);
+        
+        builder.HasIndex(r=> new { r.PersonId, r.RootUrl, r.RelativeUrl }).IsUnique();
     }
 }

@@ -6,6 +6,9 @@ namespace Kontravers.GoodJob.Data.EntityConfigurations;
 
 public static class ConfigHelper
 {
+    public const string TalentSchema = "Talent";
+    public const string WorkSchema = "Work";
+    
     public static void SetRequired<TEntityType>(this EntityTypeBuilder<TEntityType> builder,
         params Expression<Func<TEntityType, object>>[] setters) where TEntityType : class, IEntity
     {
