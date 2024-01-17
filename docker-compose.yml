@@ -1,7 +1,7 @@
 services:
   goodjob_worker:
     build:
-      context: ./kontravers.goodjob
+      context: ./Kontravers.GoodJob
       dockerfile: Dockerfile-GoodJobWorker
     depends_on:
       - postgres
