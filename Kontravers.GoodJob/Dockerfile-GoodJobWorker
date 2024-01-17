@@ -1,0 +1,13 @@
+# Build stage
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /source/goodjob_workers
+COPY . .
+RUN dotnet restore ./Kontravers.GoodJob.Worker/Kontravers.GoodJob.Worker.csproj
+RUN dotnet publish ./Kontravers.GoodJob.Worker/Kontravers.GoodJob.Worker.csproj -c release -o /app/goodjob_workers --no-restore
+
+# Run stage
+FROM mcr.microsoft.com/dotnet/runtime:7.0
+WORKDIR /app/goodjob_workers
+COPY --from=build /app/goodjob_workers ./
+
+ENTRYPOINT ["dotnet", "Kontravers.GoodJob.Worker.dll"]
