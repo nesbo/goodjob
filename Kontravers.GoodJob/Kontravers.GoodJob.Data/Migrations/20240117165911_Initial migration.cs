@@ -19,18 +19,28 @@ namespace Kontravers.GoodJob.Data.Migrations
                 name: "Talent");
 
             migrationBuilder.CreateTable(
-                name: "JobStash",
+                name: "Job",
                 schema: "Work",
                 columns: table => new
                 {
-                    JobStashId = table.Column<int>(type: "integer", nullable: false)
+                    JobId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CreatedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InsertedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Status = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Source = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Title = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Url = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    Description = table.Column<string>(type: "character varying(10000)", maxLength: 10000, nullable: false),
+                    PublishedAtUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Budget = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    Skills = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    Uuid = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
                     PersonId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobStash", x => x.JobStashId);
+                    table.PrimaryKey("PK_Job", x => x.JobId);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,6 +50,8 @@ namespace Kontravers.GoodJob.Data.Migrations
                 {
                     PersonId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InsertedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     Email = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     IsEnabled = table.Column<bool>(type: "boolean", nullable: false),
@@ -51,40 +63,14 @@ namespace Kontravers.GoodJob.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Job",
-                schema: "Work",
-                columns: table => new
-                {
-                    JobId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    JobStashId = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<byte>(type: "smallint", nullable: false),
-                    Title = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    Url = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
-                    Description = table.Column<string>(type: "character varying(10000)", maxLength: 10000, nullable: false),
-                    PublishedAtUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Budget = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    Skills = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Job", x => x.JobId);
-                    table.ForeignKey(
-                        name: "FK_Job_JobStash_JobStashId",
-                        column: x => x.JobStashId,
-                        principalSchema: "Work",
-                        principalTable: "JobStash",
-                        principalColumn: "JobStashId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "PersonUpworkRssFeed",
                 schema: "Talent",
                 columns: table => new
                 {
                     PersonUpworkRssFeedId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    InsertedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PersonId = table.Column<int>(type: "integer", nullable: false),
                     RootUrl = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     RelativeUrl = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
@@ -104,16 +90,10 @@ namespace Kontravers.GoodJob.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Job_JobStashId",
+                name: "IX_Job_Uuid_PersonId",
                 schema: "Work",
                 table: "Job",
-                column: "JobStashId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobStash_PersonId",
-                schema: "Work",
-                table: "JobStash",
-                column: "PersonId",
+                columns: new[] { "Uuid", "PersonId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -141,10 +121,6 @@ namespace Kontravers.GoodJob.Data.Migrations
             migrationBuilder.DropTable(
                 name: "PersonUpworkRssFeed",
                 schema: "Talent");
-
-            migrationBuilder.DropTable(
-                name: "JobStash",
-                schema: "Work");
 
             migrationBuilder.DropTable(
                 name: "Person",

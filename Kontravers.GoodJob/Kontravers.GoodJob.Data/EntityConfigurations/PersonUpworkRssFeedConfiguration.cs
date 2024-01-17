@@ -17,7 +17,9 @@ public class PersonUpworkRssFeedConfiguration : IEntityTypeConfiguration<PersonU
             r=>r.RootUrl,
             r=> r.RelativeUrl,
             r=> r.LastFetchedAtUtc,
-            r=> r.MinFetchIntervalInMinutes);
+            r=> r.MinFetchIntervalInMinutes,
+            r=> r.CreatedUtc,
+            r=> r.InsertedUtc);
         
         builder.Property(r=> r.RootUrl)
             .HasMaxLength(128);

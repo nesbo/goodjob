@@ -1,9 +1,8 @@
-using Kontravers.GoodJob.Domain.Work;
 using Microsoft.Extensions.Logging;
 
-namespace Kontravers.GoodJob.Domain;
+namespace Kontravers.GoodJob.Domain.Talent.Services;
 
-public class RssFeedFetcher : IRssFeedFetcher
+public class RssFeedFetcher
 {
     private readonly UpworkRssFeedFetcher _upworkRssFeedFetcher;
     private readonly ILogger<RssFeedFetcher> _logger;

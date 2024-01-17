@@ -26,9 +26,11 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
 
         builder.HasIndex(p=> new { p.Email, p.OrganisationId }).IsUnique();
         
-        builder.SetRequired(p=> p.IsEnabled);
-        builder.SetRequired(p=> p.Name);
-        builder.SetRequired(p=> p.OrganisationId);
-        builder.SetRequired(p=> p.Email);
+        builder.SetRequired(p=> p.IsEnabled,
+            p=> p.Name,
+            p=> p.CreatedUtc,
+            p=> p.InsertedUtc,
+            p=> p.OrganisationId,
+            p=> p.Email);
     }
 }

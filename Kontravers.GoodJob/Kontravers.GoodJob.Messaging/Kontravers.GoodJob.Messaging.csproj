@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Paramore.Brighter" Version="10.0.0-preview.1" />
+      <PackageReference Include="Paramore.Brighter.MessagingGateway.RMQ" Version="10.0.0-preview.1" />
+      <PackageReference Include="Paramore.Brighter.ServiceActivator" Version="10.0.0-preview.1" />
+    </ItemGroup>
+
+</Project>

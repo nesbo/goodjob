@@ -5,5 +5,7 @@ public enum JobStatusType : byte
     None = 0,
     Created,
     NotRelevant,
+    InProgress,
+    NotApplied,
     Applied
 }

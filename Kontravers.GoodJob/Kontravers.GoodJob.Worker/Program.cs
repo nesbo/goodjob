@@ -1,8 +1,11 @@
 using Kontravers.GoodJob.Data;
 using Kontravers.GoodJob.Data.Repositories.Talent;
+using Kontravers.GoodJob.Data.Repositories.Work;
 using Kontravers.GoodJob.Domain;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
-using Kontravers.GoodJob.Domain.Work;
+using Kontravers.GoodJob.Domain.Talent.Services;
+using Kontravers.GoodJob.Domain.Work.Repositories;
+using Kontravers.GoodJob.Messaging;
 using Kontravers.GoodJob.Worker;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +15,11 @@ var host = Host.CreateDefaultBuilder(args)
         services.AddHostedService<RssFeedRunner>();
 
         services.AddScoped<UpworkRssFeedFetcher>();
-        services.AddScoped<IRssFeedFetcher, RssFeedFetcher>();
+        services.AddScoped<RssFeedFetcher>();
         services.AddScoped<IClock, Clock>();
         services.AddScoped<IPersonQueryRepository, PersonQueryRepository>();
+        services.AddScoped<IJobRepository, JobRepository>();
+        services.AddScoped<ICommandPublisher, CommandPublisher>();
 
         services.AddDbContext<GoodJobDbContext>(options =>
         {

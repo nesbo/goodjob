@@ -13,19 +13,29 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
         builder.Property(p=> p.Id)
             .HasColumnName("JobId");
 
-        builder.SetRequired(j => j.JobStashId,
+        builder.SetRequired(
             j => j.Title,
             j => j.Url,
             j => j.Description,
             j => j.PublishedAtUtc,
-            j => j.Budget);
+            j => j.Budget,
+            j => j.CreatedUtc,
+            j => j.InsertedUtc,
+            j => j.Status,
+            j => j.Uuid,
+            j => j.Source,
+            j => j.PersonId);
 
         builder.Property(j => j.Title).HasMaxLength(256);
         builder.Property(j => j.Url).HasMaxLength(512);
         builder.Property(j => j.Description).HasMaxLength(10000);
         builder.Property(j => j.Budget).HasMaxLength(64);
         builder.Property(j => j.Skills).HasMaxLength(512);
+        builder.Property(j => j.Uuid).HasMaxLength(512);
 
-        builder.Property(j => j.Status).HasConversion<byte>();
+        builder.Property(j => j.Status).HasConversion<string>().HasMaxLength(64);
+        builder.Property(j => j.Source).HasConversion<string>().HasMaxLength(64);
+        
+        builder.HasIndex(j=> new { j.Uuid, j.PersonId }).IsUnique();
     }
 }

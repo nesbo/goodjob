@@ -12,4 +12,12 @@
       <PackageReference Include="RestSharp" Version="110.2.1-alpha.0.16" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Kontravers.GoodJob.Messaging\Kontravers.GoodJob.Messaging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Talent\UseCases\" />
+    </ItemGroup>
+
 </Project>

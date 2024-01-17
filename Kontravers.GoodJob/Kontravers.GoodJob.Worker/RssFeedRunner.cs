@@ -1,4 +1,5 @@
 using Kontravers.GoodJob.Domain;
+using Kontravers.GoodJob.Domain.Talent.Services;
 
 namespace Kontravers.GoodJob.Worker;
 
@@ -19,13 +20,12 @@ public class RssFeedRunner : BackgroundService
 
         return Task.Factory.StartNew(async () =>
         {
-
             while (!stoppingToken.IsCancellationRequested)
             {
                 using var scope = _serviceProvider.CreateScope();
 
                 var upworkCrawlerSettings = scope.ServiceProvider.GetRequiredService<IUpworkCrawlerSettings>();
-                var rssFeedFetcher = scope.ServiceProvider.GetRequiredService<IRssFeedFetcher>();
+                var rssFeedFetcher = scope.ServiceProvider.GetRequiredService<RssFeedFetcher>();
                 try
                 {
                     _logger.LogTrace("Fetching RSS feeds");

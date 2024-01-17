@@ -31,10 +31,16 @@ namespace Kontravers.GoodJob.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
+
+                    b.Property<DateTime>("InsertedUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsEnabled")
                         .HasColumnType("boolean");
@@ -65,6 +71,12 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .HasColumnName("PersonUpworkRssFeedId");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("InsertedUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("LastFetchedAtUtc")
                         .HasColumnType("timestamp with time zone");
@@ -107,12 +119,18 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(10000)
                         .HasColumnType("character varying(10000)");
 
-                    b.Property<int>("JobStashId")
+                    b.Property<DateTime>("InsertedUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PersonId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("PublishedAtUtc")
@@ -122,8 +140,15 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.Property<byte>("Status")
-                        .HasColumnType("smallint");
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -135,34 +160,17 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("character varying(512)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobStashId");
-
-                    b.ToTable("Job", "Work");
-                });
-
-            modelBuilder.Entity("Kontravers.GoodJob.Domain.Work.JobStash", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("JobStashId");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonId")
+                    b.HasIndex("Uuid", "PersonId")
                         .IsUnique();
 
-                    b.ToTable("JobStash", "Work");
+                    b.ToTable("Job", "Work");
                 });
 
             modelBuilder.Entity("Kontravers.GoodJob.Domain.Talent.PersonUpworkRssFeed", b =>
@@ -174,23 +182,9 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Kontravers.GoodJob.Domain.Work.Job", b =>
-                {
-                    b.HasOne("Kontravers.GoodJob.Domain.Work.JobStash", null)
-                        .WithMany("Jobs")
-                        .HasForeignKey("JobStashId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Kontravers.GoodJob.Domain.Talent.Person", b =>
                 {
                     b.Navigation("UpworkRssFeeds");
-                });
-
-            modelBuilder.Entity("Kontravers.GoodJob.Domain.Work.JobStash", b =>
-                {
-                    b.Navigation("Jobs");
                 });
 #pragma warning restore 612, 618
         }
