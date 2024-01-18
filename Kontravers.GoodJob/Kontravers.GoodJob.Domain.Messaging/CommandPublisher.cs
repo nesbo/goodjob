@@ -14,6 +14,7 @@ public class CommandPublisher : ICommandPublisher
     public Task PublishAsync<TCommand>(TCommand command, CancellationToken cancellationToken) 
         where TCommand : class, ICommand
     {
-        return _commandProcessor.PostAsync(command, cancellationToken: cancellationToken);
+        // let's go with send at first, don't publish to bus
+        return _commandProcessor.SendAsync(command, cancellationToken: cancellationToken);
     }
 }

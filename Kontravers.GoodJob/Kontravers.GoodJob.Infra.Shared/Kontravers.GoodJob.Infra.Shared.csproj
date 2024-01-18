@@ -12,7 +12,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Paramore.Brighter.Extensions.DependencyInjection" Version="10.0.0-preview.1" />
       <PackageReference Include="RestSharp" Version="110.2.0" />
+      <PackageReference Include="System.Net.Mail" Version="1.0.0-rtm-00002" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="EmailTemplates\GJ-job-email-template_01.html" />
+      <EmbeddedResource Include="EmailTemplates\GJ-job-email-template_01.html" />
     </ItemGroup>
 
 </Project>

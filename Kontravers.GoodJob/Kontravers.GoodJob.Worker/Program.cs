@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<RssFeedRunner>();
-        services.AddGoodJobServices();
-        services.AddLogging();
-        
+        services
+            .AddHostedService<RssFeedRunner>()
+            .AddGoodJobServices()
+            .AddBrighterRegistrations()
+            .AddLogging();
+
     })
     .Build();
 

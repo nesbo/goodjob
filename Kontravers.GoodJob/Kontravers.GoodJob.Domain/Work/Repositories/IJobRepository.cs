@@ -6,4 +6,5 @@ public interface IJobRepository
     Task<Job?> GetAsync(int personId, string uuid, CancellationToken cancellationToken);
     Task AddAsync(Job jobStash, CancellationToken cancellationToken);
     Task SaveChangesAsync(CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(int personId, string commandUuid, CancellationToken cancellationToken);
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kontravers.GoodJob.Data.Migrations
 {
     [DbContext(typeof(GoodJobDbContext))]
-    [Migration("20240117171119_Initial migration")]
+    [Migration("20240118125007_Initial migration")]
     partial class Initialmigration
     {
         /// <inheritdoc />

@@ -21,4 +21,11 @@ public class JobRepository : RepositoryBase<Job>, IJobRepository
             .SingleOrDefaultAsync(job => job.PersonId == personId && job.Uuid == uuid
                 , cancellationToken);
     }
+
+    public async Task<bool> ExistsAsync(int personId, string commandUuid, CancellationToken cancellationToken)
+    {
+        return await Query
+            .CountAsync(j=> j.PersonId == personId && j.Uuid == commandUuid,
+                cancellationToken) > 0;
+    }
 }

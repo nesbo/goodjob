@@ -17,10 +17,9 @@ public class RssFeedFetcher
     {
         _logger.LogTrace("Fetching RSS feeds in parallel");
         
-        var upworkRssFeedFetcherTask = _upworkRssFeedFetcher.StartFetchingAllAsync(cancellationToken);
         try
         {
-            await Task.WhenAll(upworkRssFeedFetcherTask);
+            await _upworkRssFeedFetcher.StartFetchingAllAsync(cancellationToken);
         }
         catch (Exception ex)
         {

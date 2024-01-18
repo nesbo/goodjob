@@ -41,13 +41,12 @@ public class UpworkRssFeedFetcher
         _logger.LogTrace("Starting fetching Upwork RSS feeds for {PersonCount} persons",
             persons.Length);
         
-        var personFetchTasks = persons
-            .Select(person => FetchPersonUpworkRssFeedsAsync(person, cancellationToken))
-            .ToArray();
-        
         try
         {
-            await Task.WhenAll(personFetchTasks);
+            foreach (var person in persons)
+            {
+                await FetchPersonUpworkRssFeedsAsync(person, cancellationToken);
+            }
         }
         catch (Exception e)
         {
@@ -58,49 +57,49 @@ public class UpworkRssFeedFetcher
         _logger.LogInformation("Finished fetching all Upwork RSS feeds");
     }
 
-    private Task FetchPersonUpworkRssFeedsAsync(Person person, CancellationToken cancellationToken)
+    private async Task FetchPersonUpworkRssFeedsAsync(Person person, CancellationToken cancellationToken)
     {
-        var personUpworkRssFeedFetchTasks = person
-            .UpworkRssFeeds
-            .Select(personUpworkRssFeed => Task.Factory.StartNew(async () =>
+        _logger.LogTrace("Person {PersonId} has {UpworkRssFeedCount} Upwork RSS feeds",
+            person.Id, person.UpworkRssFeeds.Count);
+
+        foreach (var personUpworkRssFeed in person.UpworkRssFeeds)
+
+        {
+            var feedMinFetchInterval = TimeSpan.FromMinutes(personUpworkRssFeed.MinFetchIntervalInMinutes);
+            if (personUpworkRssFeed.LastFetchedAtUtc + feedMinFetchInterval > _clock.UtcNow)
             {
-                var feedMinFetchInterval = TimeSpan.FromMinutes(personUpworkRssFeed.MinFetchIntervalInMinutes);
-                if (personUpworkRssFeed.LastFetchedAtUtc + feedMinFetchInterval > _clock.UtcNow)
-                {
-                    _logger.LogTrace("Skipping fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId} "
-                                     + "because it was fetched recently at {LastFetchedUtc}",
-                        personUpworkRssFeed.Id, person.Id, personUpworkRssFeed.LastFetchedAtUtc);
-                    return;
-                }
+                _logger.LogTrace("Skipping fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId} "
+                                 + "because it was fetched recently at {LastFetchedUtc}",
+                    personUpworkRssFeed.Id, person.Id, personUpworkRssFeed.LastFetchedAtUtc);
+                return;
+            }
 
-                string response;
-                try
-                {
-                    response = await _httpClient.GetStringAsync(personUpworkRssFeed.RootUrl,
-                        personUpworkRssFeed.RelativeUrl, cancellationToken);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e,
-                        "Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
-                        personUpworkRssFeed.Id, person.Id);
-                    throw;
-                }
+            string response;
+            try
+            {
+                _logger.LogInformation("Fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                    personUpworkRssFeed.Id, person.Id);
+                response = await _httpClient.GetStringAsync(personUpworkRssFeed.RootUrl,
+                    personUpworkRssFeed.RelativeUrl, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e,
+                    "Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                    personUpworkRssFeed.Id, person.Id);
+                return;
+            }
 
-                if (string.IsNullOrEmpty(response))
-                {
-                    _logger.LogError("Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}. "
-                                     + "Response was empty",
-                        personUpworkRssFeed.Id, person.Id);
-                    return;
-                }
-                
-                await ParseRssFeedAndPublishJobCommandsAsync(personUpworkRssFeed, response, cancellationToken);
+            if (string.IsNullOrEmpty(response))
+            {
+                _logger.LogError("Error fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}. "
+                                 + "Response was empty",
+                    personUpworkRssFeed.Id, person.Id);
+                return;
+            }
 
-            }, cancellationToken))
-            .ToList();
-
-        return Task.WhenAll(personUpworkRssFeedFetchTasks);
+            await ParseRssFeedAndPublishJobCommandsAsync(personUpworkRssFeed, response, cancellationToken);
+        }
     }
 
     private async Task ParseRssFeedAndPublishJobCommandsAsync(PersonUpworkRssFeed personUpworkRssFeed,
@@ -123,7 +122,10 @@ public class UpworkRssFeedFetcher
         for (var i = 0; i < items.Count; i++)
         {
             var item = items.Item(i);
-            var command = CreateJobCommand.FromUpworkRssFeedItem(item!, _clock.UtcNow);
+            var command = CreateJobCommand.FromUpworkRssFeedItem(item!, _clock.UtcNow,
+                personUpworkRssFeed.PersonId.ToString());
+            _logger.LogTrace("Publishing CreateJobCommand for person {PersonId}, job title {JobTitle}",
+                personUpworkRssFeed.PersonId, command.Title);
             await _commandPublisher.PublishAsync(command, cancellationToken);
         }
     }

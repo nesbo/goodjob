@@ -8,6 +8,7 @@ using Kontravers.GoodJob.Domain.Talent.Services;
 using Kontravers.GoodJob.Domain.Work.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Paramore.Brighter.Extensions.DependencyInjection;
 
 namespace Kontravers.GoodJob.Infra.Shared;
 
@@ -22,6 +23,7 @@ public static class GoodJobServiceRegistrationsExtensions
         services.AddScoped<IJobRepository, JobRepository>();
         services.AddScoped<ICommandPublisher, CommandPublisher>();
         services.AddScoped<IHttpClient, HttpClient>();
+        services.AddScoped<IEmailSender, EmailSender>();
 
         services.AddDbContext<GoodJobDbContext>(options =>
         {
@@ -34,6 +36,12 @@ public static class GoodJobServiceRegistrationsExtensions
             RssFeedFetchIntervalInSeconds = 60
         });
 
+        return services;
+    }
+    
+    public static IServiceCollection AddBrighterRegistrations(this IServiceCollection services)
+    {
+        services.AddBrighter().AutoFromAssemblies();
         return services;
     }
 }
