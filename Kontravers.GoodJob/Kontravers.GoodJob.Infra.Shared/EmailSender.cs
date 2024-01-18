@@ -10,6 +10,7 @@ namespace Kontravers.GoodJob.Infra.Shared;
 public class EmailSender : IEmailSender
 {
     private const string From = "dev@kontrave.rs";
+    private const string FromDisplayName = "Kontravers GoodJob";
     private const string GjJobEmailTemplateHtml = "GJ-job-email-template_01.html";
     private const string EmailUsername = "dev@kontrave.rs";
     private const string EmailPassword = "1312kontra";
@@ -39,12 +40,12 @@ public class EmailSender : IEmailSender
         
         var emailContent = stringBuilder.ToString();
 
-        var mailMessage = new MailMessage()
+        var mailMessage = new MailMessage
         {
             IsBodyHtml = true,
-            From = new MailAddress(From),
+            From = new MailAddress(From, FromDisplayName), 
             Body = emailContent,
-            Subject = $"New Kontravers GoodJob - {job.Title}"
+            Subject = job.Title
         };
         
         mailMessage.To.Add(receiver.Email);
