@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .email-container {
+            font-family: Arial, sans-serif;
+            color: #333333;
+            padding: 20px;
+        }
+        .job-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .job-description {
+            margin-top: 10px;
+        }
+        .skills-list {
+            margin-top: 10px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .budget-rate {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .apply-link {
+            margin-top: 20px;
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .publish-time {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="job-title">{{ Job Title }}</div>
+        <div class="job-description">
+            <strong>Description:</strong>
+            <p>{{ Job Description }}</p>
+        </div>
+        <div class="skills-required">
+            <strong>Required Skills:</strong>
+            <ul class="skills-list">
+                {{#each Skill}}
+                <li>{{.}}</li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="budget-rate">
+            <strong>Budget/Rate:</strong> {{ Project Budget or Hourly Rate }}
+        </div>
+        <a href="{{ Apply Link }}" class="apply-link">Apply Now</a>
+        <div class="publish-time">Published: {{ Time the job is published }}</div>
+    </div>
+</body>
+</html>
