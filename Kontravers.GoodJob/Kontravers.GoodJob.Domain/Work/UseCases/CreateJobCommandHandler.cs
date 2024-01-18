@@ -38,7 +38,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
             return await base.HandleAsync(command, cancellationToken);
         }
         
-        var job = new Job(personId, command.Title, command.Url,
+        var job = new Job(personId, command.Title.ReplaceLineEndings(""), command.Url,
             command.Description, command.PublishedAtUtc, "UnknownBudget", command.Uuid,
             command.CreatedUtc, clock.UtcNow, JobSourceType.Upwork);
         
