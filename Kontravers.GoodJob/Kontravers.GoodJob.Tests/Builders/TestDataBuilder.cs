@@ -24,7 +24,8 @@ public class TestDataBuilder
              createdUtc.Value, createdUtc.Value);
         
         person.AddUpworkRssFeed("https://www.upwork.com/", "ab/feed/jobs/rss?sort=recency&paging=0%3B1",
-            DateTime.MinValue, 5, createdUtc.Value, createdUtc.Value);
+            DateTime.MinValue, 5, createdUtc.Value, createdUtc.Value,
+            true,true);
 
         _dbContextFactory.Context.Add(person);
         _dbContextFactory.Context.SaveChanges();

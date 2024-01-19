@@ -12,6 +12,7 @@ public class EmailSender : IEmailSender
     private const string From = "dev@kontrave.rs";
     private const string FromDisplayName = "Kontravers GoodJob";
     private const string GjJobEmailTemplateHtml = "GJ-job-email-template_01.html";
+    private const string GjJobEmailJobProposalTemplateHtml = "GJ-job-email-job-proposal-template.html";
     private const string EmailUsername = "dev@kontrave.rs";
     private const string EmailPassword = "1312kontra";
     private const string EmailHost = "mail.kontrave.rs";
@@ -37,6 +38,24 @@ public class EmailSender : IEmailSender
         stringBuilder.Replace("{{ Job Description }}", job.Description);
         stringBuilder.Replace("{{ Apply Link }}", job.Url);
         stringBuilder.Replace("{{ Time the job is published }}", job.PublishedAtUtc.ToString("f"));
+
+        if (job.HasProposals)
+        {
+            var proposalTemplate = ResourceReader
+                .ReadTextLinesAsync(GjJobEmailJobProposalTemplateHtml);
+            var proposalStringBuilder = new StringBuilder();
+            foreach (var line in proposalTemplate.Result)
+            {
+                proposalStringBuilder.AppendLine(line);
+            }
+
+            proposalStringBuilder.Replace("{{ Proposal text }}", job.JobProposals.First().Text);
+            stringBuilder.Replace("###Proposals###", proposalStringBuilder.ToString());
+        }
+        else
+        {
+            stringBuilder.Replace("###Proposals###", "");
+        }
         
         var emailContent = stringBuilder.ToString();
 

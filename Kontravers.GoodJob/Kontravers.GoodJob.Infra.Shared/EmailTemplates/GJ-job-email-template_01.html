@@ -47,17 +47,7 @@
             <strong>Description:</strong>
             <p>{{ Job Description }}</p>
         </div>
-        <div class="skills-required">
-            <strong>Required Skills:</strong>
-            <ul class="skills-list">
-                {{#each Skill}}
-                <li>{{.}}</li>
-                {{/each}}
-            </ul>
-        </div>
-        <div class="budget-rate">
-            <strong>Budget/Rate:</strong> {{ Project Budget or Hourly Rate }}
-        </div>
+        ###Proposals###        
         <a href="{{ Apply Link }}" class="apply-link">Apply Now</a>
         <div class="publish-time">Published: {{ Time the job is published }}</div>
     </div>

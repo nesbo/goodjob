@@ -3,7 +3,18 @@ using Kontravers.GoodJob.Infra.Shared;
 using Kontravers.GoodJob.Worker;
 using Microsoft.EntityFrameworkCore;
 
-var host = Host.CreateDefaultBuilder(args)
+var configuration = new ConfigurationBuilder()
+    .AddEnvironmentVariables()
+    .AddCommandLine(args)
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+var builder = Host.CreateDefaultBuilder();
+builder
+    .ConfigureAppConfiguration(configurationBuilder =>
+    {
+        configurationBuilder.AddConfiguration(configuration);
+    })
     .ConfigureServices(services =>
     {
         services
@@ -11,9 +22,9 @@ var host = Host.CreateDefaultBuilder(args)
             .AddGoodJobServices()
             .AddBrighterRegistrations()
             .AddLogging();
+    });
 
-    })
-    .Build();
+var host = builder.Build();
 
 using (var scope = host.Services.CreateScope())
 {

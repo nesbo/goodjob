@@ -1,6 +1,8 @@
 using Kontravers.GoodJob.Domain.Messaging.Commands;
+using Kontravers.GoodJob.Domain.Talent;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
 using Kontravers.GoodJob.Domain.Work.Repositories;
+using Kontravers.GoodJob.Domain.Work.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Paramore.Brighter;
@@ -39,8 +41,9 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         }
         
         var job = new Job(personId, command.Title.ReplaceLineEndings(""), command.Url,
-            command.Description, command.PublishedAtUtc, "UnknownBudget", command.Uuid,
-            command.CreatedUtc, clock.UtcNow, JobSourceType.Upwork);
+            command.Description, command.PublishedAtUtc, command.Uuid,
+            command.CreatedUtc, clock.UtcNow, JobSourceType.Upwork, 
+            command.PreferredPortfolioId, command.PersonFeedId);
         
         var person = await personQueryRepository.GetAsync(personId, cancellationToken);
         if (person is null)
@@ -49,7 +52,51 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
             return await base.HandleAsync(command, cancellationToken);
         }
         
+        await GenerateProposalIfEnabledAsync(scope, command, job, person, cancellationToken);
+        await SendJobEmailIfEnabledAsync(scope, command, personId, job, person, cancellationToken);
+
+        logger.LogTrace("Saving job [{JobId}] to database", job.Id);
+        await jobRepository.AddAsync(job, cancellationToken);
+        await jobRepository.SaveChangesAsync(cancellationToken);
+        logger.LogInformation("Job [{JobId}] saved to database", job.Id);
+        
+        return await base.HandleAsync(command, cancellationToken);
+    }
+
+    private static Task GenerateProposalIfEnabledAsync(IServiceScope scope, CreateJobCommand command,
+        Job job, Person person, CancellationToken cancellationToken)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<CreateJobCommandHandler>>();
+        if (command.JobSource == JobSourceCommandType.Upwork)
+        {
+            var personUpworkRssFeed = person.UpworkRssFeeds
+                .Single(f => f.Id == command.PersonFeedId);
+            if (!personUpworkRssFeed.AutoGenerateProposals)
+            {
+                logger.LogInformation("Auto-generating proposals is disabled for person [{PersonId}] and feed [{FeedId}]",
+                    person.Id, personUpworkRssFeed.Id);
+                return Task.CompletedTask;
+            }
+        }
+        
+        var proposalGeneratorFactory = scope.ServiceProvider.GetRequiredService<IJobProposalGeneratorFactory>();
+        var proposalGenerator = proposalGeneratorFactory.Create(JobProposalGeneratorType.ChatGpt35Turbo);
+        return proposalGenerator.GenerateAsync(person, job, cancellationToken);
+    }
+
+    private static async Task SendJobEmailIfEnabledAsync(IServiceScope scope,
+        CreateJobCommand command, int personId, Job job, Person person, CancellationToken cancellationToken)
+    {
+        if (command.JobSource == JobSourceCommandType.Upwork)
+        {
+            if (!person.UpworkRssFeeds.Single(f=> f.Id == command.PersonFeedId).AutoSendEmail)
+            {
+                return;
+            }
+        }
+        
         var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<CreateJobCommandHandler>>();
         logger.LogInformation("Sending job email to person [{PersonId}], job title [{JobTitle}]",
             personId, job.Title);
 
@@ -61,17 +108,10 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         {
             logger.LogError(e, "Error sending job email to person [{PersonId}], job title [{JobTitle}]",
                 personId, job.Title);
-            return await base.HandleAsync(command, cancellationToken);
+            throw;
         }
         
         logger.LogInformation("Email sent to person [{PersonId}], job title [{JobTitle}]",
             personId, job.Title);
-        
-        logger.LogTrace("Saving job [{JobId}] to database", job.Id);
-        await jobRepository.AddAsync(job, cancellationToken);
-        await jobRepository.SaveChangesAsync(cancellationToken);
-        logger.LogInformation("Job [{JobId}] saved to database", job.Id);
-        
-        return await base.HandleAsync(command, cancellationToken);
     }
 }

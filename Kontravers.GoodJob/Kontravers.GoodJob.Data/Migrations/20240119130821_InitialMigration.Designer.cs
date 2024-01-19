@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kontravers.GoodJob.Data.Migrations
 {
     [DbContext(typeof(GoodJobDbContext))]
-    [Migration("20240118125007_Initial migration")]
-    partial class Initialmigration
+    [Migration("20240119130821_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,6 +102,16 @@ namespace Kontravers.GoodJob.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("AutoGenerateProposals")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<bool>("AutoSendEmail")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone");
 
@@ -115,6 +125,9 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<int>("PersonId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PreferredPortfolioId")
                         .HasColumnType("integer");
 
                     b.Property<string>("RelativeUrl")
@@ -144,11 +157,6 @@ namespace Kontravers.GoodJob.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Budget")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone");
 
@@ -160,7 +168,13 @@ namespace Kontravers.GoodJob.Data.Migrations
                     b.Property<DateTime>("InsertedUtc")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int>("PersonFeedId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("PersonId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PreferredPortfolioId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("PublishedAtUtc")
@@ -187,13 +201,13 @@ namespace Kontravers.GoodJob.Data.Migrations
 
                     b.Property<string>("Url")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
 
                     b.Property<string>("Uuid")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)");
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
 
                     b.HasKey("Id");
 
@@ -201,6 +215,46 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Job", "Work");
+                });
+
+            modelBuilder.Entity("Kontravers.GoodJob.Domain.Work.JobProposal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("JobProposalId");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("GeneratorType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("InsertedUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(10240)
+                        .HasColumnType("character varying(10240)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("JobProposal", "Work");
                 });
 
             modelBuilder.Entity("Kontravers.GoodJob.Domain.Talent.PersonUpworkRssFeed", b =>
@@ -212,9 +266,23 @@ namespace Kontravers.GoodJob.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Kontravers.GoodJob.Domain.Work.JobProposal", b =>
+                {
+                    b.HasOne("Kontravers.GoodJob.Domain.Work.Job", null)
+                        .WithMany("JobProposals")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Kontravers.GoodJob.Domain.Talent.Person", b =>
                 {
                     b.Navigation("UpworkRssFeeds");
+                });
+
+            modelBuilder.Entity("Kontravers.GoodJob.Domain.Work.Job", b =>
+                {
+                    b.Navigation("JobProposals");
                 });
 #pragma warning restore 612, 618
         }

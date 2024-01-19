@@ -9,9 +9,12 @@
     <ItemGroup>
       <ProjectReference Include="..\Kontravers.GoodJob.Data\Kontravers.GoodJob.Data.csproj" />
       <ProjectReference Include="..\Kontravers.GoodJob.Domain\Kontravers.GoodJob.Domain.csproj" />
+      <ProjectReference Include="..\Kontravers.GoodJob.OpenAi\Kontravers.GoodJob.OpenAi.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
       <PackageReference Include="Paramore.Brighter.Extensions.DependencyInjection" Version="10.0.0-preview.1" />
       <PackageReference Include="RestSharp" Version="110.2.0" />
       <PackageReference Include="System.Net.Mail" Version="1.0.0-rtm-00002" />
@@ -20,6 +23,12 @@
     <ItemGroup>
       <None Remove="EmailTemplates\GJ-job-email-template_01.html" />
       <EmbeddedResource Include="EmailTemplates\GJ-job-email-template_01.html" />
+      <None Remove="EmailTemplates\GJ-job-email-job-proposal-template.html" />
+      <EmbeddedResource Include="EmailTemplates\GJ-job-email-job-proposal-template.html" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="OpenAi\" />
     </ItemGroup>
 
 </Project>

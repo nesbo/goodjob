@@ -22,4 +22,11 @@ public class PersonQueryRepository : QueryRepositoryBase<Person>, IPersonQueryRe
             .AsNoTracking()
             .ToArrayAsync(cancellationToken);
     }
+
+    public override Task<Person?> GetAsync(int id, CancellationToken cancellationToken)
+    {
+        return Query
+            .Include(p=> p.UpworkRssFeeds)
+            .SingleOrDefaultAsync(p=> p.Id == id, cancellationToken);
+    }
 }

@@ -15,8 +15,9 @@ public abstract class QueryRepositoryBase<TAggregate> where TAggregate : class, 
         DbContext = dbContext;
     }
     
-    public Task<TAggregate?> GetAsync(int id, CancellationToken cancellationToken)
+    public virtual Task<TAggregate?> GetAsync(int id, CancellationToken cancellationToken)
     {
-        return Query.SingleOrDefaultAsync(a => a.Id == id, cancellationToken);
+        return Query
+            .SingleOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 }

@@ -61,9 +61,8 @@ public class UpworkRssFeedFetcher
     {
         _logger.LogTrace("Person {PersonId} has {UpworkRssFeedCount} Upwork RSS feeds",
             person.Id, person.UpworkRssFeeds.Count);
-
+        
         foreach (var personUpworkRssFeed in person.UpworkRssFeeds)
-
         {
             var feedMinFetchInterval = TimeSpan.FromMinutes(personUpworkRssFeed.MinFetchIntervalInMinutes);
             if (personUpworkRssFeed.LastFetchedAtUtc + feedMinFetchInterval > _clock.UtcNow)
@@ -118,15 +117,20 @@ public class UpworkRssFeedFetcher
         
         _logger.LogTrace("Found {ItemCount} items in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
             items.Count, personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
+        
+        var itemTasks = new List<Task>();
 
         for (var i = 0; i < items.Count; i++)
         {
             var item = items.Item(i);
             var command = CreateJobCommand.FromUpworkRssFeedItem(item!, _clock.UtcNow,
-                personUpworkRssFeed.PersonId.ToString());
+                personUpworkRssFeed.PersonId.ToString(), personUpworkRssFeed.PreferredPortfolioId,
+                personUpworkRssFeed.Id);
             _logger.LogTrace("Publishing CreateJobCommand for person {PersonId}, job title {JobTitle}",
                 personUpworkRssFeed.PersonId, command.Title);
-            await _commandPublisher.PublishAsync(command, cancellationToken);
+            itemTasks.Add(_commandPublisher.PublishAsync(command, cancellationToken));
         }
+        
+        await Task.WhenAll(itemTasks);
     }
 }

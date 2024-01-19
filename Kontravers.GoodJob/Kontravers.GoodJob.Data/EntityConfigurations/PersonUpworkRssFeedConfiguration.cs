@@ -19,13 +19,19 @@ public class PersonUpworkRssFeedConfiguration : IEntityTypeConfiguration<PersonU
             r=> r.LastFetchedAtUtc,
             r=> r.MinFetchIntervalInMinutes,
             r=> r.CreatedUtc,
-            r=> r.InsertedUtc);
+            r=> r.InsertedUtc,
+            r=> r.AutoSendEmail,
+            r=> r.AutoGenerateProposals);
         
         builder.Property(r=> r.RootUrl)
             .HasMaxLength(128);
         builder.Property(r=> r.RelativeUrl)
             .HasMaxLength(512);
+        builder.Property(p=> p.PreferredPortfolioId).HasConversion<int?>();
         
         builder.HasIndex(r=> new { r.PersonId, r.RootUrl, r.RelativeUrl }).IsUnique();
+
+        builder.Property(r => r.AutoSendEmail).HasDefaultValue(false);
+        builder.Property(r => r.AutoGenerateProposals).HasDefaultValue(false);
     }
 }
