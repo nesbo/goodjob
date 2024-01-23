@@ -9,6 +9,7 @@ namespace Kontravers.GoodJob.Infra.Shared;
 
 public class EmailSender : IEmailSender
 {
+    private readonly IClock _clock;
     private const string From = "dev@kontrave.rs";
     private const string FromDisplayName = "Kontravers GoodJob";
     private const string GjJobEmailTemplateHtml = "GJ-job-email-template_01.html";
@@ -17,6 +18,11 @@ public class EmailSender : IEmailSender
     private const string EmailPassword = "1312kontra";
     private const string EmailHost = "mail.kontrave.rs";
     private const int EmailPort = 587;
+
+    public EmailSender(IClock clock)
+    {
+        _clock = clock;
+    }
 
     public async Task SendJobEmailAsync(Person receiver, Job job, CancellationToken cancellationToken)
     {
@@ -58,13 +64,15 @@ public class EmailSender : IEmailSender
         }
         
         var emailContent = stringBuilder.ToString();
+        
+        var publishedAt = _clock.UtcNow - job.PublishedAtUtc;
 
         var mailMessage = new MailMessage
         {
             IsBodyHtml = true,
-            From = new MailAddress(From, FromDisplayName), 
+            From = new MailAddress(From, FromDisplayName),
             Body = emailContent,
-            Subject = job.Title
+            Subject = $"[{publishedAt.Days}D {publishedAt.Hours}H {publishedAt.Minutes}M before] - {job.Title}"
         };
         
         mailMessage.To.Add(receiver.Email);
