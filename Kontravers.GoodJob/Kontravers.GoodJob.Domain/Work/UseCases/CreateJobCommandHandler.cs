@@ -43,7 +43,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         var job = new Job(personId, command.Title.ReplaceLineEndings(""), command.Url,
             command.Description, command.PublishedAtUtc, command.Uuid,
             command.CreatedUtc, clock.UtcNow, JobSourceType.Upwork, 
-            command.PreferredPortfolioId, command.PersonFeedId);
+            command.PreferredProfileId, command.PersonFeedId);
         
         var person = await personQueryRepository.GetAsync(personId, cancellationToken);
         if (person is null)

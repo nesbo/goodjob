@@ -15,9 +15,9 @@ public class PersonQueryRepository : QueryRepositoryBase<Person>, IPersonQueryRe
         throw new NotImplementedException();
     }
 
-    public async Task<Person[]> ListAllAsync(CancellationToken cancellationToken)
+    public Task<Person[]> ListAllAsync(CancellationToken cancellationToken)
     {
-        return await Query
+        return Query
             .Include(p => p.UpworkRssFeeds)
             .AsNoTracking()
             .ToArrayAsync(cancellationToken);
@@ -26,7 +26,8 @@ public class PersonQueryRepository : QueryRepositoryBase<Person>, IPersonQueryRe
     public override Task<Person?> GetAsync(int id, CancellationToken cancellationToken)
     {
         return Query
-            .Include(p=> p.UpworkRssFeeds)
-            .SingleOrDefaultAsync(p=> p.Id == id, cancellationToken);
+            .Include(p => p.UpworkRssFeeds)
+            .Include(p => p.Profiles)
+            .SingleOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 }

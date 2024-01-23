@@ -101,7 +101,7 @@ public class UpworkRssFeedFetcher
         }
     }
 
-    private async Task ParseRssFeedAndPublishJobCommandsAsync(PersonUpworkRssFeed personUpworkRssFeed,
+    private Task ParseRssFeedAndPublishJobCommandsAsync(PersonUpworkRssFeed personUpworkRssFeed,
         string responseContent, CancellationToken cancellationToken)
     {
         var xmlDocument = new XmlDocument();
@@ -112,7 +112,7 @@ public class UpworkRssFeedFetcher
         {
             _logger.LogTrace("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
                 personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
-            return;
+            return Task.CompletedTask;
         }
         
         _logger.LogTrace("Found {ItemCount} items in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
@@ -124,13 +124,13 @@ public class UpworkRssFeedFetcher
         {
             var item = items.Item(i);
             var command = CreateJobCommand.FromUpworkRssFeedItem(item!, _clock.UtcNow,
-                personUpworkRssFeed.PersonId.ToString(), personUpworkRssFeed.PreferredPortfolioId,
+                personUpworkRssFeed.PersonId.ToString(), personUpworkRssFeed.PreferredProfileId,
                 personUpworkRssFeed.Id);
             _logger.LogTrace("Publishing CreateJobCommand for person {PersonId}, job title {JobTitle}",
                 personUpworkRssFeed.PersonId, command.Title);
             itemTasks.Add(_commandPublisher.PublishAsync(command, cancellationToken));
         }
         
-        await Task.WhenAll(itemTasks);
+        return Task.WhenAll(itemTasks);
     }
 }

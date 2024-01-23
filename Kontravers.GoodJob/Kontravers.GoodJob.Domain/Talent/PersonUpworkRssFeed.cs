@@ -7,7 +7,7 @@ public class PersonUpworkRssFeed : IEntity
     public PersonUpworkRssFeed(int personId, string rootUrl, DateTime lastFetchedAtUtc,
         byte minFetchIntervalInMinutes, string relativeUrl, DateTime createdUtc,
         DateTime insertedUtc, bool autoGenerateProposals, bool autoSendEmail,
-        int? preferredPortfolioId = null)
+        int? preferredProfileId = null)
     {
         PersonId = personId;
         RootUrl = rootUrl;
@@ -18,7 +18,7 @@ public class PersonUpworkRssFeed : IEntity
         InsertedUtc = insertedUtc;
         AutoGenerateProposals = autoGenerateProposals;
         AutoSendEmail = autoSendEmail;
-        PreferredPortfolioId = preferredPortfolioId;
+        PreferredProfileId = preferredProfileId;
     }
 
     public int Id { get; protected set; }
@@ -29,7 +29,7 @@ public class PersonUpworkRssFeed : IEntity
     public string RelativeUrl { get; }
     public DateTime LastFetchedAtUtc { get; }
     public byte MinFetchIntervalInMinutes { get; }
-    public int? PreferredPortfolioId { get; }
+    public int? PreferredProfileId { get; }
     public bool AutoGenerateProposals { get; }
     public bool AutoSendEmail { get; }
 }

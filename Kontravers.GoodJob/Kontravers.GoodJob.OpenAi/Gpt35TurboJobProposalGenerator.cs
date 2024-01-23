@@ -46,22 +46,47 @@ public class Gpt35TurboJobProposalGenerator : IJobProposalGenerator
 
     private static ChatCompletionsOptions GeneratePrompt(Person person, Job job)
     {
-        return new ChatCompletionsOptions
+        var chatRequestMessages = new List<ChatRequestMessage> 
+        {
+            new ChatRequestSystemMessage("You are GoodJob, an upwork proposal writing assistant for freelancers and agencies that takes user inputed profile description and writes a proposal for the job description. You specialize in crafting proposals that are tailored to their unique skills and experiences. Your approach to writing a winning proposal includes: 1. Starting with a quick, straightforward greeting and introduction, followed by a concise restatement of the client’s core need or problem. 2. Including a clear statement that confidently assures the client that their problem can be solved, and indicating readiness to start immediately. 3. Crafting a short, compelling pitch, ideally two to three sentences, that highlights why the freelancer or agency is the perfect fit for the job. 4. Providing a brief yet detailed description of the methods and processes that will be used to approach the project, ensuring excellent service. 5. Attaching relevant documents, files of sample works, or links to a portfolio that demonstrate past projects related to the client’s needs. Write a proposal in the name of the user that follows the previously established rules for writing. Analyse all the information provided to make sure that the proposal is relevant. Make sure that the writing is professional, bullshit-free but in an honest and friendly tone. Avoid: too many words like \"enthusiasm\" and \"thrill\" and \"intricately\" and similar fluff words. Let's keep it professional and straightforward. Persuasion comes from a measured tone, no need to go overboard."),
+            new ChatRequestUserMessage("Given I have the following job post title:"),
+            new ChatRequestUserMessage(job.Title),
+            new ChatRequestUserMessage("And I have the following job post description:"),
+            new ChatRequestUserMessage(job.Description),
+            new ChatRequestUserMessage("And my name is:"),
+            new ChatRequestUserMessage(person.Name),
+        };
+
+        if (job.PreferredProfileId.HasValue)
+        {
+            var profile = person.Profiles.Single(p => p.Id == job.PreferredProfileId.Value);
+            chatRequestMessages.Add(new ChatRequestUserMessage("And my profile description is:"));
+            chatRequestMessages.Add(new ChatRequestUserMessage(profile.Description));
+            chatRequestMessages.Add(new ChatRequestUserMessage("And my profile title is:"));
+            chatRequestMessages.Add(new ChatRequestUserMessage(profile.Title));
+            if (profile.Skills is not null)
+            {
+                chatRequestMessages.Add(new ChatRequestUserMessage("And my skills are:"));
+                chatRequestMessages.Add(new ChatRequestUserMessage(profile.Skills));
+            }
+            
+            chatRequestMessages.Add(new ChatRequestUserMessage("Please avoid including the skills that are not described in my profile description and skills set."));
+        }
+
+        chatRequestMessages.Add(new ChatRequestUserMessage(
+            "Could you please generate a brief job proposal for me and mark my capabilities to deliver this job expectations?"));
+
+        var result = new ChatCompletionsOptions
         {
             DeploymentName = "gpt-3.5-turbo",
-            Messages =
-            {
-                new ChatRequestSystemMessage("You are GoodJob, an upwork proposal writing assistant for freelancers and agencies that takes user inputed profile description and writes a proposal for the job description. You specialize in crafting proposals that are tailored to their unique skills and experiences. Your approach to writing a winning proposal includes: 1. Starting with a quick, straightforward greeting and introduction, followed by a concise restatement of the client’s core need or problem. 2. Including a clear statement that confidently assures the client that their problem can be solved, and indicating readiness to start immediately. 3. Crafting a short, compelling pitch, ideally two to three sentences, that highlights why the freelancer or agency is the perfect fit for the job. 4. Providing a brief yet detailed description of the methods and processes that will be used to approach the project, ensuring excellent service. 5. Attaching relevant documents, files of sample works, or links to a portfolio that demonstrate past projects related to the client’s needs. Write a proposal in the name of the user that follows the previously established rules for writing. Analyse all the information provided to make sure that the proposal is relevant. Make sure that the writing is professional, bullshit-free but in an honest and friendly tone. Avoid: too many words like \"enthusiasm\" and \"thrill\" and \"intricately\" and similar fluff words. Let's keep it professional and straightforward. Persuasion comes from a measured tone, no need to go overboard."),
-                new ChatRequestUserMessage("Given I have the following job post title:"),
-                new ChatRequestUserMessage(job.Title),
-                new ChatRequestUserMessage("And I have the following job post description:"),
-                new ChatRequestUserMessage(job.Description),
-                new ChatRequestUserMessage("And my name is:"),
-                new ChatRequestUserMessage(person.Name),
-                // TODO: Include profile text and portfolio items
-                new ChatRequestUserMessage("Could you please generate a brief job proposal for me and mark my capabilities to deliver this job expectations?")
-            },
             MaxTokens = 1000
         };
+
+        foreach (var chatRequestMessage in chatRequestMessages)
+        {
+            result.Messages.Add(chatRequestMessage);
+        }
+        
+        return result;
     }
 }

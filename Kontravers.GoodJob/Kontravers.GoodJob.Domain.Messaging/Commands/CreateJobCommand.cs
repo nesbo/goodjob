@@ -15,12 +15,12 @@ public class CreateJobCommand : ICommand
     public string Title { get; set; }
     public string Uuid { get; set; }
     public string PersonId { get; set; }
-    public int? PreferredPortfolioId { get; set; }
+    public int? PreferredProfileId { get; set; }
     public JobSourceCommandType JobSource { get; set; }
     public int PersonFeedId { get; set; }
 
     public static CreateJobCommand FromUpworkRssFeedItem(XmlNode xmlNode, DateTime createdUtc,
-        string personId, int? preferredPortfolioId, int personFeedId)
+        string personId, int? preferredProfileId, int personFeedId)
     {
         var title = xmlNode.SelectSingleNode("title")?.InnerText;
         var link = xmlNode.SelectSingleNode("link")?.InnerText;
@@ -37,7 +37,7 @@ public class CreateJobCommand : ICommand
             CreatedUtc = createdUtc.ToUniversalTime(),
             Uuid = uuid!,
             PersonId = personId,
-            PreferredPortfolioId = preferredPortfolioId,
+            PreferredProfileId = preferredProfileId,
             JobSource = JobSourceCommandType.Upwork,
             PersonFeedId = personFeedId
         };

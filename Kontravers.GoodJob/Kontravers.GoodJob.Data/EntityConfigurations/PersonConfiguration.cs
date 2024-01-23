@@ -22,6 +22,10 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
             .WithOne()
             .HasForeignKey(r=> r.PersonId);
 
+        builder.HasMany(p => p.Profiles)
+            .WithOne()
+            .HasForeignKey(p => p.PersonId);
+
         builder.HasIndex(p=> new { p.Email, p.OrganisationId }).IsUnique();
         
         builder.SetRequired(p=> p.IsEnabled,

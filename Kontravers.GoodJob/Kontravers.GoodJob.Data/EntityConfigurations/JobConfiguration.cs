@@ -31,7 +31,7 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
         builder.Property(j => j.Description).HasMaxLength(10000);
         builder.Property(j => j.Skills).HasMaxLength(512);
         builder.Property(j => j.Uuid).HasMaxLength(2048);
-        builder.Property(j => j.PreferredPortfolioId).HasConversion<int?>();
+        builder.Property(j => j.PreferredProfileId).HasConversion<int?>();
 
         builder.Property(j => j.Status).HasConversion<string>().HasMaxLength(64);
         builder.Property(j => j.Source).HasConversion<string>().HasMaxLength(64);

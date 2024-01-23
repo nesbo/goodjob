@@ -8,7 +8,7 @@ public class Job : IAggregate
     
     public Job(int personId, string title, string url, string description, DateTime publishedAtUtc,
         string uuid, DateTime createdUtc, DateTime insertedUtc, JobSourceType source,
-        int? preferredPortfolioId, int personFeedId, string? skills = null)
+        int? preferredProfileId, int personFeedId, string? skills = null)
     {
         Title = title;
         Url = url;
@@ -18,7 +18,7 @@ public class Job : IAggregate
         CreatedUtc = createdUtc;
         InsertedUtc = insertedUtc;
         Source = source;
-        PreferredPortfolioId = preferredPortfolioId;
+        PreferredProfileId = preferredProfileId;
         PersonId = personId;
         Skills = skills;
         Status = JobStatusType.Created;
@@ -37,7 +37,7 @@ public class Job : IAggregate
     public string? Skills { get; }
     public string Uuid { get; }
     public int PersonId { get; }
-    public int? PreferredPortfolioId { get; }
+    public int? PreferredProfileId { get; }
     public int PersonFeedId { get; }
 
     public IReadOnlyCollection<JobProposal> JobProposals

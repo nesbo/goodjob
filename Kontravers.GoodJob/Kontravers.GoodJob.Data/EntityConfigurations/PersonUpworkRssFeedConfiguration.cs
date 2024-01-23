@@ -27,7 +27,7 @@ public class PersonUpworkRssFeedConfiguration : IEntityTypeConfiguration<PersonU
             .HasMaxLength(128);
         builder.Property(r=> r.RelativeUrl)
             .HasMaxLength(512);
-        builder.Property(p=> p.PreferredPortfolioId).HasConversion<int?>();
+        builder.Property(p=> p.PreferredProfileId).HasConversion<int?>();
         
         builder.HasIndex(r=> new { r.PersonId, r.RootUrl, r.RelativeUrl }).IsUnique();
 
