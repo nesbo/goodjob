@@ -34,7 +34,7 @@ public class Gpt35TurboJobProposalGenerator : IJobProposalGenerator
             person.Id, job.Title);
         var createdUtc = _clock.UtcNow;
         var response = await openApiClient.GetChatCompletionsAsync(prompt, cancellationToken);
-        _logger.LogInformation("Received [{ProposalsCount}] proposals from OpenAI",
+        _logger.LogTrace("Received [{ProposalsCount}] proposals from OpenAI",
             response.Value.Choices.Count);
 
         foreach (var chatChoice in response.Value.Choices)

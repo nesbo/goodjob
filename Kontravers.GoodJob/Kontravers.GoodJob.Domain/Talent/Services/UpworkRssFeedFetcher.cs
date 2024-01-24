@@ -67,7 +67,7 @@ public class UpworkRssFeedFetcher
             var feedMinFetchInterval = TimeSpan.FromMinutes(personUpworkRssFeed.MinFetchIntervalInMinutes);
             if (personUpworkRssFeed.LastFetchedAtUtc + feedMinFetchInterval > _clock.UtcNow)
             {
-                _logger.LogTrace("Skipping fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId} "
+                _logger.LogInformation("Skipping fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId} "
                                  + "because it was fetched recently at {LastFetchedUtc}",
                     personUpworkRssFeed.Id, person.Id, personUpworkRssFeed.LastFetchedAtUtc);
                 return;
@@ -76,10 +76,12 @@ public class UpworkRssFeedFetcher
             string response;
             try
             {
-                _logger.LogInformation("Fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                _logger.LogTrace("Fetching Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
                     personUpworkRssFeed.Id, person.Id);
                 response = await _httpClient.GetStringAsync(personUpworkRssFeed.RootUrl,
                     personUpworkRssFeed.RelativeUrl, cancellationToken);
+                _logger.LogInformation("Fetched Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+                    personUpworkRssFeed.Id, person.Id);
             }
             catch (Exception e)
             {
@@ -110,12 +112,12 @@ public class UpworkRssFeedFetcher
         
         if (items == null || items.Count == 0)
         {
-            _logger.LogTrace("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+            _logger.LogInformation("No items found in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
                 personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
             return Task.CompletedTask;
         }
         
-        _logger.LogTrace("Found {ItemCount} items in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
+        _logger.LogInformation("Found {ItemCount} items in Upwork RSS feed {UpworkRssFeedId} for person {PersonId}",
             items.Count, personUpworkRssFeed.Id, personUpworkRssFeed.PersonId);
         
         var itemTasks = new List<Task>();

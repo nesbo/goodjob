@@ -27,7 +27,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         var personQueryRepository = scope.ServiceProvider.GetRequiredService<IPersonQueryRepository>();
         var clock = scope.ServiceProvider.GetRequiredService<IClock>();
         
-        logger.LogInformation("Starting processing CreateJobCommand for person [{PersonId}], with [{Uuid}]",
+        logger.LogTrace("Starting processing CreateJobCommand for person [{PersonId}], with [{Uuid}]",
             command.PersonId, command.Uuid);
 
         var personId = int.Parse(command.PersonId);
@@ -35,7 +35,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         
         if (jobExists)
         {
-            logger.LogWarning("Job with [{Uuid}] already exists for person [{PersonId}]",
+            logger.LogInformation("Job with [{Uuid}] already exists for person [{PersonId}]",
                 command.Uuid, command.PersonId);
             return await base.HandleAsync(command, cancellationToken);
         }
@@ -97,7 +97,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         
         var emailSender = scope.ServiceProvider.GetRequiredService<IEmailSender>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<CreateJobCommandHandler>>();
-        logger.LogInformation("Sending job email to person [{PersonId}], job title [{JobTitle}]",
+        logger.LogTrace("Sending job email to person [{PersonId}], job title [{JobTitle}]",
             personId, job.Title);
 
         try
