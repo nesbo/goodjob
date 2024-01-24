@@ -12,6 +12,7 @@ namespace Kontravers.GoodJob.Domain.Work.UseCases;
 public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
 {
     private readonly IServiceProvider _serviceProvider;
+    private static readonly TimeSpan IgnoreOlderThan = TimeSpan.FromDays(1);
 
     public CreateJobCommandHandler(IServiceProvider serviceProvider)
     {
@@ -29,6 +30,13 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         
         logger.LogTrace("Starting processing CreateJobCommand for person [{PersonId}], with [{Uuid}]",
             command.PersonId, command.Uuid);
+        
+        if (clock.UtcNow - command.PublishedAtUtc > IgnoreOlderThan)
+        {
+            logger.LogInformation("Job title [{JobTitle}] is older than [{IgnoreOlderThan}]. Ignoring.",
+                command.Title, IgnoreOlderThan);
+            return await base.HandleAsync(command, cancellationToken);
+        }
 
         var personId = int.Parse(command.PersonId);
         var jobExists = await jobRepository.ExistsAsync(personId, command.Uuid, cancellationToken);
