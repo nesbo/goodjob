@@ -15,8 +15,4 @@
       <ProjectReference Include="..\Kontravers.GoodJob.Domain.Messaging\Kontravers.GoodJob.Domain.Messaging.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Talent\UseCases\" />
-    </ItemGroup>
-
 </Project>
