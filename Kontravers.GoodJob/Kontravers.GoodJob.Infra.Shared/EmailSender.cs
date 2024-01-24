@@ -72,7 +72,7 @@ public class EmailSender : IEmailSender
             IsBodyHtml = true,
             From = new MailAddress(From, FromDisplayName),
             Body = emailContent,
-            Subject = $"[{publishedAt.Days}D{publishedAt.Hours}H{publishedAt.Minutes}M ago] - {job.Title}"
+            Subject = $"[{publishedAt.ToShortTimespanString()} ago] - {job.Title}"
         };
         
         mailMessage.To.Add(receiver.Email);
