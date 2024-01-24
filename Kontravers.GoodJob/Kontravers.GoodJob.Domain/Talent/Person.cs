@@ -39,12 +39,12 @@ public class Person : IAggregate
 
     public void AddUpworkRssFeed(string rootUrl, string relativeUrl, DateTime lastFetchedAtUtc,
         byte minFetchIntervalInMinutes, DateTime createdUtc, DateTime insertedUtc,
-        bool autoGenerateProposals, bool autoSendEmails,
+        bool autoGenerateProposals, bool autoSendEmails, string title,
         int? preferredPortfolioId = null)
     {
         var upworkRssFeed = new PersonUpworkRssFeed(Id, rootUrl, lastFetchedAtUtc,
             minFetchIntervalInMinutes, relativeUrl, createdUtc, insertedUtc,
-            autoGenerateProposals, autoSendEmails, preferredPortfolioId);
+            autoGenerateProposals, autoSendEmails, title, preferredPortfolioId);
         _upworkRssFeeds.Add(upworkRssFeed);
     }
 }

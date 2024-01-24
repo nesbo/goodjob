@@ -32,6 +32,7 @@ public static class GoodJobServiceRegistrationsExtensions
         services.AddScoped<Gpt35TurboJobProposalGenerator>();
         services.AddScoped<IJobProposalGeneratorFactory, JobProposalGeneratorFactory>();
         services.AddScoped<ListPersonsQueryHandler>();
+        services.AddScoped<GetPersonQueryHandler>();
 
         services.AddDbContext<GoodJobDbContext>(options =>
         {

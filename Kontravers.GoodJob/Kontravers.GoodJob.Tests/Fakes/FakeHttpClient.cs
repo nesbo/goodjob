@@ -1,6 +1,6 @@
 using Kontravers.GoodJob.Domain;
 
-namespace Kontravers.GoodJob.Tests.Talent;
+namespace Kontravers.GoodJob.Tests.Fakes;
 
 public class FakeHttpClient : IHttpClient
 {

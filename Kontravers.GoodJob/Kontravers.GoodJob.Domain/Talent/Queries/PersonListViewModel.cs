@@ -1,4 +1,4 @@
-namespace Kontravers.GoodJob.Domain.Talent;
+namespace Kontravers.GoodJob.Domain.Talent.Queries;
 
 public class PersonListViewModel
 {

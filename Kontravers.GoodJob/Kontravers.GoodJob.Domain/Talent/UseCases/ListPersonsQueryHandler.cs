@@ -1,3 +1,4 @@
+using Kontravers.GoodJob.Domain.Talent.Queries;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
