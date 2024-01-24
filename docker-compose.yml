@@ -1,5 +1,5 @@
 services:
-  goodjob_worker:
+  worker:
     build:
       context: ./Kontravers.GoodJob
       dockerfile: Dockerfile-GoodJobWorker
