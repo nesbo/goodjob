@@ -33,7 +33,7 @@ public class CreateJobCommand : ICommand
             Title = title!,
             Url = link!,
             Description = description!,
-            PublishedAtUtc = DateTime.Parse(pubDate!).ToLocalTime().ToUniversalTime(),
+            PublishedAtUtc = DateTime.Parse(pubDate!).ToUniversalTime(),
             CreatedUtc = createdUtc.ToUniversalTime(),
             Uuid = uuid!,
             PersonId = personId,

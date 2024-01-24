@@ -64,15 +64,13 @@ public class EmailSender : IEmailSender
         }
         
         var emailContent = stringBuilder.ToString();
-        
-        var publishedAt = _clock.UtcNow - job.PublishedAtUtc;
 
         var mailMessage = new MailMessage
         {
             IsBodyHtml = true,
             From = new MailAddress(From, FromDisplayName),
             Body = emailContent,
-            Subject = $"[{publishedAt.ToShortTimespanString()} ago] - {job.Title}"
+            Subject = $"{job.PublishedAtLocal.ToString("t")} - {job.Title}"
         };
         
         mailMessage.To.Add(receiver.Email);

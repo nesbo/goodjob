@@ -34,6 +34,7 @@ public class Job : IAggregate
     public string Url { get; }
     public string Description { get; }
     public DateTime PublishedAtUtc { get; }
+    public DateTime PublishedAtLocal => PublishedAtUtc.ToLocalTime();
     public string? Skills { get; }
     public string Uuid { get; }
     public int PersonId { get; }
