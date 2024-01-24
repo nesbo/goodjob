@@ -6,26 +6,26 @@ public static class TimeExtensions
     {
         if (span.Days > 1)
         {
-            return $"{span.TotalDays}D";
+            return $"{Convert.ToInt32(span.TotalDays)}D";
         }
         
         if (span.Days == 1)
         {
-            return $"{span.TotalHours}H";
+            return $"{Convert.ToInt32(span.TotalHours)}H";
         }
         
         if (span.Hours > 1)
         {
-            return $"{span.TotalHours}H";
+            return $"{Convert.ToInt32(span.TotalHours)}H";
         }
         
         if (span.Hours == 1)
         {
-            return $"{span.TotalMinutes}M";
+            return $"{Convert.ToInt32(span.TotalMinutes)}M";
         }
         
         return span.Minutes >= 1 
-            ? $"{span.TotalMinutes}M" 
-            : $"{span.TotalSeconds}S";
+            ? $"{Convert.ToInt32(span.TotalMinutes)}M" 
+            : $"{Convert.ToInt32(span.TotalSeconds)}S";
     }
 }
