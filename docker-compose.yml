@@ -8,6 +8,18 @@ services:
     networks:
       - kontravers-goodjob
   
+  api:
+    build:
+      context: ./Kontravers.GoodJob
+      dockerfile: Dockerfile-GoodJobAPI
+    depends_on:
+      - postgres
+      - worker
+    ports:
+      - "8010:8010"
+    networks:
+      - kontravers-goodjob
+  
   postgres:
     image: postgres:15.3
     container_name: goodjob-postgres
