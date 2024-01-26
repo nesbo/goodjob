@@ -33,6 +33,7 @@ public static class GoodJobServiceRegistrationsExtensions
         services.AddScoped<IJobProposalGeneratorFactory, JobProposalGeneratorFactory>();
         services.AddScoped<ListPersonsQueryHandler>();
         services.AddScoped<GetPersonQueryHandler>();
+        services.AddScoped<GetPersonUpworkRssFeedQueryHandler>();
 
         services.AddDbContext<GoodJobDbContext>(options =>
         {

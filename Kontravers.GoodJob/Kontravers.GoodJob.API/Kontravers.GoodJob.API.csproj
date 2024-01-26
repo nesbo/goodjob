@@ -16,4 +16,8 @@
       <ProjectReference Include="..\Kontravers.GoodJob.Infra.Shared\Kontravers.GoodJob.Infra.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Controllers\" />
+    </ItemGroup>
+
 </Project>

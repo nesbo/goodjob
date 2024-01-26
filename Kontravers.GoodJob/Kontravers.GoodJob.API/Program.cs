@@ -1,3 +1,4 @@
+using Kontravers.GoodJob.API;
 using Kontravers.GoodJob.Infra.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.AddGoodJobMinimalApis();
 
 app.UseHttpsRedirection();
 

@@ -47,4 +47,9 @@ public class Person : IAggregate
             autoGenerateProposals, autoSendEmails, title, preferredPortfolioId);
         _upworkRssFeeds.Add(upworkRssFeed);
     }
+
+    public PersonUpworkRssFeed? GetUpworkRssFeed(int feedId)
+    {
+        return _upworkRssFeeds.SingleOrDefault(x => x.Id == feedId);
+    }
 }
