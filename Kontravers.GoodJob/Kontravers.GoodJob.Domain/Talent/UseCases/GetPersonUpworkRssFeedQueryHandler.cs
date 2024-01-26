@@ -40,11 +40,14 @@ public class GetPersonUpworkRssFeedQueryHandler
             throw new NotFoundException("Upwork rss feed not found");
         }
         
+        // merge complete url from root and relative url from upworkRssFeed object
+        var baseUrl = new Uri(upworkRssFeed.RootUrl);
+        var url = new Uri(baseUrl, upworkRssFeed.RelativeUrl);
+        
         return new PersonUpworkRssFeedViewModel
         {
             Id = upworkRssFeed.Id.ToString(),
-            RssFeedUrl = new Uri(new Uri(upworkRssFeed.RootUrl), new Uri(upworkRssFeed.RelativeUrl))
-                .ToString(),
+            RssFeedUrl = url.ToString(),
             Title = upworkRssFeed.Title,
             MinimumFetchIntervalInMinutes = upworkRssFeed.MinFetchIntervalInMinutes,
             LastFetchTimeUtc = upworkRssFeed.LastFetchedAtUtc,
