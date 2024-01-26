@@ -1,7 +1,7 @@
 using System.Xml;
 using Kontravers.GoodJob.Domain.Messaging;
-using Kontravers.GoodJob.Domain.Messaging.Commands;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
+using Kontravers.GoodJob.Domain.Work.Commands;
 using Microsoft.Extensions.Logging;
 
 namespace Kontravers.GoodJob.Domain.Talent.Services;

@@ -1,3 +1,5 @@
+using Kontravers.GoodJob.Domain.Talent.Commands;
+
 namespace Kontravers.GoodJob.Domain.Talent;
 
 public class PersonUpworkRssFeed : IEntity
@@ -26,8 +28,8 @@ public class PersonUpworkRssFeed : IEntity
     public DateTime CreatedUtc { get; }
     public DateTime InsertedUtc { get; }
     public int PersonId { get; }
-    public string RootUrl { get; }
-    public string RelativeUrl { get; }
+    public string RootUrl { get; private set; }
+    public string RelativeUrl { get; private set; }
 
     public string AbsoluteUrl
     {
@@ -41,9 +43,20 @@ public class PersonUpworkRssFeed : IEntity
     }
 
     public DateTime LastFetchedAtUtc { get; }
-    public byte MinFetchIntervalInMinutes { get; }
-    public int? PreferredProfileId { get; }
-    public bool AutoGenerateProposals { get; }
-    public bool AutoSendEmail { get; }
-    public string Title { get; }
+    public byte MinFetchIntervalInMinutes { get; private set; }
+    public int? PreferredProfileId { get; private set; }
+    public bool AutoGenerateProposals { get; private set; }
+    public bool AutoSendEmail { get; private set; }
+    public string Title { get; private set; }
+
+    public void Update(UpdatePersonUpworkRssFeedCommand command)
+    {
+        MinFetchIntervalInMinutes = command.MinFetchIntervalInMinutes;
+        AutoGenerateProposals = command.AutoGenerateProposalsEnabled;
+        AutoSendEmail = command.AutoSendEmailEnabled;
+        Title = command.Title;
+        PreferredProfileId = command.PreferredProfileId;
+        RootUrl = command.RootUrl;
+        RelativeUrl = command.RelativeUrl;
+    }
 }

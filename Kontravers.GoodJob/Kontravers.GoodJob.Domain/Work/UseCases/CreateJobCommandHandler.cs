@@ -1,6 +1,6 @@
-using Kontravers.GoodJob.Domain.Messaging.Commands;
 using Kontravers.GoodJob.Domain.Talent;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
+using Kontravers.GoodJob.Domain.Work.Commands;
 using Kontravers.GoodJob.Domain.Work.Repositories;
 using Kontravers.GoodJob.Domain.Work.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,7 +75,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
         Job job, Person person, CancellationToken cancellationToken)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<CreateJobCommandHandler>>();
-        if (command.JobSource == JobSourceCommandType.Upwork)
+        if (command.JobSource == JobSourceType.Upwork)
         {
             var personUpworkRssFeed = person.UpworkRssFeeds
                 .Single(f => f.Id == command.PersonFeedId);
@@ -95,7 +95,7 @@ public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
     private static async Task SendJobEmailIfEnabledAsync(IServiceScope scope,
         CreateJobCommand command, int personId, Job job, Person person, CancellationToken cancellationToken)
     {
-        if (command.JobSource == JobSourceCommandType.Upwork)
+        if (command.JobSource == JobSourceType.Upwork)
         {
             if (!person.UpworkRssFeeds.Single(f=> f.Id == command.PersonFeedId).AutoSendEmail)
             {

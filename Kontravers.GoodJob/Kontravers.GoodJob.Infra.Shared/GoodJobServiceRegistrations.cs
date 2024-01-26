@@ -25,6 +25,7 @@ public static class GoodJobServiceRegistrationsExtensions
         services.AddScoped<RssFeedFetcher>();
         services.AddScoped<IClock, Clock>();
         services.AddScoped<IPersonQueryRepository, PersonQueryRepository>();
+        services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<IJobRepository, JobRepository>();
         services.AddScoped<ICommandPublisher, CommandPublisher>();
         services.AddScoped<IHttpClient, HttpClient>();

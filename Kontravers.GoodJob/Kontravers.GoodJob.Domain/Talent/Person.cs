@@ -1,3 +1,6 @@
+using Kontravers.GoodJob.Domain.Exceptions;
+using Kontravers.GoodJob.Domain.Talent.Commands;
+
 namespace Kontravers.GoodJob.Domain.Talent;
 
 public class Person : IAggregate
@@ -51,5 +54,16 @@ public class Person : IAggregate
     public PersonUpworkRssFeed? GetUpworkRssFeed(int feedId)
     {
         return _upworkRssFeeds.SingleOrDefault(x => x.Id == feedId);
+    }
+
+    public void UpdateUpworkRssFeed(UpdatePersonUpworkRssFeedCommand command)
+    {
+        var feed = GetUpworkRssFeed(command.PersonFeedId);
+        if (feed is null)
+        {
+            throw new NotFoundException("Upwork feed not found");
+        }
+        
+        feed.Update(command);
     }
 }

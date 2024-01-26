@@ -1,0 +1,42 @@
+using Kontravers.GoodJob.Domain;
+using Kontravers.GoodJob.Domain.Talent.Commands;
+
+namespace Kontravers.GoodJob.API.Requests.Talent;
+
+public class UpdatePersonUpworkRssFeedRequest
+{
+    public required string RootUrl { get; set; }
+    public required string RelativeUrl { get; set; }
+    public required bool AutoSendEmailEnabled { get; set; }
+    public required bool AutoGenerateProposalsEnabled { get; set; }
+    public int? PreferredProfileId { get; set; }
+    public required byte MinFetchIntervalInMinutes { get; set; }
+    public required string Title { get; set; }
+    
+    public UpdatePersonUpworkRssFeedCommand ToCommand(IClock clock,
+        string personIdText, string personFeedIdText)
+    {
+        if (!int.TryParse(personIdText, out var personId))
+        {
+            throw new BadRequestException(nameof(personId));
+        }
+        
+        if (!int.TryParse(personFeedIdText, out var personFeedId))
+        {
+            throw new BadRequestException(nameof(personFeedId));
+        }
+        
+        return new UpdatePersonUpworkRssFeedCommand(
+            clock.UtcNow,
+            personId,
+            personFeedId,
+            RootUrl,
+            RelativeUrl,
+            AutoSendEmailEnabled,
+            AutoGenerateProposalsEnabled,
+            PreferredProfileId,
+            MinFetchIntervalInMinutes,
+            Title
+        );
+    }
+}

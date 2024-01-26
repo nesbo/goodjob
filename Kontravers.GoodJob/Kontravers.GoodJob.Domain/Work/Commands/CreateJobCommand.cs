@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using System.Xml;
+using Kontravers.GoodJob.Domain.Messaging;
 
-namespace Kontravers.GoodJob.Domain.Messaging.Commands;
+namespace Kontravers.GoodJob.Domain.Work.Commands;
 
 public class CreateJobCommand : ICommand
 {
@@ -16,7 +17,7 @@ public class CreateJobCommand : ICommand
     public string Uuid { get; set; }
     public string PersonId { get; set; }
     public int? PreferredProfileId { get; set; }
-    public JobSourceCommandType JobSource { get; set; }
+    public JobSourceType JobSource { get; set; }
     public int PersonFeedId { get; set; }
 
     public static CreateJobCommand FromUpworkRssFeedItem(XmlNode xmlNode, DateTime createdUtc,
@@ -38,7 +39,7 @@ public class CreateJobCommand : ICommand
             Uuid = uuid!,
             PersonId = personId,
             PreferredProfileId = preferredProfileId,
-            JobSource = JobSourceCommandType.Upwork,
+            JobSource = JobSourceType.Upwork,
             PersonFeedId = personFeedId
         };
     }

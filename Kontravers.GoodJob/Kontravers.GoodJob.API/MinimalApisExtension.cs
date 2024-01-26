@@ -1,7 +1,10 @@
+using Kontravers.GoodJob.API.Requests.Talent;
+using Kontravers.GoodJob.Domain;
 using Kontravers.GoodJob.Domain.Exceptions;
 using Kontravers.GoodJob.Domain.Talent.Queries;
 using Kontravers.GoodJob.Domain.Talent.UseCases;
 using Microsoft.AspNetCore.Diagnostics;
+using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.API;
 
@@ -31,6 +34,12 @@ public static class MinimalApisExtension
                         CancellationToken cancellationToken) =>
                     handler.GetAsync(new GetPersonUpworkRssFeedQuery(personId, upworkRssFeedId), cancellationToken))
             .Produces<PersonUpworkRssFeedViewModel>();
+
+        personsEndpoint.MapPut("{personId}/upwork-rss-feeds/{upworkRssFeedId}",
+            (IAmACommandProcessor commandProcessor, string personId, string upworkRssFeedId,
+                    UpdatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken) =>
+                commandProcessor.SendAsync(request.ToCommand(clock, personId, upworkRssFeedId),
+                    cancellationToken: cancellationToken));
 
         return app;
     }
