@@ -5,8 +5,7 @@ namespace Kontravers.GoodJob.API.Requests.Talent;
 
 public class UpdatePersonUpworkRssFeedRequest
 {
-    public required string RootUrl { get; set; }
-    public required string RelativeUrl { get; set; }
+    public required string AbsoluteFeedUrl { get; set; }
     public required bool AutoSendEmailEnabled { get; set; }
     public required bool AutoGenerateProposalsEnabled { get; set; }
     public int? PreferredProfileId { get; set; }
@@ -25,13 +24,23 @@ public class UpdatePersonUpworkRssFeedRequest
         {
             throw new BadRequestException(nameof(personFeedId));
         }
+
+        Uri uri;
+        try
+        {
+            uri = new Uri(AbsoluteFeedUrl);
+        }
+        catch (Exception)
+        {
+            throw new BadRequestException(nameof(AbsoluteFeedUrl));
+        }
         
         return new UpdatePersonUpworkRssFeedCommand(
             clock.UtcNow,
             personId,
             personFeedId,
-            RootUrl,
-            RelativeUrl,
+            uri.Scheme + Uri.SchemeDelimiter + uri.Host,
+            uri.PathAndQuery,
             AutoSendEmailEnabled,
             AutoGenerateProposalsEnabled,
             PreferredProfileId,
