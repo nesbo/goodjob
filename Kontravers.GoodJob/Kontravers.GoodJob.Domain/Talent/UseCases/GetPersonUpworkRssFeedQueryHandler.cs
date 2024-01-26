@@ -16,7 +16,7 @@ public class GetPersonUpworkRssFeedQueryHandler
         _personQueryRepository = personQueryRepository;
         _logger = logger;
     }
-    
+
     public async Task<PersonUpworkRssFeedViewModel> GetAsync(GetPersonUpworkRssFeedQuery query,
         CancellationToken cancellationToken)
     {
@@ -31,19 +31,21 @@ public class GetPersonUpworkRssFeedQueryHandler
         {
             throw new NotFoundException("Person not found");
         }
-        
+
         var feedId = int.Parse(query.UpworkRssFeedId);
         var upworkRssFeed = person.GetUpworkRssFeed(feedId);
-        
+
         if (upworkRssFeed is null)
         {
             throw new NotFoundException("Upwork rss feed not found");
         }
-        
+
         return new PersonUpworkRssFeedViewModel
         {
             Id = upworkRssFeed.Id.ToString(),
-            RssFeedUrl = upworkRssFeed.AbsoluteUrl,
+            AbsoluteFeedUrl = upworkRssFeed.AbsoluteUrl,
+            RootUrl = upworkRssFeed.RootUrl,
+            RelativeUrl = upworkRssFeed.RelativeUrl,
             Title = upworkRssFeed.Title,
             MinimumFetchIntervalInMinutes = upworkRssFeed.MinFetchIntervalInMinutes,
             LastFetchTimeUtc = upworkRssFeed.LastFetchedAtUtc,
@@ -53,5 +55,4 @@ public class GetPersonUpworkRssFeedQueryHandler
             CreatedUtc = upworkRssFeed.CreatedUtc
         };
     }
-    
 }
