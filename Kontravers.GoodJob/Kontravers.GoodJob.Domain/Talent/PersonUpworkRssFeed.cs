@@ -28,6 +28,18 @@ public class PersonUpworkRssFeed : IEntity
     public int PersonId { get; }
     public string RootUrl { get; }
     public string RelativeUrl { get; }
+
+    public string AbsoluteUrl
+    {
+        get
+        {
+            var baseUri = new Uri(RootUrl);
+            var relativeUri = new Uri(RelativeUrl, UriKind.Relative);
+            var url = new Uri(baseUri, relativeUri);
+            return url.ToString();
+        }
+    }
+
     public DateTime LastFetchedAtUtc { get; }
     public byte MinFetchIntervalInMinutes { get; }
     public int? PreferredProfileId { get; }

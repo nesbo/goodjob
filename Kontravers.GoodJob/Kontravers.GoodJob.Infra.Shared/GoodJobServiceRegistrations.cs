@@ -50,12 +50,8 @@ public static class GoodJobServiceRegistrationsExtensions
             RssFeedFetchIntervalInSeconds = 60
         });
 
-        return services;
-    }
-    
-    public static IServiceCollection AddBrighterRegistrations(this IServiceCollection services)
-    {
         services.AddBrighter().AutoFromAssemblies();
+
         return services;
     }
 }

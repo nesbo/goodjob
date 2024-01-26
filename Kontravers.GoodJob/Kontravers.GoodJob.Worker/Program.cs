@@ -20,7 +20,6 @@ builder
         services
             .AddHostedService<RssFeedRunner>()
             .AddGoodJobServices()
-            .AddBrighterRegistrations()
             .AddLogging();
     });
 
