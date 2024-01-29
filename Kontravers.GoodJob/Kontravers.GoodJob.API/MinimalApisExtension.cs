@@ -42,6 +42,11 @@ public static class MinimalApisExtension
                     UpdatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId, upworkRssFeedId),
                     cancellationToken: cancellationToken));
+        
+        personsEndpoint.MapPost("{personId}/profiles",
+            (IAmACommandProcessor commandProcessor, string personId,
+                    CreatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
+                commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
 
         return app;
     }

@@ -66,4 +66,17 @@ public class Person : IAggregate
         
         feed.Update(command);
     }
+
+    public void CreateProfile(CreatePersonProfileCommand command, DateTime insertedUtc)
+    {
+        var existingProfile = _profiles.SingleOrDefault(x => x.Title == command.Title);
+        if (existingProfile is not null)
+        {
+            throw new DuplicateEntityException("Profile with this title already exists");
+        }
+        
+        var profile = new Profile(command.CreatedUtc, insertedUtc, command.Title,
+            command.Description, command.Skills);
+        _profiles.Add(profile);
+    }
 }
