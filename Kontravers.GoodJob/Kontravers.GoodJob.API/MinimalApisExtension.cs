@@ -13,6 +13,8 @@ public static class MinimalApisExtension
     public static WebApplication AddGoodJobMinimalApis(this WebApplication app)
     {
         AttachExceptionHandler(app);
+
+        app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         
         var personsEndpoint = app.MapGroup("/persons")
             .WithTags("Persons");
