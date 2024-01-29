@@ -9,7 +9,7 @@ public class UpdatePersonUpworkRssFeedRequest
     public required bool AutoSendEmailEnabled { get; set; }
     public required bool AutoGenerateProposalsEnabled { get; set; }
     public int? PreferredProfileId { get; set; }
-    public required byte MinFetchIntervalInMinutes { get; set; }
+    public required byte MinimumFetchIntervalInMinutes { get; set; }
     public required string Title { get; set; }
     
     public UpdatePersonUpworkRssFeedCommand ToCommand(IClock clock,
@@ -44,7 +44,7 @@ public class UpdatePersonUpworkRssFeedRequest
             AutoSendEmailEnabled,
             AutoGenerateProposalsEnabled,
             PreferredProfileId,
-            MinFetchIntervalInMinutes,
+            MinimumFetchIntervalInMinutes,
             Title
         );
     }

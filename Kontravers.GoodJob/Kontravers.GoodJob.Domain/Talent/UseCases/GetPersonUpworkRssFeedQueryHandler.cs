@@ -44,13 +44,11 @@ public class GetPersonUpworkRssFeedQueryHandler
         {
             Id = upworkRssFeed.Id.ToString(),
             AbsoluteFeedUrl = upworkRssFeed.AbsoluteUrl,
-            RootUrl = upworkRssFeed.RootUrl,
-            RelativeUrl = upworkRssFeed.RelativeUrl,
             Title = upworkRssFeed.Title,
             MinimumFetchIntervalInMinutes = upworkRssFeed.MinFetchIntervalInMinutes,
             LastFetchTimeUtc = upworkRssFeed.LastFetchedAtUtc,
             AutoSendEmailEnabled = upworkRssFeed.AutoSendEmail,
-            AutoGenerateProposalEnabled = upworkRssFeed.AutoGenerateProposals,
+            AutoGenerateProposalsEnabled = upworkRssFeed.AutoGenerateProposals,
             PreferredProfileId = upworkRssFeed.PreferredProfileId,
             CreatedUtc = upworkRssFeed.CreatedUtc
         };
