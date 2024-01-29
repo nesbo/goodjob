@@ -79,4 +79,14 @@ public class Person : IAggregate
             command.Description, command.Skills);
         _profiles.Add(profile);
     }
+
+    public bool HasProfile(int profileId)
+    {
+        return _profiles.Any(x => x.Id == profileId);
+    }
+
+    public Profile GetProfile(int profileId)
+    {
+        return _profiles.Single(p => p.Id == profileId);
+    }
 }

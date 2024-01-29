@@ -35,6 +35,7 @@ public static class GoodJobServiceRegistrationsExtensions
         services.AddScoped<ListPersonsQueryHandler>();
         services.AddScoped<GetPersonQueryHandler>();
         services.AddScoped<GetPersonUpworkRssFeedQueryHandler>();
+        services.AddScoped<GetPersonProfileQueryHandler>();
 
         services.AddDbContext<GoodJobDbContext>(options =>
         {

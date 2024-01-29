@@ -17,7 +17,7 @@ public static class MinimalApisExtension
         app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         
         var personsEndpoint = app.MapGroup("/persons")
-            .WithTags("Persons");
+            .WithTags("Talent");
         
         personsEndpoint
             .MapGet("/", (ListPersonsQueryHandler handler, CancellationToken cancellationToken) =>
@@ -47,6 +47,12 @@ public static class MinimalApisExtension
             (IAmACommandProcessor commandProcessor, string personId,
                     CreatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
+        
+        personsEndpoint.MapGet("{personId}/profiles/{profileId}",
+            (GetPersonProfileQueryHandler handler, string personId, string profileId,
+                    CancellationToken cancellationToken) =>
+                handler.GetAsync(new GetPersonProfileQuery(personId, profileId), cancellationToken))
+            .Produces<PersonProfileViewModel>();
 
         return app;
     }
