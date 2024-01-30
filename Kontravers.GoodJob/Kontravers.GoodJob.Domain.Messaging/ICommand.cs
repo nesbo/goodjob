@@ -4,6 +4,6 @@ namespace Kontravers.GoodJob.Domain.Messaging;
 
 public interface ICommand : IRequest
 {
-    static string CommandName { get; }
+    string CommandName { get; }
     DateTime CreatedUtc { get; }
 }

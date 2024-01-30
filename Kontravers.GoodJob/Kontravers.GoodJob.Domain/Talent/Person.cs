@@ -89,4 +89,16 @@ public class Person : IAggregate
     {
         return _profiles.Single(p => p.Id == profileId);
     }
+
+    public void UpdateProfile(UpdatePersonProfileCommand command)
+    {
+        var profileId = int.Parse(command.ProfileId);
+        if (!HasProfile(profileId))
+        {
+            throw new NotFoundException("Profile not found");
+        }
+        
+        var profile = GetProfile(profileId);
+        profile.Update(command);
+    }
 }

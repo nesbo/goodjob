@@ -6,9 +6,10 @@ namespace Kontravers.GoodJob.Domain.Work.Commands;
 
 public class CreateJobCommand : ICommand
 {
-    public static readonly string CommandName  = "CreateJobCommand";
+    public string CommandName => _commandName;
+    private const string _commandName = "CreateJobCommand";
     public Guid Id { get; set; } = Guid.NewGuid();
-    public Activity Span { get; set; } = new (CommandName);
+    public Activity Span { get; set; } = new(_commandName);
     public DateTime CreatedUtc { get; set; }
     public DateTime PublishedAtUtc { get; set; }
     public string Description { get; set; }

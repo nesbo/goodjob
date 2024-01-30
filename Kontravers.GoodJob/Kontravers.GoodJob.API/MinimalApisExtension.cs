@@ -53,6 +53,12 @@ public static class MinimalApisExtension
                     CancellationToken cancellationToken) =>
                 handler.GetAsync(new GetPersonProfileQuery(personId, profileId), cancellationToken))
             .Produces<PersonProfileViewModel>();
+        
+        personsEndpoint.MapPut("{personId}/profiles/{profileId}",
+            (IAmACommandProcessor commandProcessor, string personId, string profileId,
+                    UpdatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
+                commandProcessor.SendAsync(request.ToCommand(clock, personId, profileId),
+                    cancellationToken: cancellationToken));
 
         return app;
     }

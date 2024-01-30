@@ -21,9 +21,10 @@ public class UpdatePersonUpworkRssFeedCommand : ICommand
         Title = title;
     }
 
-    public static string CommandName { get; } = "UpdatePersonUpworkRssFeedCommand";
+    public string CommandName => _commandName;
+    private const string _commandName = "UpdatePersonUpworkRssFeedCommand";
     public Guid Id { get; set; } = Guid.NewGuid();
-    public Activity Span { get; set; } = new (CommandName);
+    public Activity Span { get; set; } = new (_commandName);
     public DateTime CreatedUtc { get; }
     public int PersonId { get; }
     public int PersonFeedId { get; }
