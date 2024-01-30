@@ -59,6 +59,8 @@ public static class MinimalApisExtension
                     UpdatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId, profileId),
                     cancellationToken: cancellationToken));
+        
+        
 
         return app;
     }

@@ -14,9 +14,9 @@ public class EmailSender : IEmailSender
     private const string FromDisplayName = "Kontravers GoodJob";
     private const string GjJobEmailTemplateHtml = "GJ-job-email-template_01.html";
     private const string GjJobEmailJobProposalTemplateHtml = "GJ-job-email-job-proposal-template.html";
-    private const string EmailUsername = "dev@kontrave.rs";
-    private const string EmailPassword = "1312kontra";
-    private const string EmailHost = "mail.kontrave.rs";
+    private const string EmailUsername = "apikey";
+    private const string EmailPassword = "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";
+    private const string EmailHost = "smtp.sendgrid.net";
     private const int EmailPort = 587;
 
     public EmailSender(IClock clock)
