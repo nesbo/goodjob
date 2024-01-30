@@ -1,6 +1,8 @@
 using Kontravers.GoodJob.Data.Repositories.Talent;
 using Kontravers.GoodJob.Domain.Talent;
+using Kontravers.GoodJob.Domain.Talent.Commands;
 using Kontravers.GoodJob.Domain.Talent.Repositories;
+using Kontravers.GoodJob.Tests.Fakes;
 
 namespace Kontravers.GoodJob.Tests.Builders;
 
@@ -23,9 +25,10 @@ public class TestDataBuilder
         var person = new Person(true, email, "John Doe", 1,
              createdUtc.Value, createdUtc.Value);
         
-        person.AddUpworkRssFeed("https://www.upwork.com/", "ab/feed/jobs/rss?sort=recency&paging=0%3B1",
-            DateTime.MinValue, 5, createdUtc.Value, createdUtc.Value,
-            true,true, "Upwork RSS Feed 1");
+        var createUpworkRssFeedCommand = new CreatePersonUpworkRssFeedCommand(createdUtc.Value, person.Id,
+            "https://www.upwork.com/", "ab/feed/jobs/rss?sort=recency&paging=0%3B1",
+            true,true, 1, 5, "Upwork RSS Feed 1");
+        person.CreateUpworkRssFeed(createUpworkRssFeedCommand, new FakeClock(createdUtc.Value));
 
         _dbContextFactory.Context.Add(person);
         _dbContextFactory.Context.SaveChanges();

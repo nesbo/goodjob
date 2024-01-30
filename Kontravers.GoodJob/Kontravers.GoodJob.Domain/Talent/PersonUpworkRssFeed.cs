@@ -6,12 +6,11 @@ public class PersonUpworkRssFeed : IEntity
 {
     protected PersonUpworkRssFeed() { }
     
-    public PersonUpworkRssFeed(int personId, string rootUrl, DateTime lastFetchedAtUtc,
+    public PersonUpworkRssFeed(string rootUrl, DateTime lastFetchedAtUtc,
         byte minFetchIntervalInMinutes, string relativeUrl, DateTime createdUtc,
         DateTime insertedUtc, bool autoGenerateProposals, bool autoSendEmail,
         string title, int? preferredProfileId = null)
     {
-        PersonId = personId;
         RootUrl = rootUrl;
         LastFetchedAtUtc = lastFetchedAtUtc;
         MinFetchIntervalInMinutes = minFetchIntervalInMinutes;

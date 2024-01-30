@@ -40,17 +40,6 @@ public class Person : IAggregate
         InsertedUtc = insertedUtc;
     }
 
-    public void AddUpworkRssFeed(string rootUrl, string relativeUrl, DateTime lastFetchedAtUtc,
-        byte minFetchIntervalInMinutes, DateTime createdUtc, DateTime insertedUtc,
-        bool autoGenerateProposals, bool autoSendEmails, string title,
-        int? preferredPortfolioId = null)
-    {
-        var upworkRssFeed = new PersonUpworkRssFeed(Id, rootUrl, lastFetchedAtUtc,
-            minFetchIntervalInMinutes, relativeUrl, createdUtc, insertedUtc,
-            autoGenerateProposals, autoSendEmails, title, preferredPortfolioId);
-        _upworkRssFeeds.Add(upworkRssFeed);
-    }
-
     public PersonUpworkRssFeed? GetUpworkRssFeed(int feedId)
     {
         return _upworkRssFeeds.SingleOrDefault(x => x.Id == feedId);
@@ -100,5 +89,21 @@ public class Person : IAggregate
         
         var profile = GetProfile(profileId);
         profile.Update(command);
+    }
+
+    public void CreateUpworkRssFeed(CreatePersonUpworkRssFeedCommand command, IClock clock)
+    {
+        if (UpworkRssFeeds.Any(x => x.Title == command.Title))
+        {
+            throw new DuplicateEntityException("Upwork RSS feed with this title already exists");
+        }
+
+        var upworkRssFeed = new PersonUpworkRssFeed(command.RootUrl,
+            command.CreatedUtc.AddMinutes(-command.MinimumFetchIntervalInMinutes),
+            command.MinimumFetchIntervalInMinutes,
+            command.RelativeUrl, command.CreatedUtc, clock.UtcNow, command.AutoGenerateProposalsEnabled,
+            command.AutoSendEmailEnabled, command.Title, command.PreferredProfileId);
+        
+        _upworkRssFeeds.Add(upworkRssFeed);
     }
 }

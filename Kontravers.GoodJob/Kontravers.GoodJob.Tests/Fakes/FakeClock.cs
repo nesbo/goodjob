@@ -4,5 +4,17 @@ namespace Kontravers.GoodJob.Tests.Fakes;
 
 public class FakeClock : IClock
 {
-    public DateTime UtcNow { get; } = DateTime.UtcNow;
+    private readonly DateTime _utcNow;
+
+    public FakeClock(DateTime utcNow)
+    {
+        _utcNow = utcNow;
+    }
+
+    public FakeClock()
+    {
+        _utcNow = DateTime.UtcNow;
+    }
+
+    public DateTime UtcNow => _utcNow;
 }
