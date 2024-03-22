@@ -12,7 +12,7 @@ namespace Kontravers.GoodJob.Domain.Work.UseCases;
 public class CreateJobCommandHandler : RequestHandlerAsync<CreateJobCommand>
 {
     private readonly IServiceProvider _serviceProvider;
-    private static readonly TimeSpan IgnoreOlderThan = TimeSpan.FromDays(1);
+    private static readonly TimeSpan IgnoreOlderThan = TimeSpan.FromDays(30);
 
     public CreateJobCommandHandler(IServiceProvider serviceProvider)
     {
