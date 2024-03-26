@@ -1,12 +1,12 @@
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /source/goodjob_api
 COPY . .
 RUN dotnet restore ./Kontravers.GoodJob.API/Kontravers.GoodJob.API.csproj
 RUN dotnet publish ./Kontravers.GoodJob.API/Kontravers.GoodJob.API.csproj -c release -o /app/goodjob_api --no-restore
 
 # Run stage
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app/goodjob_api
 COPY --from=build /app/goodjob_api ./
 ENV ASPNETCORE_URLS=http://+:8010
