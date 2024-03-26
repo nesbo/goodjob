@@ -9,4 +9,15 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            // configure postgres
+            optionsBuilder
+                .UseNpgsql("Host=localhost;Database=fleetstep.connect.teltonika;Username=postgres;Password=Password1!");
+        }
+        base.OnConfiguring(optionsBuilder);
+    }
 }

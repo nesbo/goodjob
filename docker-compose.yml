@@ -7,6 +7,18 @@ services:
       - postgres
     networks:
       - kontravers-goodjob
+
+  auth:
+    build:
+      context: ./Kontravers.GoodJob
+      dockerfile: Dockerfile-GoodJobAuth
+    ports:
+      - "7068:7068" #https
+      - "5279:5279" #http
+    depends_on:
+      - postgres
+    networks:
+      - kontravers-goodjob
   
   api:
     build:
@@ -21,7 +33,7 @@ services:
       - kontravers-goodjob
   
   postgres:
-    image: postgres:15.3
+    image: postgres:latest
     container_name: goodjob-postgres
     ports:
       - "5432:5432"
