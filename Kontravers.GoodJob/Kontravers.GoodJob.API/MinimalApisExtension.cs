@@ -17,7 +17,8 @@ public static class MinimalApisExtension
         app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         
         var personsEndpoint = app.MapGroup("/persons")
-            .WithTags("Talent");
+            .WithTags("Talent")
+            .RequireAuthorization(options => options.RequireAuthenticatedUser());
         
         personsEndpoint
             .MapGet("/", (ListPersonsQueryHandler handler, CancellationToken cancellationToken) =>

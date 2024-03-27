@@ -1,4 +1,3 @@
-using IdentityModel;
 using Kontravers.GoodJob.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -40,7 +39,11 @@ serviceCollection
     .AddAuthentication();
 
 serviceCollection
-    .AddIdentityServer()
+    .AddIdentityServer(options =>
+    {
+        options.Authentication.CookieLifetime = TimeSpan.FromHours(1);
+        options.Authentication.CookieSlidingExpiration = true;
+    })
     .AddInMemoryClients(Clients.GetClients())
     .AddInMemoryApiResources(Resources.GetApiResources())
     .AddInMemoryIdentityResources(Resources.GetIdentityResources())
