@@ -1,11 +1,18 @@
+using IdentityModel;
+using Kontravers.GoodJob.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Kontravers.GoodJob.Auth.Data;
 using Kontravers.GoodJob.Data;
+using Kontravers.GoodJob.Domain;
+using EmailSender = Kontravers.GoodJob.Auth.EmailSender;
+using IEmailSender = Microsoft.AspNetCore.Identity.UI.Services.IEmailSender;
 
 var builder = WebApplication.CreateBuilder(args);
 var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development;
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+var serviceCollection = builder.Services;
+
+serviceCollection.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = isDevelopment
         ? "Host=localhost;Database=goodjob;Username=postgres;Password=Password1!;Timezone=UTC"
@@ -14,17 +21,34 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString, x =>
         x.MigrationsHistoryTable("__EFMigrationsHistory", "auth"));
 });
-    
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+serviceCollection.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services
-    .AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+serviceCollection
+    .AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentityServer();
+serviceCollection.ConfigureApplicationCookie(cookie =>
+{
+    cookie.LoginPath = "/Identity/Account/Login";
+});
 
-builder.Services.AddControllersWithViews();
+serviceCollection
+    .AddScoped<Kontravers.GoodJob.Domain.IEmailSender, Kontravers.GoodJob.Infra.Shared.EmailSender>()
+    .AddScoped<IClock, Clock>()
+    .AddScoped<IEmailSender, EmailSender>()
+    .AddAuthentication();
+
+serviceCollection
+    .AddIdentityServer()
+    .AddInMemoryClients(Clients.GetClients())
+    .AddInMemoryApiResources(Resources.GetApiResources())
+    .AddInMemoryIdentityResources(Resources.GetIdentityResources())
+    .AddInMemoryApiScopes(Scopes.GetApiScopes())
+    .AddAspNetIdentity<IdentityUser>();
+
+serviceCollection.AddControllersWithViews();
+serviceCollection.AddRazorPages();
 
 var app = builder.Build();
 
@@ -47,6 +71,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseIdentityServer();
+app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",

@@ -6,4 +6,5 @@ namespace Kontravers.GoodJob.Domain;
 public interface IEmailSender
 {
     Task SendJobEmailAsync(Person receiver, Job job, CancellationToken cancellationToken);
+    Task SendEmailAsync(string email, string subject, string htmlMessage);
 }

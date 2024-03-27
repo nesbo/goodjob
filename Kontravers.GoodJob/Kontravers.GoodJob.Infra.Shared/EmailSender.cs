@@ -77,4 +77,9 @@ public class EmailSender : IEmailSender
         
         await smtpClient.SendMailAsync(mailMessage, cancellationToken);
     }
+
+    public Task SendEmailAsync(string email, string subject, string htmlMessage)
+    {
+        return Task.CompletedTask;
+    }
 }
