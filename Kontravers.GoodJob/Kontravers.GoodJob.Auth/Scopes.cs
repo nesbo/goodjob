@@ -11,9 +11,7 @@ public static class Scopes
         return new[]
         {
             new ApiScope(AuthConstants.PersonTalentScope),
-            new ApiScope(AuthConstants.PersonWorkScope),
-            new ApiScope(AuthConstants.ProfileScope),
-            new ApiScope(AuthConstants.OpenIdScope)
+            new ApiScope(AuthConstants.PersonWorkScope)
         };
     }
 }

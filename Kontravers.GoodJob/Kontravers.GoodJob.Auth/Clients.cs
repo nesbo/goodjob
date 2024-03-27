@@ -18,8 +18,12 @@ public class Clients
                 RequireClientSecret = false,
                 RedirectUris = { "https://localhost:5001/signin-oidc", "https://oauth.pstmn.io/v1/callback" },
                 PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
-                AllowedScopes = { "openid", "profile", "email", 
-                    AuthConstants.PersonTalentScope, AuthConstants.PersonWorkScope }
+                AllowedScopes =
+                {
+                    AuthConstants.PersonTalentScope,
+                    AuthConstants.PersonWorkScope,
+                    "openid", "profile", "userId"
+                }
             }
         };
     }

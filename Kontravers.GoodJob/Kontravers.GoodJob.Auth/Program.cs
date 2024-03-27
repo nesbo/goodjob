@@ -9,9 +9,9 @@ using IEmailSender = Microsoft.AspNetCore.Identity.UI.Services.IEmailSender;
 
 var builder = WebApplication.CreateBuilder(args);
 var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development;
-var serviceCollection = builder.Services;
+var services = builder.Services;
 
-serviceCollection.AddDbContext<ApplicationDbContext>(options =>
+services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = isDevelopment
         ? "Host=localhost;Database=goodjob;Username=postgres;Password=Password1!;Timezone=UTC"
@@ -21,24 +21,25 @@ serviceCollection.AddDbContext<ApplicationDbContext>(options =>
         x.MigrationsHistoryTable("__EFMigrationsHistory", "auth"));
 });
 
-serviceCollection.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDatabaseDeveloperPageExceptionFilter();
 
-serviceCollection
+services
     .AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
-serviceCollection.ConfigureApplicationCookie(cookie =>
+services.ConfigureApplicationCookie(cookie =>
 {
     cookie.LoginPath = "/Identity/Account/Login";
 });
 
-serviceCollection
+services
     .AddScoped<Kontravers.GoodJob.Domain.IEmailSender, Kontravers.GoodJob.Infra.Shared.EmailSender>()
     .AddScoped<IClock, Clock>()
     .AddScoped<IEmailSender, EmailSender>()
     .AddAuthentication();
 
-serviceCollection
+services
     .AddIdentityServer(options =>
     {
         options.Authentication.CookieLifetime = TimeSpan.FromHours(1);
@@ -51,8 +52,8 @@ serviceCollection
     .AddAspNetIdentity<IdentityUser>()
     .AddDeveloperSigningCredential();
 
-serviceCollection.AddControllersWithViews();
-serviceCollection.AddRazorPages();
+services.AddControllersWithViews();
+services.AddRazorPages();
 
 var app = builder.Build();
 

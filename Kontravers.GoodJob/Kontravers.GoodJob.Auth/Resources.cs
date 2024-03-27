@@ -11,6 +11,11 @@ public class Resources
 
     public static IEnumerable<IdentityResource> GetIdentityResources()
     {
-        return Enumerable.Empty<IdentityResource>();
+        return new[]
+        {
+            new IdentityResources.OpenId(),
+            new IdentityResources.Profile(),
+            new IdentityResource("userId", new[] { "userId" })
+        };
     }
 }
