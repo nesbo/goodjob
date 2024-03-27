@@ -45,7 +45,8 @@ serviceCollection
     .AddInMemoryApiResources(Resources.GetApiResources())
     .AddInMemoryIdentityResources(Resources.GetIdentityResources())
     .AddInMemoryApiScopes(Scopes.GetApiScopes())
-    .AddAspNetIdentity<IdentityUser>();
+    .AddAspNetIdentity<IdentityUser>()
+    .AddDeveloperSigningCredential();
 
 serviceCollection.AddControllersWithViews();
 serviceCollection.AddRazorPages();
@@ -69,8 +70,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.None,
+    Secure = CookieSecurePolicy.Always,
+});
+
 app.UseIdentityServer();
+app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllerRoute(
