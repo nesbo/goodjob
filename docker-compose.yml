@@ -44,6 +44,22 @@ services:
       - psql:/var/lib/postgresql/data
     networks:
       - kontravers-goodjob
+  
+  rabbitmq:
+    build:
+      context: ./Kontravers.GoodJob
+      dockerfile: Dockerfile-RabbitMq
+    container_name: goodjob-rabbitmq
+    ports:
+      - "8080:15672"
+      - "5672:5672"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 300M
+    networks:
+      - kontravers-goodjob
       
 networks:
     kontravers-goodjob:

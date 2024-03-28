@@ -1,0 +1,7 @@
+FROM rabbitmq:3.9-management
+
+COPY rabbitmq.conf /etc/rabbitmq/
+COPY definitions.json /etc/rabbitmq/
+ENV RABBITMQ_USER test
+ENV RABBITMQ_PASSWORD test
+RUN chown rabbitmq:rabbitmq /etc/rabbitmq/rabbitmq.conf /etc/rabbitmq/definitions.json

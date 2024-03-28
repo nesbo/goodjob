@@ -1,7 +1,6 @@
 using Kontravers.GoodJob.Data;
 using Kontravers.GoodJob.Infra.Shared;
 using Kontravers.GoodJob.Worker;
-using Microsoft.EntityFrameworkCore;
 
 var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
@@ -31,4 +30,3 @@ using (var scope = host.Services.CreateScope())
 }
 
 await host.RunAsync();
-
