@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Kontravers.GoodJob.Auth.Data;
 using Kontravers.GoodJob.Data;
 using Kontravers.GoodJob.Domain;
+using Kontravers.GoodJob.Domain.Messaging;
+using Paramore.Brighter;
+using Paramore.Brighter.Extensions.DependencyInjection;
+using Paramore.Brighter.MessagingGateway.RMQ;
 using EmailSender = Kontravers.GoodJob.Auth.EmailSender;
 using IEmailSender = Microsoft.AspNetCore.Identity.UI.Services.IEmailSender;
 
@@ -27,6 +31,29 @@ services
     .AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+var amqpUriSpecification = new AmqpUriSpecification(
+    new Uri(builder.Configuration.GetConnectionString("RabbitMq")));
+
+var identityEventsExchange = new Exchange(Constants.IdentityEventsExchange,
+    type: "topic", durable: true);
+
+var producerRegistry = new ProducerRegistry(new Dictionary<string, IAmAMessageProducer>
+{
+    {
+        UserCreatedEvent.TopicName, new RmqMessageProducer(new RmqMessagingGatewayConnection
+        {
+            AmpqUri = amqpUriSpecification,
+            Exchange = identityEventsExchange,
+            Name = UserCreatedEvent.TopicName,
+            PersistMessages = false
+        })
+    }
+});
+
+services.AddBrighter()
+    .MapperRegistryFromAssemblies(typeof(UserCreatedEventMapper).Assembly)
+    .UseExternalBus(config => config.ProducerRegistry = producerRegistry);
 
 services.ConfigureApplicationCookie(cookie =>
 {
