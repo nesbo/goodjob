@@ -1,13 +1,13 @@
 {
-    "rabbit_version": "3.9.8",
-    "rabbitmq_version": "3.9.8",
+    "rabbit_version": "3.13.0",
+    "rabbitmq_version": "3.13.0",
     "product_name": "RabbitMQ",
-    "product_version": "3.9.8",
+    "product_version": "3.13.0",
     "users":
     [
         {
             "name": "goodjob",
-            "password_hash": "8pxSYOow0FuSYTywRN0T6NK5fagoCanjqO6MQIjZJyIy/UVy",
+            "password_hash": "h3pprVWahYL435detoYN543HkyOcd6ZexmTzApURsRjtNfpZ",
             "hashing_algorithm": "rabbit_password_hashing_sha256",
             "tags":
             [ "administrator", "management" ],

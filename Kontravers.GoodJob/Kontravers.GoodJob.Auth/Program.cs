@@ -64,6 +64,7 @@ services
     .AddScoped<Kontravers.GoodJob.Domain.IEmailSender, Kontravers.GoodJob.Infra.Shared.EmailSender>()
     .AddScoped<IClock, Clock>()
     .AddScoped<IEmailSender, EmailSender>()
+    .AddScoped<IEventPublisher, EventPublisher>()
     .AddAuthentication();
 
 services
