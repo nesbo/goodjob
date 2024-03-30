@@ -7,6 +7,8 @@ public class RssFeedRunner : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<RssFeedRunner> _logger;
+    private Task _executingTask;
+    private CancellationToken _stopToken;
 
     public RssFeedRunner(IServiceProvider serviceProvider, ILogger<RssFeedRunner> logger)
     {
@@ -17,10 +19,11 @@ public class RssFeedRunner : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("RSS feed runner started");
+        _stopToken = stoppingToken;
 
-        return Task.Factory.StartNew(async () =>
+        _executingTask = Task.Factory.StartNew(async () =>
         {
-            while (!stoppingToken.IsCancellationRequested)
+            while (!_stopToken.IsCancellationRequested)
             {
                 using var scope = _serviceProvider.CreateScope();
 
@@ -41,6 +44,8 @@ public class RssFeedRunner : BackgroundService
             }
 
             _logger.LogInformation("RSS feed runner stopped");
-        }, stoppingToken);
+        }, _stopToken);
+        
+        return Task.CompletedTask;
     }
 }

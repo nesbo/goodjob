@@ -8,7 +8,7 @@ var services = builder.Services;
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();
-services.AddGoodJobServices();
+services.AddGoodJobServices().AddBrighterRegistrations();
 services.AddCors();
 services.AddAuthorizationBuilder()
     .AddPolicy(AuthConstants.PersonTalentAuthorisation, policy =>

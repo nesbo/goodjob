@@ -6,25 +6,22 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class CreatePersonProfileCommandHandler : RequestHandlerAsync<CreatePersonProfileCommand>
+public class UpdatePersonProfile : RequestHandlerAsync<UpdatePersonProfileCommand>
 {
     private readonly IPersonRepository _personRepository;
-    private readonly ILogger<CreatePersonProfileCommandHandler> _logger;
-    private readonly IClock _clock;
+    private readonly ILogger<UpdatePersonProfile> _logger;
 
-    public CreatePersonProfileCommandHandler(IPersonRepository personRepository,
-        ILogger<CreatePersonProfileCommandHandler> logger, IClock clock)
+    public UpdatePersonProfile(IPersonRepository personRepository,
+        ILogger<UpdatePersonProfile> logger)
     {
         _personRepository = personRepository;
         _logger = logger;
-        _clock = clock;
     }
     
-    
-    public override async Task<CreatePersonProfileCommand> HandleAsync(CreatePersonProfileCommand command,
+    public override async Task<UpdatePersonProfileCommand> HandleAsync(UpdatePersonProfileCommand command,
         CancellationToken cancellationToken = new ())
     {
-        _logger.LogInformation("Creating person profile for person {PersonId}", command.PersonId);
+        _logger.LogInformation("Updating person profile for person {PersonId}", command.PersonId);
         
         var personId = int.Parse(command.PersonId);
         var person = await _personRepository.GetAsync(personId, cancellationToken);
@@ -35,11 +32,10 @@ public class CreatePersonProfileCommandHandler : RequestHandlerAsync<CreatePerso
             throw new NotFoundException("Person not found");
         }
         
-        person.CreateProfile(command, _clock.UtcNow);
+        person.UpdateProfile(command);
         
-        _logger.LogInformation("Person profile created for person {PersonId}. Saving to database",
+        _logger.LogInformation("Person profile updated for person {PersonId}. Saving to database",
             command.PersonId);
-
         await _personRepository.SaveChangesAsync(cancellationToken);
         
         return await base.HandleAsync(command, cancellationToken);

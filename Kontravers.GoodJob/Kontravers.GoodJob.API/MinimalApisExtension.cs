@@ -21,19 +21,19 @@ public static class MinimalApisExtension
             .RequireAuthorization(options => options.RequireAuthenticatedUser());
         
         personsEndpoint
-            .MapGet("/", (ListPersonsQueryHandler handler, CancellationToken cancellationToken) =>
+            .MapGet("/", (ListPersons handler, CancellationToken cancellationToken) =>
                 handler.ListAsync(new ListPersonsQuery("1", 1, 10), cancellationToken))
             .Produces<PersonListViewModel>();
 
         personsEndpoint
             .MapGet("{personId}",
-                (GetPersonQueryHandler handler, string personId, CancellationToken cancellationToken) =>
+                (GetPerson handler, string personId, CancellationToken cancellationToken) =>
                     handler.GetAsync(new GetPersonQuery(personId), cancellationToken))
             .Produces<PersonViewModel>();
 
         personsEndpoint
             .MapGet("{personId}/upwork-rss-feeds/{upworkRssFeedId}",
-                (GetPersonUpworkRssFeedQueryHandler handler, string personId, string upworkRssFeedId,
+                (GetPersonUpworkRssFeed handler, string personId, string upworkRssFeedId,
                         CancellationToken cancellationToken) =>
                     handler.GetAsync(new GetPersonUpworkRssFeedQuery(personId, upworkRssFeedId), cancellationToken))
             .Produces<PersonUpworkRssFeedViewModel>();
@@ -50,7 +50,7 @@ public static class MinimalApisExtension
                 commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
         
         personsEndpoint.MapGet("{personId}/profiles/{profileId}",
-            (GetPersonProfileQueryHandler handler, string personId, string profileId,
+            (GetPersonProfile handler, string personId, string profileId,
                     CancellationToken cancellationToken) =>
                 handler.GetAsync(new GetPersonProfileQuery(personId, profileId), cancellationToken))
             .Produces<PersonProfileViewModel>();

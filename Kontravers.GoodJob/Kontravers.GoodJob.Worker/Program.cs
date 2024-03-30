@@ -2,23 +2,25 @@ using Kontravers.GoodJob.Data;
 using Kontravers.GoodJob.Infra.Shared;
 using Kontravers.GoodJob.Worker;
 
-var configuration = new ConfigurationBuilder()
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .AddJsonFile("appsettings.json")
-    .Build();
-
 var builder = Host.CreateDefaultBuilder();
 builder
-    .ConfigureAppConfiguration(configurationBuilder =>
+    .ConfigureAppConfiguration((context, configurationBuilder) =>
     {
-        configurationBuilder.AddConfiguration(configuration);
+        var environment = context.HostingEnvironment;
+        
+        configurationBuilder
+            .AddCommandLine(args)
+            .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environment.EnvironmentName}.json")
+            .AddEnvironmentVariables();
     })
     .ConfigureServices(services =>
     {
         services
             .AddHostedService<RssFeedRunner>()
+            .AddHostedService<BrighterRunner>()
             .AddGoodJobServices()
+            .AddBrighterRegistrations()
             .AddLogging();
     });
 

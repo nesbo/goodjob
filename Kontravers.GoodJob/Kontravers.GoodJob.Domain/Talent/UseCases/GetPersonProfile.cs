@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class GetPersonProfileQueryHandler
+public class GetPersonProfile
 {
     private readonly IPersonQueryRepository _personQueryRepository;
-    private readonly ILogger<GetPersonProfileQueryHandler> _logger;
+    private readonly ILogger<GetPersonProfile> _logger;
 
-    public GetPersonProfileQueryHandler(IPersonQueryRepository personQueryRepository,
-        ILogger<GetPersonProfileQueryHandler> logger)
+    public GetPersonProfile(IPersonQueryRepository personQueryRepository,
+        ILogger<GetPersonProfile> logger)
     {
         _personQueryRepository = personQueryRepository;
         _logger = logger;

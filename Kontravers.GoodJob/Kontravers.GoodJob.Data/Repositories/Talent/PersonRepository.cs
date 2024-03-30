@@ -15,4 +15,11 @@ public class PersonRepository : RepositoryBase<Person>, IPersonRepository
             .Include(p => p.Profiles)
             .SingleOrDefaultAsync(p => p.Id == personId, cancellationToken);
     }
+
+    public Task<bool> ExistsForOrganisationAsync(string email, int organizationId, CancellationToken cancellationToken)
+    {
+        return Query
+            .AnyAsync(p => p.Email == email && p.OrganisationId == organizationId,
+                cancellationToken);
+    }
 }

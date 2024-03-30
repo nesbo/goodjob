@@ -15,12 +15,18 @@ public class PersonQueryRepository : QueryRepositoryBase<Person>, IPersonQueryRe
         throw new NotImplementedException();
     }
 
-    public Task<Person[]> ListAllAsync(CancellationToken cancellationToken)
+    public Task<Person[]> ListAllAsync(CancellationToken cancellationToken, bool includeDisabled = false)
     {
-        return Query
+        var query = Query
             .Include(p => p.UpworkRssFeeds)
-            .AsNoTracking()
-            .ToArrayAsync(cancellationToken);
+            .AsNoTracking();
+        
+        if (!includeDisabled)
+        {
+            query = query.Where(p => p.IsEnabled == true);
+        }
+        
+        return query.ToArrayAsync(cancellationToken);
     }
 
     public override Task<Person?> GetAsync(int id, CancellationToken cancellationToken)

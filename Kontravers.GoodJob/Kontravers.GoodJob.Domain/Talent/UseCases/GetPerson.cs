@@ -4,11 +4,11 @@ using Kontravers.GoodJob.Domain.Talent.Repositories;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class GetPersonQueryHandler
+public class GetPerson
 {
     private readonly IPersonQueryRepository _personQueryRepository;
 
-    public GetPersonQueryHandler(IPersonQueryRepository personQueryRepository)
+    public GetPerson(IPersonQueryRepository personQueryRepository)
     {
         _personQueryRepository = personQueryRepository;
     }

@@ -6,25 +6,26 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class UpdatePersonProfileCommandHandler : RequestHandlerAsync<UpdatePersonProfileCommand>
+public class CreatePersonUpworkRssFeed: RequestHandlerAsync<CreatePersonUpworkRssFeedCommand>
 {
     private readonly IPersonRepository _personRepository;
-    private readonly ILogger<UpdatePersonProfileCommandHandler> _logger;
+    private readonly ILogger<CreatePersonUpworkRssFeed> _logger;
+    private readonly IClock _clock;
 
-    public UpdatePersonProfileCommandHandler(IPersonRepository personRepository,
-        ILogger<UpdatePersonProfileCommandHandler> logger)
+    public CreatePersonUpworkRssFeed(IPersonRepository personRepository,
+        ILogger<CreatePersonUpworkRssFeed> logger, IClock clock)
     {
         _personRepository = personRepository;
         _logger = logger;
+        _clock = clock;
     }
     
-    public override async Task<UpdatePersonProfileCommand> HandleAsync(UpdatePersonProfileCommand command,
+    public override async Task<CreatePersonUpworkRssFeedCommand> HandleAsync(CreatePersonUpworkRssFeedCommand command,
         CancellationToken cancellationToken = new ())
     {
-        _logger.LogInformation("Updating person profile for person {PersonId}", command.PersonId);
+        _logger.LogInformation("Creating person upwork rss feed for person {PersonId}", command.PersonId);
         
-        var personId = int.Parse(command.PersonId);
-        var person = await _personRepository.GetAsync(personId, cancellationToken);
+        var person = await _personRepository.GetAsync(command.PersonId, cancellationToken);
         
         if (person is null)
         {
@@ -32,10 +33,7 @@ public class UpdatePersonProfileCommandHandler : RequestHandlerAsync<UpdatePerso
             throw new NotFoundException("Person not found");
         }
         
-        person.UpdateProfile(command);
-        
-        _logger.LogInformation("Person profile updated for person {PersonId}. Saving to database",
-            command.PersonId);
+        person.CreateUpworkRssFeed(command, _clock);
         await _personRepository.SaveChangesAsync(cancellationToken);
         
         return await base.HandleAsync(command, cancellationToken);

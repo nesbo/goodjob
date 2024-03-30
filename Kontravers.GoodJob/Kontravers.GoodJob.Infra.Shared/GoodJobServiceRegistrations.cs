@@ -32,10 +32,10 @@ public static class GoodJobServiceRegistrationsExtensions
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<Gpt35TurboJobProposalGenerator>();
         services.AddScoped<IJobProposalGeneratorFactory, JobProposalGeneratorFactory>();
-        services.AddScoped<ListPersonsQueryHandler>();
-        services.AddScoped<GetPersonQueryHandler>();
-        services.AddScoped<GetPersonUpworkRssFeedQueryHandler>();
-        services.AddScoped<GetPersonProfileQueryHandler>();
+        services.AddScoped<ListPersons>();
+        services.AddScoped<GetPerson>();
+        services.AddScoped<GetPersonUpworkRssFeed>();
+        services.AddScoped<GetPersonProfile>();
 
         services.AddDbContext<GoodJobDbContext>(options =>
         {
@@ -51,8 +51,19 @@ public static class GoodJobServiceRegistrationsExtensions
             CrawlIntervalInSeconds = 60,
             RssFeedFetchIntervalInSeconds = 60
         });
+        
+        return services;
+    }
 
-        services.AddBrighter().AutoFromAssemblies();
+    public static IServiceCollection AddBrighterRegistrations(this IServiceCollection services)
+    {
+        services.AddBrighter(options =>
+            {
+                options.HandlerLifetime = ServiceLifetime.Scoped;
+                options.CommandProcessorLifetime = ServiceLifetime.Scoped;
+                options.MapperLifetime = ServiceLifetime.Singleton;
+            })
+            .AutoFromAssemblies(typeof(UserCreatedEventMapper).Assembly, typeof(UpdatePersonProfile).Assembly);
 
         return services;
     }

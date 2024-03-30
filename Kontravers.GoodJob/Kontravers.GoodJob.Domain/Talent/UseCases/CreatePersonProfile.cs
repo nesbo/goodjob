@@ -6,26 +6,28 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class CreatePersonUpworkRssFeedCommandHandler: RequestHandlerAsync<CreatePersonUpworkRssFeedCommand>
+public class CreatePersonProfile : RequestHandlerAsync<CreatePersonProfileCommand>
 {
     private readonly IPersonRepository _personRepository;
-    private readonly ILogger<CreatePersonUpworkRssFeedCommandHandler> _logger;
+    private readonly ILogger<CreatePersonProfile> _logger;
     private readonly IClock _clock;
 
-    public CreatePersonUpworkRssFeedCommandHandler(IPersonRepository personRepository,
-        ILogger<CreatePersonUpworkRssFeedCommandHandler> logger, IClock clock)
+    public CreatePersonProfile(IPersonRepository personRepository,
+        ILogger<CreatePersonProfile> logger, IClock clock)
     {
         _personRepository = personRepository;
         _logger = logger;
         _clock = clock;
     }
     
-    public override async Task<CreatePersonUpworkRssFeedCommand> HandleAsync(CreatePersonUpworkRssFeedCommand command,
+    
+    public override async Task<CreatePersonProfileCommand> HandleAsync(CreatePersonProfileCommand command,
         CancellationToken cancellationToken = new ())
     {
-        _logger.LogInformation("Creating person upwork rss feed for person {PersonId}", command.PersonId);
+        _logger.LogInformation("Creating person profile for person {PersonId}", command.PersonId);
         
-        var person = await _personRepository.GetAsync(command.PersonId, cancellationToken);
+        var personId = int.Parse(command.PersonId);
+        var person = await _personRepository.GetAsync(personId, cancellationToken);
         
         if (person is null)
         {
@@ -33,7 +35,11 @@ public class CreatePersonUpworkRssFeedCommandHandler: RequestHandlerAsync<Create
             throw new NotFoundException("Person not found");
         }
         
-        person.CreateUpworkRssFeed(command, _clock);
+        person.CreateProfile(command, _clock.UtcNow);
+        
+        _logger.LogInformation("Person profile created for person {PersonId}. Saving to database",
+            command.PersonId);
+
         await _personRepository.SaveChangesAsync(cancellationToken);
         
         return await base.HandleAsync(command, cancellationToken);

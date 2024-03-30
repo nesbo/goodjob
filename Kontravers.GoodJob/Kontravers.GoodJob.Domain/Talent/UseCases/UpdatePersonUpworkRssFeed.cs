@@ -6,13 +6,13 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class UpdatePersonUpworkRssFeedCommandHandler : RequestHandlerAsync<UpdatePersonUpworkRssFeedCommand>
+public class UpdatePersonUpworkRssFeed : RequestHandlerAsync<UpdatePersonUpworkRssFeedCommand>
 {
     private readonly IPersonRepository _personRepository;
-    private readonly ILogger<UpdatePersonUpworkRssFeedCommandHandler> _logger;
+    private readonly ILogger<UpdatePersonUpworkRssFeed> _logger;
 
-    public UpdatePersonUpworkRssFeedCommandHandler(IPersonRepository personRepository,
-        ILogger<UpdatePersonUpworkRssFeedCommandHandler> logger)
+    public UpdatePersonUpworkRssFeed(IPersonRepository personRepository,
+        ILogger<UpdatePersonUpworkRssFeed> logger)
     {
         _personRepository = personRepository;
         _logger = logger;

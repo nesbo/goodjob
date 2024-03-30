@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class GetPersonUpworkRssFeedQueryHandler
+public class GetPersonUpworkRssFeed
 {
     private readonly IPersonQueryRepository _personQueryRepository;
-    private readonly ILogger<GetPersonUpworkRssFeedQueryHandler> _logger;
+    private readonly ILogger<GetPersonUpworkRssFeed> _logger;
 
-    public GetPersonUpworkRssFeedQueryHandler(IPersonQueryRepository personQueryRepository,
-        ILogger<GetPersonUpworkRssFeedQueryHandler> logger)
+    public GetPersonUpworkRssFeed(IPersonQueryRepository personQueryRepository,
+        ILogger<GetPersonUpworkRssFeed> logger)
     {
         _personQueryRepository = personQueryRepository;
         _logger = logger;

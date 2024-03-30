@@ -3,7 +3,7 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Messaging;
 
-public class UserCreatedEventMapper : IAmAMessageMapper<UserCreatedEvent>
+public class UserCreatedEventMapper : IAmAMessageMapper<UserCreatedEvent>, IAmAMessageMapperAsync<UserCreatedEvent>
 {
     public Message MapToMessage(UserCreatedEvent request)
     {
@@ -16,5 +16,15 @@ public class UserCreatedEventMapper : IAmAMessageMapper<UserCreatedEvent>
     public UserCreatedEvent MapToRequest(Message message)
     {
         return JsonSerializer.Deserialize<UserCreatedEvent>(message.Body.Value)!;
+    }
+
+    public Task<Message> MapToMessageAsync(UserCreatedEvent request, CancellationToken cancellationToken = new ())
+    {
+        return Task.FromResult(MapToMessage(request));
+    }
+
+    public Task<UserCreatedEvent> MapToRequestAsync(Message message, CancellationToken cancellationToken = new ())
+    {
+        return Task.FromResult(MapToRequest(message));
     }
 }
