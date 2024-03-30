@@ -11,7 +11,7 @@ builder
         configurationBuilder
             .AddCommandLine(args)
             .AddJsonFile("appsettings.json")
-            .AddJsonFile($"appsettings.{environment.EnvironmentName}.json")
+            .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", optional: true)
             .AddEnvironmentVariables();
     })
     .ConfigureServices(services =>
