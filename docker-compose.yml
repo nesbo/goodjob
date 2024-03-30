@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile-GoodJobWorker
     depends_on:
       - postgres
+      - rabbitmq
     networks:
       - kontravers-goodjob
 
@@ -17,6 +18,7 @@ services:
       - "5279:5279" #http
     depends_on:
       - postgres
+      - rabbitmq
     networks:
       - kontravers-goodjob
   
@@ -27,6 +29,7 @@ services:
     depends_on:
       - postgres
       - worker
+      - rabbitmq
     ports:
       - "8010:8010"
     networks:
