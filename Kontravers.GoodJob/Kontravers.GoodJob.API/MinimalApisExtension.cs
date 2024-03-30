@@ -15,10 +15,9 @@ public static class MinimalApisExtension
         AttachExceptionHandler(app);
 
         app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-        
+
         var personsEndpoint = app.MapGroup("/persons")
-            .WithTags("Talent")
-            .RequireAuthorization(options => options.RequireAuthenticatedUser());
+            .WithTags("Talent");
         
         personsEndpoint
             .MapGet("/", (ListPersons handler, CancellationToken cancellationToken) =>
