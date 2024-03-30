@@ -36,7 +36,7 @@ services:
       - kontravers-goodjob
   
   postgres:
-    image: postgres:latest
+    image: postgres:15.6
     container_name: goodjob-postgres
     ports:
       - "5432:5432"
