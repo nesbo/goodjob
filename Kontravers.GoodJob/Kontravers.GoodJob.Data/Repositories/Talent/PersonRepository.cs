@@ -22,4 +22,10 @@ public class PersonRepository : RepositoryBase<Person>, IPersonRepository
             .AnyAsync(p => p.Email == email && p.OrganisationId == organizationId,
                 cancellationToken);
     }
+
+    public Task<Person?> GetByUserIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        return Query
+            .SingleOrDefaultAsync(p => p.UserId == userId, cancellationToken);
+    }
 }

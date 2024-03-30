@@ -47,12 +47,15 @@ public class BrighterRunner : BackgroundService
         _logger = logger;
         var subscriberRegistry = new SubscriberRegistry();
         subscriberRegistry.RegisterAsync<UserCreatedEvent, CreatePerson>();
+        subscriberRegistry.RegisterAsync<UserAccountConfirmedEvent, EnablePerson>();
 
         var messageMapperRegistry = new MessageMapperRegistry(
             new ServiceProviderMapperFactory(serviceProvider),
             new SimpleMessageMapperFactoryAsync(_messageMapperFactoryAsync));
         messageMapperRegistry.Register<UserCreatedEvent, UserCreatedEventMapper>();
         messageMapperRegistry.RegisterAsync<UserCreatedEvent, UserCreatedEventMapper>();
+        messageMapperRegistry.Register<UserAccountConfirmedEvent, UserAccountConfirmedEventMapper>();
+        messageMapperRegistry.RegisterAsync<UserAccountConfirmedEvent, UserAccountConfirmedEventMapper>();
 
         var messageTransformerFactory = new SimpleMessageTransformerFactory(_messageTransformFactory);
         var messageTransformerFactoryAsync = new SimpleMessageTransformerFactoryAsync(_messageTransformFactoryAsync);
@@ -92,6 +95,12 @@ public class BrighterRunner : BackgroundService
                     name: new SubscriptionName(UserCreatedEvent.TopicName),
                     channelName: new ChannelName(UserCreatedEvent.TopicName),
                     routingKey: new RoutingKey(UserCreatedEvent.TopicName),
+                    noOfPerformers: 1,
+                    runAsync: true),
+                new RmqSubscription<UserAccountConfirmedEvent>(
+                    name: new SubscriptionName(UserAccountConfirmedEvent.TopicName),
+                    channelName: new ChannelName(UserAccountConfirmedEvent.TopicName),
+                    routingKey: new RoutingKey(UserAccountConfirmedEvent.TopicName),
                     noOfPerformers: 1,
                     runAsync: true)
             });

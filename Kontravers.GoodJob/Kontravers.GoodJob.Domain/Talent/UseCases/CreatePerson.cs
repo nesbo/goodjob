@@ -39,7 +39,7 @@ public class CreatePerson : RequestHandlerAsync<UserCreatedEvent>
         }
         
         var person = new Person(false, command.Email, command.Name, organizationId,
-            command.OccurredOn, _clock.UtcNow);
+            command.OccurredOn, _clock.UtcNow, command.UserId);
         
         await _personRepository.AddAsync(person, cancellationToken);
         await _personRepository.SaveChangesAsync(cancellationToken);

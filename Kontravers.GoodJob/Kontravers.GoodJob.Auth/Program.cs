@@ -48,6 +48,15 @@ var producerRegistry = new ProducerRegistry(new Dictionary<string, IAmAMessagePr
             Name = UserCreatedEvent.TopicName,
             PersistMessages = false
         })
+    },
+    {
+        UserAccountConfirmedEvent.TopicName, new RmqMessageProducer(new RmqMessagingGatewayConnection
+        {
+            AmpqUri = amqpUriSpecification,
+            Exchange = identityEventsExchange,
+            Name = UserAccountConfirmedEvent.TopicName,
+            PersistMessages = false
+        })
     }
 });
 

@@ -18,12 +18,13 @@ public class TestDataBuilder
     
     public IPersonQueryRepository PersonQueryRepository => new PersonQueryRepository(_dbContextFactory.Context);
 
-    public TestDataBuilder BuildDefaultPerson(DateTime? createdUtc = null, string? email = null)
+    public TestDataBuilder BuildDefaultPerson(DateTime? createdUtc = null, string? email = null,
+        string userId = "1")
     {
         createdUtc ??= DateTime.UtcNow;
         email ??= DefaultPersonEmail;
         var person = new Person(true, email, "John Doe", 1,
-             createdUtc.Value, createdUtc.Value);
+             createdUtc.Value, createdUtc.Value, userId);
         
         var createUpworkRssFeedCommand = new CreatePersonUpworkRssFeedCommand(createdUtc.Value, person.Id,
             "https://www.upwork.com/", "ab/feed/jobs/rss?sort=recency&paging=0%3B1",

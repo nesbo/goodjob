@@ -5,14 +5,16 @@ namespace Kontravers.GoodJob.Domain.Talent;
 
 public class Person : IAggregate
 {
-    private List<PersonUpworkRssFeed> _upworkRssFeeds = new ();
-    private List<Profile> _profiles = new ();
+    private readonly List<PersonUpworkRssFeed> _upworkRssFeeds = new ();
+    private readonly List<Profile> _profiles = new ();
+    
     public int Id { get; protected set; }
     public DateTime CreatedUtc { get; }
     public DateTime InsertedUtc { get; }
+    public string UserId { get; }
     public string Name { get; }
     public string Email { get; }
-    public bool IsEnabled { get; }
+    public bool IsEnabled { get; private set; }
     public int OrganisationId { get; }
     
     public IReadOnlyCollection<PersonUpworkRssFeed> UpworkRssFeeds
@@ -30,7 +32,7 @@ public class Person : IAggregate
     protected Person() { }
     
     public Person(bool isEnabled, string email, string name, int organisationId,
-        DateTime createdUtc, DateTime insertedUtc)
+        DateTime createdUtc, DateTime insertedUtc, string userId)
     {
         IsEnabled = isEnabled;
         Email = email;
@@ -38,6 +40,7 @@ public class Person : IAggregate
         OrganisationId = organisationId;
         CreatedUtc = createdUtc;
         InsertedUtc = insertedUtc;
+        UserId = userId;
     }
 
     public PersonUpworkRssFeed? GetUpworkRssFeed(int feedId)
@@ -105,5 +108,10 @@ public class Person : IAggregate
             command.AutoSendEmailEnabled, command.Title, command.PreferredProfileId);
         
         _upworkRssFeeds.Add(upworkRssFeed);
+    }
+
+    public void Enable()
+    {
+        IsEnabled = true;
     }
 }

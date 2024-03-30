@@ -17,6 +17,9 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
             .HasMaxLength(128);
         builder.Property(p => p.Email)
             .HasMaxLength(128);
+        builder.Property(p => p.UserId)
+            .HasMaxLength(128)
+            .HasDefaultValue("1");
 
         builder.HasMany(p => p.UpworkRssFeeds)
             .WithOne()
@@ -33,6 +36,7 @@ public class PersonConfiguration : IEntityTypeConfiguration<Person>
             p=> p.CreatedUtc,
             p=> p.InsertedUtc,
             p=> p.OrganisationId,
-            p=> p.Email);
+            p=> p.Email,
+            p=> p.UserId);
     }
 }
