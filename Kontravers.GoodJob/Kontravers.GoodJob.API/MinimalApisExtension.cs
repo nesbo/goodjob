@@ -95,13 +95,13 @@ public static class MinimalApisExtension
                         });
                         break;
                     case UnauthorizedAccessException:
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         break;
                     default:
                         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                         await context.Response.WriteAsJsonAsync(new
                         {
-                            error = "Internal server error"
+                            error = $"Internal server error - {exception?.Message}"
                         });
                         break;
                 }

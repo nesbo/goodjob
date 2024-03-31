@@ -10,8 +10,22 @@ public static class Scopes
     {
         return new[]
         {
-            new ApiScope(AuthConstants.PersonTalentScope),
+            new ApiScope(AuthConstants.PersonTalentScope)
+            {
+                UserClaims = new List<string>
+                {
+                    AuthConstants.UserIdScope,
+                    "role"
+                }
+            },
             new ApiScope(AuthConstants.PersonWorkScope)
+            {
+                UserClaims = new List<string>
+                {
+                    AuthConstants.UserIdScope,
+                    "role"
+                }
+            }
         };
     }
 }
