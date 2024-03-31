@@ -3,7 +3,7 @@ using Kontravers.GoodJob.Infra.Shared;
 
 namespace Kontravers.GoodJob.Auth;
 
-public class Clients
+public static class Clients
 {
     public static IEnumerable<Client> GetClients()
     {
@@ -22,7 +22,9 @@ public class Clients
                 {
                     AuthConstants.PersonTalentScope,
                     AuthConstants.PersonWorkScope,
-                    "openid", "profile", "userId"
+                    AuthConstants.ProfileScope,
+                    AuthConstants.OpenIdScope,
+                    AuthConstants.UserIdScope
                 }
             }
         };

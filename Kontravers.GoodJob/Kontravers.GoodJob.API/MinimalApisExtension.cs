@@ -1,8 +1,10 @@
+using System.Security.Claims;
 using Kontravers.GoodJob.API.Requests.Talent;
 using Kontravers.GoodJob.Domain;
 using Kontravers.GoodJob.Domain.Exceptions;
 using Kontravers.GoodJob.Domain.Talent.Queries;
 using Kontravers.GoodJob.Domain.Talent.UseCases;
+using Kontravers.GoodJob.Infra.Shared;
 using Microsoft.AspNetCore.Diagnostics;
 using Paramore.Brighter;
 
@@ -16,51 +18,57 @@ public static class MinimalApisExtension
 
         app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-        var personsEndpoint = app.MapGroup("/persons")
-            .WithTags("Talent");
-        
-        personsEndpoint
-            .MapGet("/", (ListPersons handler, CancellationToken cancellationToken) =>
-                handler.ListAsync(new ListPersonsQuery("1", 1, 10), cancellationToken))
-            .Produces<PersonListViewModel>();
+        var personEndpoint = app
+            .MapGroup("/person")
+            .WithTags("Talent")
+            .RequireAuthorization(builder => builder
+                .RequireAuthenticatedUser()
+                .RequireClaim("scope", AuthConstants.PersonTalentScope));
 
-        personsEndpoint
-            .MapGet("{personId}",
-                (GetPerson handler, string personId, CancellationToken cancellationToken) =>
-                    handler.GetAsync(new GetPersonQuery(personId), cancellationToken))
+        personEndpoint
+            .MapGet("/",
+                (GetPerson handler, CancellationToken cancellationToken, HttpContext context) =>
+                {
+                    var userId = GetUserId(context);
+                    return handler.GetAsync(new GetPersonByUserIdQuery(userId), cancellationToken);
+                })
             .Produces<PersonViewModel>();
 
-        personsEndpoint
-            .MapGet("{personId}/upwork-rss-feeds/{upworkRssFeedId}",
-                (GetPersonUpworkRssFeed handler, string personId, string upworkRssFeedId,
-                        CancellationToken cancellationToken) =>
-                    handler.GetAsync(new GetPersonUpworkRssFeedQuery(personId, upworkRssFeedId), cancellationToken))
+        personEndpoint
+            .MapGet("/upwork-rss-feeds/{upworkRssFeedId}",
+                (GetPersonUpworkRssFeed handler, string upworkRssFeedId,
+                    CancellationToken cancellationToken, HttpContext context) =>
+                {
+                    var userId = GetUserId(context);
+                    return handler.GetAsync(new GetPersonUpworkRssFeedByUserIdQuery(userId, upworkRssFeedId),
+                        cancellationToken);
+                })
             .Produces<PersonUpworkRssFeedViewModel>();
 
-        personsEndpoint.MapPut("{personId}/upwork-rss-feeds/{upworkRssFeedId}",
+        personEndpoint.MapPut("{personId}/upwork-rss-feeds/{upworkRssFeedId}",
             (IAmACommandProcessor commandProcessor, string personId, string upworkRssFeedId,
                     UpdatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId, upworkRssFeedId),
                     cancellationToken: cancellationToken));
         
-        personsEndpoint.MapPost("{personId}/profiles",
+        personEndpoint.MapPost("{personId}/profiles",
             (IAmACommandProcessor commandProcessor, string personId,
                     CreatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
         
-        personsEndpoint.MapGet("{personId}/profiles/{profileId}",
+        personEndpoint.MapGet("{personId}/profiles/{profileId}",
             (GetPersonProfile handler, string personId, string profileId,
                     CancellationToken cancellationToken) =>
                 handler.GetAsync(new GetPersonProfileQuery(personId, profileId), cancellationToken))
             .Produces<PersonProfileViewModel>();
         
-        personsEndpoint.MapPut("{personId}/profiles/{profileId}",
+        personEndpoint.MapPut("{personId}/profiles/{profileId}",
             (IAmACommandProcessor commandProcessor, string personId, string profileId,
                     UpdatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId, profileId),
                     cancellationToken: cancellationToken));
         
-        personsEndpoint.MapPost("{personId}/upwork-rss-feeds",
+        personEndpoint.MapPost("{personId}/upwork-rss-feeds",
             (IAmACommandProcessor commandProcessor, string personId,
                     CreatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken) =>
                 commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
@@ -77,15 +85,38 @@ public static class MinimalApisExtension
                 var exceptionHandlerPathFeature =
                     context.Features.Get<IExceptionHandlerPathFeature>();
                 var exception = exceptionHandlerPathFeature?.Error;
-                if (exception is NotFoundException)
+                switch (exception)
                 {
-                    context.Response.StatusCode = StatusCodes.Status404NotFound;
-                    await context.Response.WriteAsJsonAsync(new
-                    {
-                        error = exception.Message
-                    });
+                    case NotFoundException:
+                        context.Response.StatusCode = StatusCodes.Status404NotFound;
+                        await context.Response.WriteAsJsonAsync(new
+                        {
+                            error = exception.Message
+                        });
+                        break;
+                    case UnauthorizedAccessException:
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        break;
+                    default:
+                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                        await context.Response.WriteAsJsonAsync(new
+                        {
+                            error = "Internal server error"
+                        });
+                        break;
                 }
             });
         });
+    }
+    
+    private static string GetUserId(HttpContext context)
+    {
+        var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new UnauthorizedAccessException("User not authenticated");
+        }
+
+        return userId;
     }
 }

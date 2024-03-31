@@ -40,17 +40,31 @@ public class GetPersonUpworkRssFeed
             throw new NotFoundException("Upwork rss feed not found");
         }
 
-        return new PersonUpworkRssFeedViewModel
+        return new PersonUpworkRssFeedViewModel(upworkRssFeed);
+    }
+    
+    public async Task<PersonUpworkRssFeedViewModel> GetAsync(GetPersonUpworkRssFeedByUserIdQuery query,
+        CancellationToken cancellationToken)
+    {
+        _logger.LogInformation(
+            "Fetching person upwork rss feed for user {UserId} and upwork rss feed {UpworkRssFeedId}",
+            query.UserId, query.UpworkRssFeedId);
+
+        var person = await _personQueryRepository.GetByUserId(query.UserId, cancellationToken);
+
+        if (person is null)
         {
-            Id = upworkRssFeed.Id.ToString(),
-            AbsoluteFeedUrl = upworkRssFeed.AbsoluteUrl,
-            Title = upworkRssFeed.Title,
-            MinimumFetchIntervalInMinutes = upworkRssFeed.MinFetchIntervalInMinutes,
-            LastFetchTimeUtc = upworkRssFeed.LastFetchedAtUtc,
-            AutoSendEmailEnabled = upworkRssFeed.AutoSendEmail,
-            AutoGenerateProposalsEnabled = upworkRssFeed.AutoGenerateProposals,
-            PreferredProfileId = upworkRssFeed.PreferredProfileId,
-            CreatedUtc = upworkRssFeed.CreatedUtc
-        };
+            throw new NotFoundException("Person not found");
+        }
+
+        var feedId = int.Parse(query.UpworkRssFeedId);
+        var upworkRssFeed = person.GetUpworkRssFeed(feedId);
+
+        if (upworkRssFeed is null)
+        {
+            throw new NotFoundException("Upwork rss feed not found");
+        }
+
+        return new PersonUpworkRssFeedViewModel(upworkRssFeed);
     }
 }

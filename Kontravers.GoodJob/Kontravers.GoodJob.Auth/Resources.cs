@@ -1,8 +1,9 @@
 using IdentityServer4.Models;
+using Kontravers.GoodJob.Infra.Shared;
 
 namespace Kontravers.GoodJob.Auth;
 
-public class Resources
+public static class Resources
 {
     public static IEnumerable<ApiResource> GetApiResources()
     {
@@ -15,7 +16,7 @@ public class Resources
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
-            new IdentityResource("userId", new[] { "userId" })
+            new IdentityResource(AuthConstants.UserIdScope, new[] { "userId" })
         };
     }
 }

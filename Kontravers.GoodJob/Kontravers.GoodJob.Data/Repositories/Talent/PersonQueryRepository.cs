@@ -4,17 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kontravers.GoodJob.Data.Repositories.Talent;
 
-public class PersonQueryRepository : QueryRepositoryBase<Person>, IPersonQueryRepository
+public class PersonQueryRepository(GoodJobDbContext dbContext)
+    : QueryRepositoryBase<Person>(dbContext), IPersonQueryRepository
 {
-    public PersonQueryRepository(GoodJobDbContext dbContext) : base(dbContext)
-    {
-    }
-
-    public Task<IEnumerable<Person>> ListAsync(string organisationId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<Person[]> ListAllAsync(CancellationToken cancellationToken, bool includeDisabled = false)
     {
         var query = Query
@@ -27,6 +19,19 @@ public class PersonQueryRepository : QueryRepositoryBase<Person>, IPersonQueryRe
         }
         
         return query.ToArrayAsync(cancellationToken);
+    }
+
+    public Task<Person?> GetByUserId(string userId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Task.FromResult((Person?)null);
+        }
+        
+        return Query
+            .Include(p => p.UpworkRssFeeds)
+            .Include(p => p.Profiles)
+            .SingleOrDefaultAsync(p => p.UserId == userId, cancellationToken);
     }
 
     public override Task<Person?> GetAsync(int id, CancellationToken cancellationToken)

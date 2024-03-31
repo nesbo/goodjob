@@ -1,14 +1,14 @@
 namespace Kontravers.GoodJob.Domain.Talent.Queries;
 
-public class PersonUpworkRssFeedViewModel
+public class PersonUpworkRssFeedViewModel(PersonUpworkRssFeed upworkRssFeed)
 {
-    public required string Id { get; set; }
-    public required string AbsoluteFeedUrl { get; set; }
-    public required string Title { get; set; }
-    public required int MinimumFetchIntervalInMinutes { get; set; }
-    public required DateTime LastFetchTimeUtc { get; set; }
-    public required bool AutoSendEmailEnabled { get; set; }
-    public required bool AutoGenerateProposalsEnabled { get; set; }
-    public int? PreferredProfileId { get; set; }
-    public required DateTime CreatedUtc { get; set; }
+    public string Id { get; set; } = upworkRssFeed.Id.ToString();
+    public string AbsoluteFeedUrl { get; set; } = upworkRssFeed.AbsoluteUrl;
+    public string Title { get; set; } = upworkRssFeed.Title;
+    public int MinimumFetchIntervalInMinutes { get; set; } = upworkRssFeed.MinFetchIntervalInMinutes;
+    public DateTime LastFetchTimeUtc { get; set; } = upworkRssFeed.LastFetchedAtUtc;
+    public bool AutoSendEmailEnabled { get; set; } = upworkRssFeed.AutoSendEmail;
+    public bool AutoGenerateProposalsEnabled { get; set; } = upworkRssFeed.AutoGenerateProposals;
+    public int? PreferredProfileId { get; set; } = upworkRssFeed.PreferredProfileId;
+    public DateTime CreatedUtc { get; set; } = upworkRssFeed.CreatedUtc;
 }
