@@ -47,6 +47,7 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority = authenticationAuthority;
+        options.ClientId = "goodjob-api-client";
         options.ResponseType = OpenIdConnectResponseType.Code;
         options.ClaimActions.MapAll();
         options.SaveTokens = true;
