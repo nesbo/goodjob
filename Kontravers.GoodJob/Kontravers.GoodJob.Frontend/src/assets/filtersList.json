@@ -1,0 +1,56 @@
+{
+    "expLevel": {
+        "name": "Experience level",
+        "key": "contractor_tier",
+        "items": [
+            {
+                "value": 1,
+                "name": "Entry Level"
+            },
+            {
+                "value": 2,
+                "name": "Intermediate"
+            },
+            {
+                "value": 3,
+                "name": "Expert"
+            }
+        ]
+    },
+    "hourlyRate": {
+        "name": "Hourly rate",
+        "key": "hourly_rate",
+        "items": [
+            {
+                "value": "custom",
+                "name": "Hourly rate"
+            }
+        ]
+    },
+    "fixedPrice": {
+        "name": "Fixed price",
+        "key": "amount",
+        "items": [
+            {
+                "value": "0-99",
+                "name": "Less than $100"
+            },
+            {
+                "value": "100-499",
+                "name": "$100-$500"
+            },
+            {
+                "value": "500-999",
+                "name": "$500-$1000"
+            },
+            {
+                "value": "1000-4999",
+                "name": "$1000-$5000"
+            },
+            {
+                "value": "custom",
+                "name": "custom range"
+            }
+        ]
+    }
+}

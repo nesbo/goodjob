@@ -1,0 +1,408 @@
+{
+    "categories": [
+        {
+            "urlName": "category2_uid",
+            "value": "531770282584862721",
+            "label": "Accounting \u0026 Consulting",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639943",
+                    "label": "Accounting \u0026 Bookkeeping"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639945",
+                    "label": "Financial Planning"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639944",
+                    "label": "Management Consulting \u0026 Analysis"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639947",
+                    "label": "Other - Accounting \u0026 Consulting"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1534904461833879552",
+                    "label": "Personal \u0026 Professional Coaching"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639946",
+                    "label": "Recruiting \u0026 Human Resources"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668416",
+            "label": "Admin Support",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282584862724",
+                    "label": "Data Entry \u0026 Transcription Services"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282584862726",
+                    "label": "Market Research \u0026 Product Reviews"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282584862728",
+                    "label": "Project Management"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282584862725",
+                    "label": "Virtual Assistance"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668417",
+            "label": "Customer Service",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1484275072572772352",
+                    "label": "Community Management \u0026 Tagging"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282584862730",
+                    "label": "Customer Service \u0026 Tech Support"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668420",
+            "label": "Data Science \u0026 Analytics",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251329",
+                    "label": "AI \u0026 Machine Learning"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251330",
+                    "label": "Data Analysis \u0026 Testing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251331",
+                    "label": "Data Extraction\/ETL"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057038",
+                    "label": "Data Mining \u0026 Management"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668421",
+            "label": "Design \u0026 Creative",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251335",
+                    "label": "Art \u0026 Illustration"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251341",
+                    "label": "Audio \u0026 Music Production"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1044578476142100480",
+                    "label": "Branding \u0026 Logo Design"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251334",
+                    "label": "Graphic, Editorial \u0026 Presentation Design"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1356688560628174848",
+                    "label": "NFT, AR\/VR \u0026 Game Art"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1356688565288046592",
+                    "label": "Performing Arts"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251340",
+                    "label": "Photography"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639953",
+                    "label": "Product Design"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1356688570056970240",
+                    "label": "Video \u0026 Animation"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282584862722",
+            "label": "Engineering \u0026 Architecture",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639948",
+                    "label": "3D Modeling \u0026 CAD"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639949",
+                    "label": "Building \u0026 Landscape Architecture"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282605834240",
+                    "label": "Chemical Engineering"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639950",
+                    "label": "Civil \u0026 Structural Engineering"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282605834241",
+                    "label": "Contract Manufacturing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639951",
+                    "label": "Electrical \u0026 Electronic Engineering"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639952",
+                    "label": "Energy \u0026 Mechanical Engineering"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282605834242",
+                    "label": "Interior \u0026 Trade Show Design"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1301900647896092672",
+                    "label": "Physical Sciences"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668419",
+            "label": "IT \u0026 Networking",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057033",
+                    "label": "Database Management \u0026 Administration"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057037",
+                    "label": "DevOps \u0026 Solution Architecture"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057034",
+                    "label": "ERP\/CRM Software"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057036",
+                    "label": "Information Security \u0026 Compliance"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057035",
+                    "label": "Network \u0026 System Administration"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282584862723",
+            "label": "Legal",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282605834246",
+                    "label": "Corporate \u0026 Contract Law"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770283696353280",
+                    "label": "Finance \u0026 Tax Law"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1484275156546932736",
+                    "label": "International \u0026 Immigration Law"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1484275408410693632",
+                    "label": "Public Law"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668422",
+            "label": "Sales \u0026 Marketing",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282597445636",
+                    "label": "Digital Marketing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282597445634",
+                    "label": "Lead Generation \u0026 Telemarketing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282593251343",
+                    "label": "Marketing, PR \u0026 Brand Strategy"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282584862720",
+            "label": "Translation",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1534904461842268160",
+                    "label": "Language Tutoring \u0026 Interpretation"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282601639939",
+                    "label": "Translation \u0026 Localization Services"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668418",
+            "label": "Web, Mobile \u0026 Software Dev",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1737190722360750082",
+                    "label": "AI Apps \u0026 Integration"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1517518458442309632",
+                    "label": "Blockchain, NFT \u0026 Cryptocurrency"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057025",
+                    "label": "Desktop Application Development"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057026",
+                    "label": "Ecommerce Development"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057027",
+                    "label": "Game Design \u0026 Development"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057024",
+                    "label": "Mobile Development"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057032",
+                    "label": "Other - Software Development"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057030",
+                    "label": "Product Management \u0026 Scrum"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057031",
+                    "label": "QA Testing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057028",
+                    "label": "Scripts \u0026 Utilities"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282589057029",
+                    "label": "Web \u0026 Mobile Design"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282584862733",
+                    "label": "Web Development"
+                }
+            ]
+        },
+        {
+            "urlName": "category2_uid",
+            "value": "531770282580668423",
+            "label": "Writing",
+            "subcategories": [
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1301900640421842944",
+                    "label": "Content Writing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282597445644",
+                    "label": "Editing \u0026 Proofreading Services"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "531770282597445646",
+                    "label": "Professional \u0026 Business Writing"
+                },
+                {
+                    "urlName": "subcategory2_uid",
+                    "value": "1534904462131675136",
+                    "label": "Sales \u0026 Marketing Copywriting"
+                }
+            ]
+        }
+    ]
+}
