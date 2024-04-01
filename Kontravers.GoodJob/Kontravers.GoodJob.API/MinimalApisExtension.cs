@@ -45,33 +45,52 @@ public static class MinimalApisExtension
                 })
             .Produces<PersonUpworkRssFeedViewModel>();
 
-        personEndpoint.MapPut("{personId}/upwork-rss-feeds/{upworkRssFeedId}",
-            (IAmACommandProcessor commandProcessor, string personId, string upworkRssFeedId,
-                    UpdatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken) =>
-                commandProcessor.SendAsync(request.ToCommand(clock, personId, upworkRssFeedId),
-                    cancellationToken: cancellationToken));
+        personEndpoint.MapPut("/upwork-rss-feeds/{upworkRssFeedId}",
+            (IAmACommandProcessor commandProcessor, string upworkRssFeedId,
+                UpdatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken,
+                HttpContext context) =>
+            {
+                var userId = GetUserId(context);
+                return commandProcessor.SendAsync(request.ToCommand(clock, userId, upworkRssFeedId),
+                    cancellationToken: cancellationToken);
+            });
         
-        personEndpoint.MapPost("{personId}/profiles",
-            (IAmACommandProcessor commandProcessor, string personId,
-                    CreatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
-                commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
-        
-        personEndpoint.MapGet("{personId}/profiles/{profileId}",
-            (GetPersonProfile handler, string personId, string profileId,
-                    CancellationToken cancellationToken) =>
-                handler.GetAsync(new GetPersonProfileQuery(personId, profileId), cancellationToken))
+        personEndpoint.MapPost("/profiles",
+            (IAmACommandProcessor commandProcessor, CreatePersonProfileRequest request,
+                IClock clock, CancellationToken cancellationToken, HttpContext context) =>
+            {
+                var userId = GetUserId(context);
+                return commandProcessor.SendAsync(request.ToCommand(clock, userId),
+                    cancellationToken: cancellationToken);
+            });
+
+        personEndpoint.MapGet("/profiles/{profileId}",
+                (GetPersonProfile handler, string profileId, CancellationToken cancellationToken,
+                    HttpContext context) =>
+                {
+                    var userId = GetUserId(context);
+                    return handler.GetAsync(new GetPersonProfileQuery(userId, profileId), cancellationToken);
+                })
             .Produces<PersonProfileViewModel>();
-        
-        personEndpoint.MapPut("{personId}/profiles/{profileId}",
-            (IAmACommandProcessor commandProcessor, string personId, string profileId,
-                    UpdatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken) =>
-                commandProcessor.SendAsync(request.ToCommand(clock, personId, profileId),
-                    cancellationToken: cancellationToken));
-        
-        personEndpoint.MapPost("{personId}/upwork-rss-feeds",
+
+        personEndpoint.MapPut("/profiles/{profileId}",
             (IAmACommandProcessor commandProcessor, string personId,
-                    CreatePersonUpworkRssFeedRequest request, IClock clock, CancellationToken cancellationToken) =>
-                commandProcessor.SendAsync(request.ToCommand(clock, personId), cancellationToken: cancellationToken));
+                UpdatePersonProfileRequest request, IClock clock, CancellationToken cancellationToken,
+                HttpContext context) =>
+            {
+                var userId = GetUserId(context);
+                return commandProcessor.SendAsync(request.ToCommand(clock, personId, userId),
+                    cancellationToken: cancellationToken);
+            });
+
+        personEndpoint.MapPost("/upwork-rss-feeds",
+            (IAmACommandProcessor commandProcessor, CreatePersonUpworkRssFeedRequest request,
+                IClock clock, CancellationToken cancellationToken, HttpContext context) =>
+            {
+                var userId = GetUserId(context);
+                return commandProcessor.SendAsync(request.ToCommand(clock, userId),
+                    cancellationToken: cancellationToken);
+            });
 
         return app;
     }

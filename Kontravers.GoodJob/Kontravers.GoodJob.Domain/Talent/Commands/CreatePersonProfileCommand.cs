@@ -7,10 +7,10 @@ public class CreatePersonProfileCommand : ICommand
 {
     private static string _commandName = "CreatePersonProfileCommand";
 
-    public CreatePersonProfileCommand(string personId, string title, string description, string? skills,
+    public CreatePersonProfileCommand(string userId, string title, string description, string? skills,
         DateTime createdUtc)
     {
-        PersonId = personId;
+        UserId = userId;
         Title = title;
         Description = description;
         Skills = skills;
@@ -18,7 +18,7 @@ public class CreatePersonProfileCommand : ICommand
     }
 
     public string CommandName => _commandName;
-    public string PersonId { get; }
+    public string UserId { get; }
     public string Title { get; }
     public string Description { get; }
     public string? Skills { get; }

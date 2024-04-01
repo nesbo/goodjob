@@ -24,21 +24,21 @@ public class CreatePersonProfile : RequestHandlerAsync<CreatePersonProfileComman
     public override async Task<CreatePersonProfileCommand> HandleAsync(CreatePersonProfileCommand command,
         CancellationToken cancellationToken = new ())
     {
-        _logger.LogInformation("Creating person profile for person {PersonId}", command.PersonId);
+        _logger.LogInformation("Creating person profile for person {PersonId}", command.UserId);
         
-        var personId = int.Parse(command.PersonId);
+        var personId = int.Parse(command.UserId);
         var person = await _personRepository.GetAsync(personId, cancellationToken);
         
         if (person is null)
         {
-            _logger.LogError("Person {PersonId} not found", command.PersonId);
+            _logger.LogError("Person {PersonId} not found", command.UserId);
             throw new NotFoundException("Person not found");
         }
         
         person.CreateProfile(command, _clock.UtcNow);
         
         _logger.LogInformation("Person profile created for person {PersonId}. Saving to database",
-            command.PersonId);
+            command.UserId);
 
         await _personRepository.SaveChangesAsync(cancellationToken);
         

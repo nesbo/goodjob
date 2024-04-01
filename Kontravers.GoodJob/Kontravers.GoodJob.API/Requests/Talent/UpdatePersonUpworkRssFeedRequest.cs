@@ -13,13 +13,8 @@ public class UpdatePersonUpworkRssFeedRequest
     public required string Title { get; set; }
     
     public UpdatePersonUpworkRssFeedCommand ToCommand(IClock clock,
-        string personIdText, string personFeedIdText)
+        string userId, string personFeedIdText)
     {
-        if (!int.TryParse(personIdText, out var personId))
-        {
-            throw new BadRequestException(nameof(personId));
-        }
-        
         if (!int.TryParse(personFeedIdText, out var personFeedId))
         {
             throw new BadRequestException(nameof(personFeedId));
@@ -37,7 +32,7 @@ public class UpdatePersonUpworkRssFeedRequest
         
         return new UpdatePersonUpworkRssFeedCommand(
             clock.UtcNow,
-            personId,
+            userId,
             personFeedId,
             uri.Scheme + Uri.SchemeDelimiter + uri.Host,
             uri.PathAndQuery,

@@ -12,13 +12,8 @@ public class CreatePersonUpworkRssFeedRequest
     public required byte MinimumFetchIntervalInMinutes { get; set; }
     public required string Title { get; set; }
     public CreatePersonUpworkRssFeedCommand ToCommand(IClock clock,
-        string personIdText)
+        string userId)
     {
-        if (!int.TryParse(personIdText, out var personId))
-        {
-            throw new BadRequestException(nameof(personId));
-        }
-
         Uri uri;
         try
         {
@@ -31,7 +26,7 @@ public class CreatePersonUpworkRssFeedRequest
         
         return new CreatePersonUpworkRssFeedCommand(
             clock.UtcNow,
-            personId,
+            userId,
             uri.Scheme + Uri.SchemeDelimiter + uri.Host,
             uri.PathAndQuery,
             AutoSendEmailEnabled,

@@ -6,37 +6,30 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class UpdatePersonUpworkRssFeed : RequestHandlerAsync<UpdatePersonUpworkRssFeedCommand>
+public class UpdatePersonUpworkRssFeed(
+    IPersonRepository personRepository,
+    ILogger<UpdatePersonUpworkRssFeed> logger)
+    : RequestHandlerAsync<UpdatePersonUpworkRssFeedCommand>
 {
-    private readonly IPersonRepository _personRepository;
-    private readonly ILogger<UpdatePersonUpworkRssFeed> _logger;
-
-    public UpdatePersonUpworkRssFeed(IPersonRepository personRepository,
-        ILogger<UpdatePersonUpworkRssFeed> logger)
-    {
-        _personRepository = personRepository;
-        _logger = logger;
-    }
-
     public override async Task<UpdatePersonUpworkRssFeedCommand> HandleAsync(UpdatePersonUpworkRssFeedCommand command,
         CancellationToken cancellationToken = new())
     {
-        _logger.LogInformation("Starting update upwork rss feed for person {PersonId}, feed {UpworkFeedId}",
-            command.PersonId, command.PersonFeedId);
+        logger.LogInformation("Starting update upwork rss feed for person {PersonId}, feed {UpworkFeedId}",
+            command.UserId, command.PersonFeedId);
         
-        var person = await _personRepository.GetAsync(command.PersonId, cancellationToken);
+        var person = await personRepository.GetByUserIdAsync(command.UserId, cancellationToken);
         if (person is null)
         {
-            _logger.LogWarning("Person {PersonId} not found", command.PersonId);
+            logger.LogWarning("Person not found");
             throw new NotFoundException("Person not found");
         }
         
         person.UpdateUpworkRssFeed(command);
         
-        _logger.LogInformation("Finished update upwork rss feed for person {PersonId}, feed {UpworkFeedId}",
-            command.PersonId, command.PersonFeedId);
+        logger.LogInformation("Finished update upwork rss feed for person, feed {UpworkFeedId}",
+            command.PersonFeedId);
 
-        await _personRepository.SaveChangesAsync(cancellationToken);
+        await personRepository.SaveChangesAsync(cancellationToken);
 
         return await base.HandleAsync(command, cancellationToken);
     }

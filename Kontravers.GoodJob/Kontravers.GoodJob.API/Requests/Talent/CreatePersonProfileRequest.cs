@@ -10,8 +10,8 @@ public class CreatePersonProfileRequest
     public required string Description { get; set; }
     public string? Skills { get; set; }
 
-    public CreatePersonProfileCommand ToCommand(IClock clock, string personId)
+    public CreatePersonProfileCommand ToCommand(IClock clock, string userId)
     {
-        return new CreatePersonProfileCommand(personId, Title, Description, Skills, clock.UtcNow);
+        return new CreatePersonProfileCommand(userId, Title, Description, Skills, clock.UtcNow);
     }
 }

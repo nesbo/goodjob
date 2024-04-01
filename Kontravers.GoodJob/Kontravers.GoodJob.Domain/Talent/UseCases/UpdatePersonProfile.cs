@@ -6,37 +6,29 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class UpdatePersonProfile : RequestHandlerAsync<UpdatePersonProfileCommand>
+public class UpdatePersonProfile(
+    IPersonRepository personRepository,
+    ILogger<UpdatePersonProfile> logger)
+    : RequestHandlerAsync<UpdatePersonProfileCommand>
 {
-    private readonly IPersonRepository _personRepository;
-    private readonly ILogger<UpdatePersonProfile> _logger;
-
-    public UpdatePersonProfile(IPersonRepository personRepository,
-        ILogger<UpdatePersonProfile> logger)
-    {
-        _personRepository = personRepository;
-        _logger = logger;
-    }
-    
     public override async Task<UpdatePersonProfileCommand> HandleAsync(UpdatePersonProfileCommand command,
         CancellationToken cancellationToken = new ())
     {
-        _logger.LogInformation("Updating person profile for person {PersonId}", command.PersonId);
+        logger.LogInformation("Updating person profile for person");
         
-        var personId = int.Parse(command.PersonId);
-        var person = await _personRepository.GetAsync(personId, cancellationToken);
+        var person = await personRepository.GetByUserIdAsync(command.UserId, cancellationToken);
         
         if (person is null)
         {
-            _logger.LogError("Person {PersonId} not found", command.PersonId);
+            logger.LogError("Person not found");
             throw new NotFoundException("Person not found");
         }
         
         person.UpdateProfile(command);
         
-        _logger.LogInformation("Person profile updated for person {PersonId}. Saving to database",
-            command.PersonId);
-        await _personRepository.SaveChangesAsync(cancellationToken);
+        logger.LogInformation("Person profile updated for person {PersonId}. Saving to database",
+            person.Id);
+        await personRepository.SaveChangesAsync(cancellationToken);
         
         return await base.HandleAsync(command, cancellationToken);
     }

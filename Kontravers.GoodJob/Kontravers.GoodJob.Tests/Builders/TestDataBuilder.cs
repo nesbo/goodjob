@@ -26,7 +26,7 @@ public class TestDataBuilder
         var person = new Person(true, email, "John Doe", 1,
              createdUtc.Value, createdUtc.Value, userId);
         
-        var createUpworkRssFeedCommand = new CreatePersonUpworkRssFeedCommand(createdUtc.Value, person.Id,
+        var createUpworkRssFeedCommand = new CreatePersonUpworkRssFeedCommand(createdUtc.Value, userId,
             "https://www.upwork.com/", "ab/feed/jobs/rss?sort=recency&paging=0%3B1",
             true,true, 1, 5, "Upwork RSS Feed 1");
         person.CreateUpworkRssFeed(createUpworkRssFeedCommand, new FakeClock(createdUtc.Value));

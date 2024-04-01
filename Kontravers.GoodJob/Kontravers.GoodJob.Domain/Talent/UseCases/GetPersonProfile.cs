@@ -5,36 +5,28 @@ using Microsoft.Extensions.Logging;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class GetPersonProfile
+public class GetPersonProfile(
+    IPersonQueryRepository personQueryRepository,
+    ILogger<GetPersonProfile> logger)
 {
-    private readonly IPersonQueryRepository _personQueryRepository;
-    private readonly ILogger<GetPersonProfile> _logger;
-
-    public GetPersonProfile(IPersonQueryRepository personQueryRepository,
-        ILogger<GetPersonProfile> logger)
+    public async Task<PersonProfileViewModel> GetAsync(GetPersonProfileQuery query,
+        CancellationToken cancellationToken)
     {
-        _personQueryRepository = personQueryRepository;
-        _logger = logger;
-    }
-    
-    public async Task<PersonProfileViewModel> GetAsync(GetPersonProfileQuery query, CancellationToken cancellationToken)
-    {
-        _logger.LogInformation("Fetching person profile for person {PersonId} and profile {ProfileId}",
-            query.PersonId, query.ProfileId);
+        logger.LogInformation("Fetching person profile for person and profile {ProfileId}",
+            query.ProfileId);
         
-        var personId = int.Parse(query.PersonId);
-        var person = await _personQueryRepository.GetAsync(personId, cancellationToken);
+        var person = await personQueryRepository.GetByUserId(query.UserId, cancellationToken);
         
         if (person == null)
         {
-            _logger.LogError("Person with id {PersonId} not found", query.PersonId);
-            throw new NotFoundException($"Person with id {personId} not found");
+            logger.LogError("Person not found");
+            throw new NotFoundException($"Person not found");
         }
 
         var profileId = int.Parse(query.ProfileId);
         if (!person.HasProfile(profileId))
         {
-            _logger.LogError("Profile with id {ProfileId} not found", query.ProfileId);
+            logger.LogError("Profile with id {ProfileId} not found", query.ProfileId);
             throw new NotFoundException($"Profile with id {profileId} not found");
         }
         

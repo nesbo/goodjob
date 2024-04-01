@@ -1,13 +1,7 @@
 namespace Kontravers.GoodJob.Domain.Talent.Queries;
 
-public class GetPersonProfileQuery
+public class GetPersonProfileQuery(string userId, string profileId)
 {
-    public GetPersonProfileQuery(string personId, string profileId)
-    {
-        PersonId = personId;
-        ProfileId = profileId;
-    }
-
-    public string PersonId { get; }
-    public string ProfileId { get; }
+    public string UserId { get; } = userId;
+    public string ProfileId { get; } = profileId;
 }

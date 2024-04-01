@@ -9,8 +9,8 @@ public class UpdatePersonProfileRequest
     public string Description { get; set; }
     public string? Skills { get; set; }
 
-    public UpdatePersonProfileCommand ToCommand(IClock clock, string personId, string profileId)
+    public UpdatePersonProfileCommand ToCommand(IClock clock, string userId, string profileId)
     {
-        return new(clock.UtcNow, Title, Description, Skills, personId, profileId);
+        return new(clock.UtcNow, Title, Description, Skills, userId, profileId);
     }
 }

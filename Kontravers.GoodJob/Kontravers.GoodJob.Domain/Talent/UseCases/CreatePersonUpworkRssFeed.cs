@@ -6,35 +6,27 @@ using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.Domain.Talent.UseCases;
 
-public class CreatePersonUpworkRssFeed: RequestHandlerAsync<CreatePersonUpworkRssFeedCommand>
+public class CreatePersonUpworkRssFeed(
+    IPersonRepository personRepository,
+    ILogger<CreatePersonUpworkRssFeed> logger,
+    IClock clock)
+    : RequestHandlerAsync<CreatePersonUpworkRssFeedCommand>
 {
-    private readonly IPersonRepository _personRepository;
-    private readonly ILogger<CreatePersonUpworkRssFeed> _logger;
-    private readonly IClock _clock;
-
-    public CreatePersonUpworkRssFeed(IPersonRepository personRepository,
-        ILogger<CreatePersonUpworkRssFeed> logger, IClock clock)
+    public override async Task<CreatePersonUpworkRssFeedCommand> HandleAsync(
+        CreatePersonUpworkRssFeedCommand command, CancellationToken cancellationToken = new ())
     {
-        _personRepository = personRepository;
-        _logger = logger;
-        _clock = clock;
-    }
-    
-    public override async Task<CreatePersonUpworkRssFeedCommand> HandleAsync(CreatePersonUpworkRssFeedCommand command,
-        CancellationToken cancellationToken = new ())
-    {
-        _logger.LogInformation("Creating person upwork rss feed for person {PersonId}", command.PersonId);
+        logger.LogInformation("Creating person upwork rss feed");
         
-        var person = await _personRepository.GetAsync(command.PersonId, cancellationToken);
+        var person = await personRepository.GetByUserIdAsync(command.UserId, cancellationToken);
         
         if (person is null)
         {
-            _logger.LogError("Person {PersonId} not found", command.PersonId);
+            logger.LogError("Person not found");
             throw new NotFoundException("Person not found");
         }
         
-        person.CreateUpworkRssFeed(command, _clock);
-        await _personRepository.SaveChangesAsync(cancellationToken);
+        person.CreateUpworkRssFeed(command, clock);
+        await personRepository.SaveChangesAsync(cancellationToken);
         
         return await base.HandleAsync(command, cancellationToken);
     }
