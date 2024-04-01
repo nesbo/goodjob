@@ -1,5 +1,9 @@
+using IdentityModel;
 using Kontravers.GoodJob.API;
 using Kontravers.GoodJob.Infra.Shared;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +32,38 @@ if (authenticationAuthority is null)
 {
     throw new InvalidOperationException("Authority is not configured.");
 }
+
+services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.ForwardChallenge = "oidc";
+
+        options.Events.OnRedirectToAccessDenied = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
+    })
+    .AddOpenIdConnect("oidc", options =>
+    {
+        options.Authority = authenticationAuthority;
+        options.ResponseType = OpenIdConnectResponseType.Code;
+        options.ClaimActions.MapAll();
+        options.SaveTokens = true;
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
+        options.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
+
+        options.Events.OnRedirectToIdentityProvider = ctx =>
+        {
+            if (ctx.Request.Path == "/account/signin" || ctx.Request.Path == "/account/signout")
+                return Task.CompletedTask;
+
+            ctx.HandleResponse();
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+    });
 
 services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
