@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 class PersonsService {
-    async getPersons(): Promise<Person[]> {
+    async getPerson(): Promise<Person[]> {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/persons');
-            console.log('Persons:', response.data);
+            const response = await axios.get(import.meta.env.VITE_API_URL + '/person');
+            console.log('Person: ', response.data);
             return response.data.items;
         } catch (error) {
             console.error('Error fetching persons:', error);
@@ -13,7 +13,7 @@ class PersonsService {
     }
     async getPersonDetails(id: String): Promise<PersonDetails> {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/persons/' + id);
+            const response = await axios.get(import.meta.env.VITE_API_URL + '/person/' + id);
             console.log('Person Details:', response.data);
             return response.data;
         } catch (error) {

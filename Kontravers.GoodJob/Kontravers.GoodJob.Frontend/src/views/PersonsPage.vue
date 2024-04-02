@@ -3,26 +3,30 @@
         <RouterView />
         <h1>{{ pageTitle }}</h1>
         <p v-if="isLoading">Loading...</p>
-        <DataTable selectionMode="single" v-else-if="!error" :value="persons" tableStyle="min-width: 50rem" @rowClick="onRowClick">
-            <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"></Column>
+        <DataTable selectionMode="single" v-else-if="!error" :value="persons"
+            tableStyle="min-width: 50rem" @rowClick="onRowClick">
+            <Column v-for="col of columns" :key="col.field" :field="col.field"
+                :header="col.header"></Column>
             <Column key="actions" field="actions" header="Actions">
                 <template #body="slotProps">
-                    <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="viewPerson(slotProps.data)" />
-                    <Button icon="pi pi-trash" outlined rounded severity="danger" @click="viewPerson(slotProps.data)" />
+                    <Button icon="pi pi-pencil" outlined rounded class="mr-2"
+                        @click="viewPerson(slotProps.data)" />
+                    <Button icon="pi pi-trash" outlined rounded
+                        severity="danger" @click="viewPerson(slotProps.data)" />
                 </template>
             </Column>
         </DataTable>
         <h2 v-if="error">neradubageri</h2>
+        <Button icon="pi pi-plus" rounded @click="goTologin()" label="LOGIN" />
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import PersonsService, {Person} from '../services/PersonsService';
+import PersonsService, { Person } from '../services/PersonsService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-
 const navigate = (personId: string) => {
     router.push({ name: 'PersonDetailsPage', params: { id: personId } });
 };
@@ -37,7 +41,7 @@ const columns = [
 const persons = ref<Person[]>([]);
 const error = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
-const personsData = PersonsService.getPersons();
+const personsData = PersonsService.getPerson();
 console.log(personsData);
 const pageTitle = ref('Persons');
 
@@ -54,10 +58,17 @@ const onRowClick = (event: any) => {
 
 };
 
+const goTologin = () => {
+    window.location.href = 'https://goodjob-auth.kontrave.rs/connect/authorize?response_type=code&client_id=goodjob-api-client&scope=openid%20profile%20userId%20person-work%20person-talent&redirect_uri=https%3A%2F%2Flocalhost:5173%2Fcallback';
+}
+
+
+
+
 onMounted(async () => {
     isLoading.value = true;
     try {
-        const response = await PersonsService.getPersons();
+        const response = await PersonsService.getPerson();
         persons.value = response as Person[];
         console.log(response as Person[]);
         // ... handle the fetched data
