@@ -16,7 +16,12 @@ public static class Clients
                 AllowedGrantTypes = GrantTypes.Code,
                 RequirePkce = false,
                 RequireClientSecret = false,
-                RedirectUris = { "https://localhost:5001/signin-oidc", "https://oauth.pstmn.io/v1/callback" },
+                RedirectUris =
+                {
+                    "https://localhost:5001/signin-oidc",
+                    "https://oauth.pstmn.io/v1/callback",
+                    "https://goodjob.kontrave.rs/callback"
+                },
                 PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
                 AllowedScopes =
                 {
