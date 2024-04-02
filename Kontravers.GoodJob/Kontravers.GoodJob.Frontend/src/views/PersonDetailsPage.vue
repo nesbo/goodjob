@@ -205,7 +205,6 @@ const onAddNewFeed = async () => {
 
 const onAddNewProfile = async () => {
 
-
     dialog.open(
         EditProfileDialogTemplate, {
         props: {
