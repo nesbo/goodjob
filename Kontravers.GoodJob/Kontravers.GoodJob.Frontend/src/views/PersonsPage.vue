@@ -18,12 +18,16 @@
         </DataTable>
         <h2 v-if="error">neradubageri</h2>
         <Button icon="pi pi-plus" rounded @click="goTologin()" label="LOGIN" />
+        <Button rounded @click="getKentoTebrex()"
+            label="GetTokentooooooooken" />
+        <p>{{ kento }}</p>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import PersonsService, { Person } from '../services/PersonsService';
+import AuthService from '../services/AuthService';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -41,6 +45,7 @@ const columns = [
 const persons = ref<Person[]>([]);
 const error = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
+const kento = ref<any>('');
 const personsData = PersonsService.getPerson();
 console.log(personsData);
 const pageTitle = ref('Persons');
@@ -59,10 +64,14 @@ const onRowClick = (event: any) => {
 };
 
 const goTologin = () => {
-    window.location.href = 'https://goodjob-auth.kontrave.rs/connect/authorize?response_type=code&client_id=goodjob-api-client&scope=openid%20profile%20userId%20person-work%20person-talent&redirect_uri=https%3A%2F%2Flocalhost:5173%2Fcallback';
+    window.location.href = 'https://goodjob-auth.kontrave.rs/connect/authorize?response_type=code&client_id=goodjob-api-client&scope=openid%20profile%20userId%20person-work%20person-talent&redirect_uri=http%3A%2F%2Flocalhost:5173%2Fcallback';
 }
 
 
+const getKentoTebrex = async () => {
+    const response = await AuthService.getKento();
+    kento.value = response;
+}
 
 
 onMounted(async () => {
