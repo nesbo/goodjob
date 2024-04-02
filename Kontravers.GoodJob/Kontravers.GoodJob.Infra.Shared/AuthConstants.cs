@@ -9,5 +9,5 @@ public static class AuthConstants
     
     public const string PersonTalentAuthorisation = "person-talent";
     public const string PersonWorkAuthorisation = "person-work";
-    public const string UserIdScope = "user_id";
+    public const string UserIdScope = "userId";
 }
