@@ -36,6 +36,10 @@ services.AddAuthorizationBuilder()
     {
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("scope", AuthConstants.PersonWorkScope);
+    })
+    .AddPolicy("user", policy =>
+    {
+        policy.RequireAuthenticatedUser();
     });
 
 var configuration = builder.Configuration;
