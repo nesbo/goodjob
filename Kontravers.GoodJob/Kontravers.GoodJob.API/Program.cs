@@ -49,52 +49,16 @@ if (authenticationAuthority is null)
     throw new InvalidOperationException("Authority is not configured.");
 }
 
-services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
     {
-        options.ForwardChallenge = "oidc";
-        options.Events.OnRedirectToAccessDenied = ctx =>
-        {
-            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
-            return Task.CompletedTask;
-        };
-    })
-    .AddOpenIdConnect("oidc", options =>
-    {
-        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Authority = authenticationAuthority;
-        options.ClientId = "goodjob-api";
-        options.ClientSecret = "goodjob-api-secret";
-        options.ResponseType = OpenIdConnectResponseType.Code;
-        options.ClaimActions.MapAll();
-        options.SaveTokens = true;
-        options.GetClaimsFromUserInfoEndpoint = true;
-        options.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
-        options.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
-        
-        options.RequireHttpsMetadata = false;
-        
-        options.Events.OnRedirectToIdentityProvider = ctx =>
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            if (ctx.Request.Path == "/account/signin" || ctx.Request.Path == "/account/signout")
-                return Task.CompletedTask;
-
-            ctx.HandleResponse();
-            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            return Task.CompletedTask;
+            ValidateAudience = false
         };
+        options.RequireHttpsMetadata = false;
     });
-
-// services.AddAuthentication("Bearer")
-//     .AddJwtBearer("Bearer", options =>
-//     {
-//         options.Authority = authenticationAuthority;
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateAudience = false
-//         };
-//         options.RequireHttpsMetadata = false;
-//     });
 var swaggerConfig = new SwaggerConfig(configuration);
 services.AddSingleton(swaggerConfig);
 services.AddSwaggerGen(swaggerConfig.ConfigureSwaggerGen);
