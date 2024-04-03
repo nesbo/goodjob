@@ -5,6 +5,7 @@ using Kontravers.GoodJob.Auth.Data;
 using Kontravers.GoodJob.Data;
 using Kontravers.GoodJob.Domain;
 using Kontravers.GoodJob.Domain.Messaging;
+using Microsoft.AspNetCore.HttpOverrides;
 using Paramore.Brighter;
 using Paramore.Brighter.Extensions.DependencyInjection;
 using Paramore.Brighter.MessagingGateway.RMQ;
@@ -60,6 +61,17 @@ var producerRegistry = new ProducerRegistry(new Dictionary<string, IAmAMessagePr
     }
 });
 
+services.AddCors(o =>
+{
+    o.AddPolicy("AllowAllCorsPolicy", policyBuilder =>
+    {
+        policyBuilder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 services.AddBrighter()
     .MapperRegistryFromAssemblies(typeof(UserCreatedEventMapper).Assembly)
     .UseExternalBus(config => config.ProducerRegistry = producerRegistry);
@@ -87,7 +99,9 @@ services
     .AddInMemoryIdentityResources(Resources.GetIdentityResources())
     .AddInMemoryApiScopes(Scopes.GetApiScopes())
     .AddAspNetIdentity<IdentityUser>()
+    
     .AddDeveloperSigningCredential();
+
 
 services.AddControllersWithViews();
 services.AddRazorPages();
@@ -106,15 +120,25 @@ else
     app.UseHsts();
 }
 
+var forwardedOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+    RequireHeaderSymmetry = false
+};
+forwardedOptions.KnownNetworks.Clear();
+forwardedOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedOptions);
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseCors("AllowAllCorsPolicy");
 
 app.UseCookiePolicy(new CookiePolicyOptions
 {
     MinimumSameSitePolicy = SameSiteMode.None,
-    Secure = CookieSecurePolicy.Always,
+    Secure = CookieSecurePolicy.Always
 });
 
 app.UseIdentityServer();
