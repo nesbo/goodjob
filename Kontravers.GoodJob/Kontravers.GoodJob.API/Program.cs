@@ -85,12 +85,15 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         options.Events.OnRedirectToIdentityProvider = ctx =>
         {
             if (ctx.Request.Path == "/account/signin" || ctx.Request.Path == "/account/signout")
+            {
+                var uriBuilder = new UriBuilder(ctx.ProtocolMessage.RedirectUri);
+                uriBuilder.Scheme = "https";
+                uriBuilder.Port = -1;
+                ctx.ProtocolMessage.RedirectUri = uriBuilder.ToString();
                 return Task.CompletedTask;
+            }
 
-            var uriBuilder = new UriBuilder(ctx.ProtocolMessage.RedirectUri);
-            uriBuilder.Scheme = "https";
-            uriBuilder.Port = -1;
-            ctx.ProtocolMessage.RedirectUri = uriBuilder.ToString();
+            
             ctx.HandleResponse();
             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
             return Task.CompletedTask;
