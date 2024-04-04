@@ -39,7 +39,7 @@ public static class Clients
                 ClientId = "goodjob-api",
                 ClientName = "GoodJob API Client",
                 AllowedGrantTypes = GrantTypes.Code,
-                RequirePkce = false,
+                RequirePkce = true,
                 RequireClientSecret = false,
                 RedirectUris =
                 {
@@ -65,6 +65,7 @@ public static class Clients
                 EnableLocalLogin = true,
                 IncludeJwtId = true,
                 AlwaysSendClientClaims = true
+                
             }
         };
     }

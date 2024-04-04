@@ -70,19 +70,13 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddOpenIdConnect("oidc", options =>
     {
         options.Authority = authenticationAuthority;
-
         options.ClientId = "goodjob-api";
-
         options.ResponseType = OpenIdConnectResponseType.Code;
-                    
         options.Scope.Add(AuthConstants.PersonWorkScope);
         options.Scope.Add(AuthConstants.PersonTalentScope);
-                    
         options.ClaimActions.MapAll();
-
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
-
         options.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
         options.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
 

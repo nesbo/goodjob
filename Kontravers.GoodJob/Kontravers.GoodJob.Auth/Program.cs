@@ -5,7 +5,6 @@ using Kontravers.GoodJob.Auth.Data;
 using Kontravers.GoodJob.Data;
 using Kontravers.GoodJob.Domain;
 using Kontravers.GoodJob.Domain.Messaging;
-using Microsoft.AspNetCore.HttpOverrides;
 using Paramore.Brighter;
 using Paramore.Brighter.Extensions.DependencyInjection;
 using Paramore.Brighter.MessagingGateway.RMQ;
@@ -99,7 +98,6 @@ services
     .AddInMemoryIdentityResources(Resources.GetIdentityResources())
     .AddInMemoryApiScopes(Scopes.GetApiScopes())
     .AddAspNetIdentity<IdentityUser>()
-    
     .AddDeveloperSigningCredential();
 
 
@@ -120,16 +118,16 @@ else
     app.UseHsts();
 }
 
-var forwardedOptions = new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-    RequireHeaderSymmetry = false
-};
-forwardedOptions.KnownNetworks.Clear();
-forwardedOptions.KnownProxies.Clear();
-app.UseForwardedHeaders(forwardedOptions);
+// var forwardedOptions = new ForwardedHeadersOptions
+// {
+//     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+//     RequireHeaderSymmetry = false
+// };
+// forwardedOptions.KnownNetworks.Clear();
+// forwardedOptions.KnownProxies.Clear();
+// app.UseForwardedHeaders(forwardedOptions);
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
