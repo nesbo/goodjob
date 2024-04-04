@@ -101,6 +101,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
+  text-align: center;
 }
 
 h1, .h1 {
@@ -230,11 +231,11 @@ sup {
 }
 
 a {
-  color: #0d6efd;
+  color: #ffffff;
   text-decoration: underline;
 }
 a:hover {
-  color: #0a58ca;
+  color: #757575;
 }
 
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
@@ -2181,9 +2182,9 @@ progress {
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
-  background-color: #fff;
+  background-color: #797676;
   background-clip: padding-box;
-  border: 1px solid #ced4da;
+  border: 1px solid #000000;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -2203,8 +2204,8 @@ progress {
 }
 .form-control:focus {
   color: #212529;
-  background-color: #fff;
-  border-color: #86b7fe;
+  background-color: #797676;
+  border-color: #000000;
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
@@ -2229,7 +2230,7 @@ progress {
   -webkit-margin-end: 0.75rem;
   margin-inline-end: 0.75rem;
   color: #212529;
-  background-color: #e9ecef;
+  background-color: #797676;
   pointer-events: none;
   border-color: inherit;
   border-style: solid;
@@ -2591,7 +2592,7 @@ textarea.form-control-lg {
   height: 0.5rem;
   color: transparent;
   cursor: pointer;
-  background-color: #dee2e6;
+  background-color: #686363;
   border-color: transparent;
   border-radius: 1rem;
 }
