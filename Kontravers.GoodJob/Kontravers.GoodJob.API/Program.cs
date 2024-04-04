@@ -4,6 +4,7 @@ using Kontravers.GoodJob.API;
 using Kontravers.GoodJob.Infra.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -91,6 +92,7 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         };
     });
 
+
 services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -109,6 +111,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+var forwardedOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+    RequireHeaderSymmetry = false
+};
+forwardedOptions.KnownNetworks.Clear();
+forwardedOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedOptions);
 
 app.UseCors(allowAllCorsPolicy);
 

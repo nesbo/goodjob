@@ -39,6 +39,7 @@ public static class Clients
                 ClientId = "goodjob-api",
                 ClientName = "GoodJob API Client",
                 AllowedGrantTypes = GrantTypes.Code,
+                AllowPlainTextPkce = false,
                 RequirePkce = true,
                 RequireClientSecret = false,
                 RedirectUris =
@@ -46,7 +47,7 @@ public static class Clients
                     "https://localhost:5001/signin-oidc",
                     "https://oauth.pstmn.io/v1/callback",
                     "https://goodjob.kontrave.rs/callback",
-                    "http://goodjob-api.kontrave.rs/signin-oidc"
+                    "https://goodjob-api.kontrave.rs/signin-oidc"
                 },
                 PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
                 AllowedScopes =
@@ -64,8 +65,8 @@ public static class Clients
                 AccessTokenType = AccessTokenType.Jwt,
                 EnableLocalLogin = true,
                 IncludeJwtId = true,
-                AlwaysSendClientClaims = true
-                
+                AlwaysSendClientClaims = true,
+                RefreshTokenExpiration = TokenExpiration.Absolute
             }
         };
     }
