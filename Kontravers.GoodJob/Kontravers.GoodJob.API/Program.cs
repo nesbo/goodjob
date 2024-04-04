@@ -62,6 +62,7 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.ForwardChallenge = "oidc";
+
         options.Events.OnRedirectToAccessDenied = ctx =>
         {
             ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -86,6 +87,10 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             if (ctx.Request.Path == "/account/signin" || ctx.Request.Path == "/account/signout")
                 return Task.CompletedTask;
 
+            var uriBuilder = new UriBuilder(ctx.ProtocolMessage.RedirectUri);
+            uriBuilder.Scheme = "https";
+            uriBuilder.Port = -1;
+            ctx.ProtocolMessage.RedirectUri = uriBuilder.ToString();
             ctx.HandleResponse();
             ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
             return Task.CompletedTask;
