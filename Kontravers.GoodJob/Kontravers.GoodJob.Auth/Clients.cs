@@ -47,7 +47,7 @@ public static class Clients
                     "https://localhost:5001/signin-oidc",
                     "https://oauth.pstmn.io/v1/callback",
                     "https://goodjob.kontrave.rs/callback",
-                    "http://localhost:8010/swagger/oauth2-redirect.html"
+                    "http://goodjob-api.kontrave.rs/signin-oidc"
                 },
                 PostLogoutRedirectUris = { "https://localhost:5001/signout-callback-oidc" },
                 AllowedScopes =
