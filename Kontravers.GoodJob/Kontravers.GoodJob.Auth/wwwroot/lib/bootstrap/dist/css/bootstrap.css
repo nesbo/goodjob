@@ -372,7 +372,7 @@ button,
 [type=button],
 [type=reset],
 [type=submit] {
-  -webkit-appearance: button;
+ -webkit-appearance: button;
 }
 button:not(:disabled),
 [type=button]:not(:disabled),
@@ -2436,7 +2436,7 @@ textarea.form-control-lg {
   -moz-appearance: none;
   appearance: none;
   -webkit-print-color-adjust: exact;
-  color -adjust: exact;
+  color-adjust: exact;
 }
 .form-check-input[type=checkbox] {
   border-radius: 0.25em;
@@ -2632,6 +2632,7 @@ textarea.form-control-lg {
 }
 .form-floating > .form-control {
   padding: 1rem 0.75rem;
+  border-radius: 12px;
 }
 .form-floating > .form-control::-moz-placeholder {
   color: transparent;
@@ -2968,6 +2969,7 @@ textarea.form-control-lg {
   color: #000000;
   background-color: var(--bs-primary);
   border-color: var(--bs-primary);
+  
 }
 .btn-primary:hover {
   color: #000000;
@@ -3419,7 +3421,7 @@ textarea.form-control-lg {
 .btn-lg, .btn-group-lg > .btn {
   padding: 0.5rem 1rem;
   font-size: 1.25rem;
-  border-radius: 0.3rem;
+  border-radius: 12px;
 }
 
 .btn-sm, .btn-group-sm > .btn {
