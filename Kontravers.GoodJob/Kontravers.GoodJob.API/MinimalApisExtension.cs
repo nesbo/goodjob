@@ -22,8 +22,8 @@ public static class MinimalApisExtension
             .MapGroup("/person")
             .WithTags("Talent")
             .RequireAuthorization(builder => builder
-                .RequireAuthenticatedUser());
-                //.RequireClaim("scope", AuthConstants.PersonTalentScope));
+                .RequireAuthenticatedUser()
+                .RequireClaim("scope", AuthConstants.PersonTalentScope));
 
         personEndpoint
             .MapGet("/",
