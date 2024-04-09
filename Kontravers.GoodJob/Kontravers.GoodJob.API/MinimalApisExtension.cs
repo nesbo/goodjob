@@ -20,7 +20,8 @@ public static class MinimalApisExtension
 
         var personEndpoint = app
             .MapGroup("/person")
-            .WithTags("Talent");
+            .WithTags("Talent")
+            .RequireCors("WebApiCorsPolicy");
             //.RequireAuthorization(builder => builder
             //    .RequireAuthenticatedUser()
             //    .RequireClaim("scope", AuthConstants.PersonTalentScope));
