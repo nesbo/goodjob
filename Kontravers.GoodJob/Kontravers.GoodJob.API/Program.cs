@@ -94,16 +94,10 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         options.Authority = authenticationAuthority;
         options.ClientId = "goodjob-api";
         options.ResponseType = OpenIdConnectResponseType.Code;
-        options.Scope.Add(AuthConstants.PersonWorkScope);
-        options.Scope.Add(AuthConstants.PersonTalentScope);
-        options.Scope.Add(AuthConstants.ProfileScope);
-        options.Scope.Add(AuthConstants.UserIdScope);
-        options.Scope.Add(AuthConstants.OpenIdScope);
         options.ClaimActions.MapAll();
         options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
         options.TokenValidationParameters.NameClaimType = JwtClaimTypes.Name;
-        options.TokenValidationParameters.RoleClaimType = JwtClaimTypes.Role;
 
         options.Events.OnRedirectToIdentityProvider = ctx =>
         {
@@ -139,6 +133,7 @@ var app = builder.Build();
 
 app.AddGoodJobMinimalApis();
 app.UseCorsOptions();
+app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
