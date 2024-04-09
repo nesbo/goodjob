@@ -14,8 +14,10 @@ services.AddControllers();
 
 services.AddEndpointsApiExplorer();
 services.AddGoodJobServices().AddBrighterRegistrations();
-var allowAllCorsPolicy = "AllowAllCorsPolicy";
-var webApiCorsPolicyName = "WebApiCorsPolicy";
+const string allowAllCorsPolicy = "AllowAllCorsPolicy";
+const string webApiCorsPolicyName = "WebApiCorsPolicy";
+
+services.AddCorsOptions(webApiCorsPolicyName);
 services.AddCors(options =>
 {
     options.AddPolicy(webApiCorsPolicyName, policy =>
@@ -136,12 +138,13 @@ var app = builder.Build();
 }
 
 app.AddGoodJobMinimalApis();
+app.UseCorsOptions();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireCors(webApiCorsPolicyName);
 var forwardedOptions = new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,

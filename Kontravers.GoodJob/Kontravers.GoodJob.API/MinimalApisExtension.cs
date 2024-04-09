@@ -4,8 +4,9 @@ using Kontravers.GoodJob.Domain;
 using Kontravers.GoodJob.Domain.Exceptions;
 using Kontravers.GoodJob.Domain.Talent.Queries;
 using Kontravers.GoodJob.Domain.Talent.UseCases;
-using Kontravers.GoodJob.Infra.Shared;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Options;
 using Paramore.Brighter;
 
 namespace Kontravers.GoodJob.API;
@@ -21,10 +22,9 @@ public static class MinimalApisExtension
         var personEndpoint = app
             .MapGroup("/person")
             .WithTags("Talent")
-            .RequireCors("WebApiCorsPolicy");
-            //.RequireAuthorization(builder => builder
-            //    .RequireAuthenticatedUser()
-            //    .RequireClaim("scope", AuthConstants.PersonTalentScope));
+            .RequireCors("WebApiCorsPolicy")
+            .RequireAuthorization(builder => builder
+                .RequireAuthenticatedUser());
 
         personEndpoint
             .MapGet("/",
@@ -138,5 +138,67 @@ public static class MinimalApisExtension
         }
 
         return userId;
+    }
+}
+
+public class CorsOptionsMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ICorsService _corsService;
+    private readonly ICorsPolicyProvider _corsPolicyProvider;
+    private readonly CorsOptionsMiddlewareOptions _options;
+
+    public CorsOptionsMiddleware(RequestDelegate next, ICorsService corsService,
+        ICorsPolicyProvider corsPolicyProvider,
+        IOptions<CorsOptionsMiddlewareOptions> options)
+    {
+        _next = next;
+        _corsService = corsService;
+        _corsPolicyProvider = corsPolicyProvider;
+        _options = options.Value;
+    }
+
+    public Task Invoke(HttpContext context)
+    {
+        return BeginInvoke(context);
+    }
+
+    private async Task BeginInvoke(HttpContext context)
+    {
+        if (HttpMethods.IsOptions(context.Request.Method))
+        {
+            var policy = await _corsPolicyProvider.GetPolicyAsync(context, _options.CorsPolicyName);
+            if (policy == null)
+                throw new Exception($"Could not find CORS policy with name '{_options.CorsPolicyName}'");
+
+            var result = _corsService.EvaluatePolicy(context, policy);
+            _corsService.ApplyResult(result, context.Response);
+            return;
+        }
+
+        await _next(context);
+    }
+}
+
+public class CorsOptionsMiddlewareOptions
+{
+    public string CorsPolicyName { get; set; }
+}
+
+public static class CorsOptionsMiddlewareExtensions
+{
+    public static IServiceCollection AddCorsOptions(this IServiceCollection services, string corsPolicyName)
+    {
+        services.Configure<CorsOptionsMiddlewareOptions>(options =>
+        {
+            options.CorsPolicyName = corsPolicyName;
+        });
+
+        return services;
+    }
+
+    public static IApplicationBuilder UseCorsOptions(this IApplicationBuilder app)
+    {
+        return app.UseMiddleware<CorsOptionsMiddleware>();
     }
 }
