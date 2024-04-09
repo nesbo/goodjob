@@ -64,7 +64,7 @@ const onRowClick = (event: any) => {
 };
 
 const goTologin = () => {
-    window.location.href = 'https://goodjob-auth.kontrave.rs/connect/authorize?redirect_uri=https%3A%2F%2Flocalhost:5173';
+    window.location.href = 'https://goodjob-api.kontrave.rs/Account/SignIn?returnUrl=https://goodjob.kontrave.rs';
 }
 
 
