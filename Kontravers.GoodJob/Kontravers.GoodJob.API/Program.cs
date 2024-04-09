@@ -71,8 +71,9 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     })
     .AddOpenIdConnect("oidc", options =>
     {
+        
         options.Authority = authenticationAuthority;
-        options.ClientId = "goodjob-api";
+        options.ClientId = "goodjob-api-client";
         options.ResponseType = OpenIdConnectResponseType.Code;
         options.Scope.Add(AuthConstants.PersonWorkScope);
         options.Scope.Add(AuthConstants.PersonTalentScope);
@@ -86,9 +87,11 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         {
             if (ctx.Request.Path == "/account/signin" || ctx.Request.Path == "/account/signout")
             {
-                var uriBuilder = new UriBuilder(ctx.ProtocolMessage.RedirectUri);
-                uriBuilder.Scheme = "https";
-                uriBuilder.Port = -1;
+                var uriBuilder = new UriBuilder(ctx.ProtocolMessage.RedirectUri)
+                {
+                    Scheme = "https",
+                    Port = -1
+                };
                 ctx.ProtocolMessage.RedirectUri = uriBuilder.ToString();
                 return Task.CompletedTask;
             }
