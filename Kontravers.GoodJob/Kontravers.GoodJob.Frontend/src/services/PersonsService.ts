@@ -3,7 +3,7 @@ import axios from 'axios';
 class PersonsService {
     async getPerson(): Promise<Person[]> {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/person');
+            const response = await axios.get(import.meta.env.VITE_API_URL + '/person', { withCredentials: true });
             console.log('Person: ', response.data);
             return response.data.items;
         } catch (error) {
