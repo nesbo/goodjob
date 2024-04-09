@@ -15,8 +15,25 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddGoodJobServices().AddBrighterRegistrations();
 var allowAllCorsPolicy = "AllowAllCorsPolicy";
+var webApiCorsPolicyName = "WebApiCorsPolicy";
 services.AddCors(options =>
 {
+    options.AddPolicy(webApiCorsPolicyName, policy =>
+    {
+        var origins = new []
+        {
+            "https://goodjob.kontrave.rs",
+            "https://goodjob-api.kontrave.rs",
+            "https://goodjob-auth.kontrave.rs"
+        };
+        
+        policy
+            .WithOrigins(origins)
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithExposedHeaders("Content-Disposition");
+    });
     options.AddPolicy(allowAllCorsPolicy, policy =>
     {
         policy
@@ -133,8 +150,6 @@ var forwardedOptions = new ForwardedHeadersOptions
 forwardedOptions.KnownNetworks.Clear();
 forwardedOptions.KnownProxies.Clear();
 app.UseForwardedHeaders(forwardedOptions);
-
-app.UseCors(allowAllCorsPolicy);
 
 await app.RunAsync();
 
