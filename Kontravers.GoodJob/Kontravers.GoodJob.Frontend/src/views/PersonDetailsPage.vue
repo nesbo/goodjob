@@ -20,13 +20,17 @@
                     <div class="flex gap-4 align-items-center">
 
                         <h3 class="text-left">Feeds list</h3>
-                        <Button icon="pi pi-plus" rounded @click="onAddNewFeed()" />
+                        <Button icon="pi pi-plus" rounded
+                            @click="onAddNewFeed()" />
                     </div>
                     <p v-if="isLoading">Loading...</p>
 
 
-                    <DataTable selectionMode="single" v-else :value="personDetails.upworkRssFeeds" @rowClick="onFeedRowClick">
-                        <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"></Column>
+                    <DataTable selectionMode="single" v-else
+                        :value="personDetails.upworkRssFeeds"
+                        @rowClick="onFeedRowClick">
+                        <Column v-for="col of columns" :key="col.field"
+                            :field="col.field" :header="col.header"></Column>
                         <Column key="actions" field="actions" header="Actions">
                             <!-- <template #body="slotProps">
                                 <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="onFeedRowClick(slotProps.data)" />
@@ -42,13 +46,17 @@
                     <div class="flex gap-4 align-items-center">
 
                         <h3 class="text-left">Profiles list</h3>
-                        <Button icon="pi pi-plus" rounded @click="onAddNewProfile()" />
+                        <Button icon="pi pi-plus" rounded
+                            @click="onAddNewProfile()" />
                     </div>
                     <p v-if="isLoading">Loading...</p>
                     <!-- <p v-if="personDetails.profiles.length === 0">Loading...</p> -->
 
-                    <DataTable selectionMode="single" v-else :value="personDetails.profiles" @rowClick="onProfileRowClick">
-                        <Column v-for="col of columns" :key="col.field" :field="col.field" :header="col.header"></Column>
+                    <DataTable selectionMode="single" v-else
+                        :value="personDetails.profiles"
+                        @rowClick="onProfileRowClick">
+                        <Column v-for="col of columns" :key="col.field"
+                            :field="col.field" :header="col.header"></Column>
                         <Column key="actions" field="actions" header="Actions">
 
                             <!-- <template #body="slotProps">
@@ -122,7 +130,7 @@ const onFeedRowClick = async (event: any) => {
             },
 
             onClose: () => {
-                getPersonDetails();
+                getPerson();
             },
         });
         feedDetails.value = response as UpworkRssFeedDetails;
@@ -160,7 +168,7 @@ const onProfileRowClick = async (event: any) => {
             },
 
             onClose: () => {
-                getPersonDetails();
+                getPerson();
             },
         });
         profileDetails.value = response as ProfileDetails;
@@ -195,7 +203,7 @@ const onAddNewFeed = async () => {
         },
 
         onClose: () => {
-            getPersonDetails();
+            getPerson();
         },
     });
     // ... handle the fetched data
@@ -220,7 +228,7 @@ const onAddNewProfile = async () => {
         },
 
         onClose: () => {
-            getPersonDetails();
+            getPerson();
         },
     });
     // ... handle the fetched data
@@ -235,16 +243,16 @@ onMounted(async () => {
     personId = useRoute().params.id as string;
 
     console.log('This is person ID', personId);
-    await getPersonDetails();
+    await getPerson();
 });
 
 isLoading.value = true;
 
-const getPersonDetails = async () => {
+const getPerson = async () => {
     isLoading.value = true;
-    console.log('This is person ID', personId)
+    // console.log('This is person ID', personId)
     try {
-        const response = await PersonsService.getPersonDetails(personId as string);
+        const response = await PersonsService.getPerson();
         personDetails.value = response as PersonDetails;
         console.log(response as PersonDetails);
         // ... handle the fetched data

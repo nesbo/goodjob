@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 class PersonsService {
-    async getPerson(): Promise<Person[]> {
+    async getPerson(): Promise<PersonDetails> {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + '/person', { withCredentials: true });
             console.log('Person: ', response.data);

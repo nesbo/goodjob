@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import PersonsPage from './views/PersonsPage.vue'
 import { onBeforeMount } from 'vue';
 // const kento = null;
 onBeforeMount(() => {
@@ -18,7 +17,6 @@ onBeforeMount(() => {
   <RouterView />
   <Toast />
   <DynamicDialog />
-  <PersonsPage />
 </template>
 
 <style>
