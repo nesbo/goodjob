@@ -76,12 +76,12 @@ services.AddAuthentication("Bearer")
         options.RequireHttpsMetadata = false;
     });
 
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+//JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.ForwardChallenge = "oidc";
-
+        
         options.Events.OnRedirectToAccessDenied = ctx =>
         {
             ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
@@ -90,7 +90,7 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     })
     .AddOpenIdConnect("oidc", options =>
     {
-        
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.Authority = authenticationAuthority;
         options.ClientId = "goodjob-api";
         options.ResponseType = OpenIdConnectResponseType.Code;
@@ -99,9 +99,8 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         options.Scope.Add(AuthConstants.ProfileScope);
         options.Scope.Add(AuthConstants.OpenIdScope);
         options.Scope.Add(AuthConstants.UserIdScope);
-        options.ClaimActions.MapAll();
-        options.SaveTokens = true;
         options.GetClaimsFromUserInfoEndpoint = true;
+        options.SaveTokens = true;
 
         options.Events.OnRedirectToIdentityProvider = ctx =>
         {
