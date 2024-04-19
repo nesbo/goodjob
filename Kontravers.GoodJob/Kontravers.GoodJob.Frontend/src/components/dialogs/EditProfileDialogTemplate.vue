@@ -1,4 +1,3 @@
-
 <template>
     <Card>
         <template #content>
@@ -6,29 +5,36 @@
                 <div class="flex flex-column gap-4 w-4">
 
                     <div class="flex flex-column gap-2 justify-content-start">
-                        <label class="text-left	" for="title">Profile title</label>
-                        <InputText id="title" v-model="form.feed.title" aria-describedby="title-help" />
+                        <label class="text-left	" for="title">Profile
+                            title</label>
+                        <InputText id="title" v-model="form.feed.title"
+                            aria-describedby="title-help" />
                         <!-- <small id="username-help">Enter your username to reset your password.</small> -->
                     </div>
 
                     <div class="flex flex-column gap-2 justify-content-start">
-                        <label class="text-left	" for="title">Skils (separate with comma)</label>
-                        <InputText id="title" v-model="form.feed.skills" aria-describedby="title-help" />
+                        <label class="text-left	" for="title">Skils (separate
+                            with comma)</label>
+                        <InputText id="title" v-model="form.feed.skills"
+                            aria-describedby="title-help" />
                         <!-- <small id="username-help">Enter your username to reset your password.</small> -->
                     </div>
                 </div>
 
                 <div class="flex flex-column gap-2 justify-content-start  w-8">
                     <label class="text-left	" for="title">Description</label>
-                    <Textarea id="title" v-model="form.feed.description" aria-describedby="title-help" rows="20" />
+                    <Textarea id="title" v-model="form.feed.description"
+                        aria-describedby="title-help" rows="20" />
                     <!-- <small id="username-help">Enter your username to reset your password.</small> -->
                 </div>
             </div>
         </template>
         <template #footer>
             <div class="flex flex-row justify-content-end gap-4">
-                <Button label="Secondary" @click="onBack" severity="secondary">back</Button>
-                <Button label="Primary" @click="onSaveProfile">save changes</Button>
+                <Button label="Secondary" @click="onBack"
+                    severity="secondary">back</Button>
+                <Button label="Primary" @click="onSaveProfile">save
+                    changes</Button>
             </div>
         </template>
     </Card>
@@ -90,7 +96,7 @@ const onSaveProfile = async () => {
 const addNewProfile = async () => {
     console.log('ADD NEW PROFILE', form.value.personId, form.value.feed);
     try {
-        await ProfileService.addNewProfile(form.value.personId, form.value.feed);
+        await ProfileService.addNewProfile(form.value.feed);
         toast.add({
             severity: 'success',
             summary: 'New profile added',
@@ -104,7 +110,7 @@ const addNewProfile = async () => {
 
 const updateProfile = async () => {
     try {
-        await ProfileService.updateProfileDetails(form.value.personId, form.value.feed);
+        await ProfileService.updateProfileDetails(form.value.feed);
         toast.add({
             severity: 'success',
             summary: 'Profile updated',

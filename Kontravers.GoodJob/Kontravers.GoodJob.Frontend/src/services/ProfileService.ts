@@ -2,9 +2,9 @@ import axios from 'axios';
 
 class ProfileService {
 
-    async getProfileDetails(id: String, feedId: String): Promise<ProfileDetails> {
+    async getProfileDetails(id: String): Promise<ProfileDetails> {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/persons/' + id + '/profiles/' + feedId);
+            const response = await axios.get(import.meta.env.VITE_API_URL + '/person/profiles/' + id, { withCredentials: true });
             console.log('Feed details:', response.data);
             return response.data;
         } catch (error) {
@@ -13,7 +13,7 @@ class ProfileService {
         }
     }
 
-    async addNewProfile(id: String,
+    async addNewProfile(
         data: ProfileDetails): Promise<void> {
 
         const dataToSend =
@@ -24,14 +24,14 @@ class ProfileService {
         }
 
         try {
-            await axios.post(import.meta.env.VITE_API_URL + '/persons/' + id + '/profiles/', dataToSend);
+            await axios.post(import.meta.env.VITE_API_URL + '/person/profiles/', dataToSend, { withCredentials: true });
         } catch (error) {
             console.error('Error fetching persons:', error);
             throw error;
         }
     }
 
-    async updateProfileDetails(id: String,
+    async updateProfileDetails(
         data: ProfileDetails): Promise<void> {
 
         const dataToSend =
@@ -42,7 +42,7 @@ class ProfileService {
         }
 
         try {
-            await axios.put(import.meta.env.VITE_API_URL + '/persons/' + id + '/profiles/' + data.id, dataToSend);
+            await axios.put(import.meta.env.VITE_API_URL + '/person/profiles/' + data.id, dataToSend, { withCredentials: true });
         } catch (error) {
             console.error('Error fetching persons:', error);
             throw error;

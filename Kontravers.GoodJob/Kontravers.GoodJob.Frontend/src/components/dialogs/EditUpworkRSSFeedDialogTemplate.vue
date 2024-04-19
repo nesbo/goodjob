@@ -254,7 +254,7 @@ const onSaveRssFeed = async () => {
 
 const createRssFeed = async () => {
     try {
-        await FeedService.addNewUpworkRssFeed(form.value.personId, form.value.feed);
+        await FeedService.addNewUpworkRssFeed(form.value.feed);
         toast.add({
             severity: 'success',
             summary: 'RSS Feed added',
@@ -268,7 +268,7 @@ const createRssFeed = async () => {
 
 const updateRssFeed = async () => {
     try {
-        await FeedService.updateUpworkRssFeedDetails(form.value.personId, form.value.feed);
+        await FeedService.updateUpworkRssFeedDetails(form.value.feed);
         toast.add({
             severity: 'success',
             summary: 'RSS Feed updated',

@@ -9,7 +9,7 @@ onBeforeMount(() => {
   console.log('At this point, events and lifecycle have been initialized.')
 })
 
-
+console.log(import.meta.env.VITE_BASE_URL);
 </script>
 
 <template>
