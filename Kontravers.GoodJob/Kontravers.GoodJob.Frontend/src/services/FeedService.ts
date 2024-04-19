@@ -2,9 +2,9 @@ import axios from 'axios';
 
 class FeedService {
 
-    async getUpworkRssFeedDetails(id: String, feedId: String): Promise<UpworkRssFeedDetails> {
+    async getUpworkRssFeedDetails(id: String): Promise<UpworkRssFeedDetails> {
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/persons/' + id + '/upwork-rss-feeds/' + feedId);
+            const response = await axios.get(import.meta.env.VITE_API_URL + '/persons/upwork-rss-feeds/' + id, { withCredentials: true });
             console.log('Feed details:', response.data);
             return response.data;
         } catch (error) {
@@ -13,7 +13,7 @@ class FeedService {
         }
     }
 
-    async addNewUpworkRssFeed(id: String,
+    async addNewUpworkRssFeed(
         data: UpworkRssFeedDetails): Promise<void> {
 
         const dataToSend =
@@ -27,14 +27,14 @@ class FeedService {
         }
 
         try {
-            await axios.post(import.meta.env.VITE_API_URL + '/persons/' + id + '/upwork-rss-feeds/', dataToSend);
+            await axios.post(import.meta.env.VITE_API_URL + '/person/upwork-rss-feeds/', dataToSend, { withCredentials: true });
         } catch (error) {
             console.error('Error fetching persons:', error);
             throw error;
         }
     }
 
-    async updateUpworkRssFeedDetails(id: String,
+    async updateUpworkRssFeedDetails(
         data: UpworkRssFeedDetails): Promise<void> {
 
         const dataToSend =
@@ -48,7 +48,7 @@ class FeedService {
         }
 
         try {
-            await axios.put(import.meta.env.VITE_API_URL + '/persons/' + id + '/upwork-rss-feeds/' + data.id, dataToSend);
+            await axios.put(import.meta.env.VITE_API_URL + '/person/upwork-rss-feeds/' + data.id, dataToSend, { withCredentials: true });
         } catch (error) {
             console.error('Error fetching persons:', error);
             throw error;

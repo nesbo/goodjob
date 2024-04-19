@@ -1,6 +1,5 @@
 <template>
-    <div>
-
+    <div v-if="personDetails">
         <Card class="mb-4">
             <template #content class="text-left">
                 <span class="text-left">
@@ -73,6 +72,9 @@
         </div>
 
     </div>
+    <div v-else>
+        <Button rounded @click="onlogin()"> Login </Button>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -96,23 +98,20 @@ const columns = [
 
 ];
 
-const personDetails = ref<PersonDetails>({
-    id: '',
-    name: '',
-    email: '',
-    organisationId: '',
-    upworkRssFeeds: [],
-    profiles: []
-});
+const personDetails = ref<PersonDetails>({} as PersonDetails);
 const error = ref<string | null>(null);
 const isLoading = ref<boolean>(false);
 const feedDetails = ref<any>({});
 const profileDetails = ref<any>({});
 
+const onlogin = () => {
+    window.location.href = `https://goodjob-api.kontrave.rs/Account/SignIn?returnUrl=${import.meta.env.VITE_BASE_URL}`;
+};
+
 const onFeedRowClick = async (event: any) => {
 
     try {
-        const response = await FeedService.getUpworkRssFeedDetails(personDetails.value.id as string, event.data.id as string);
+        const response = await FeedService.getUpworkRssFeedDetails(event.data.id as string);
         console.log('Pre dialoga', response);
 
         dialog.open(EditUpworkRSSFeedDialogTemplate, {
@@ -148,7 +147,7 @@ const onFeedRowClick = async (event: any) => {
 const onProfileRowClick = async (event: any) => {
 
     try {
-        const response = await ProfileService.getProfileDetails(personDetails.value.id as string, event.data.id as string);
+        const response = await ProfileService.getProfileDetails(event.data.id as string);
         console.log('Pre dialoga', response);
 
         dialog.open(
@@ -244,6 +243,7 @@ onMounted(async () => {
 
     console.log('This is person ID', personId);
     await getPerson();
+    console.log('PERSON VALUE REF in mounted:', personDetails.value);
 });
 
 isLoading.value = true;
@@ -254,7 +254,7 @@ const getPerson = async () => {
     try {
         const response = await PersonsService.getPerson();
         personDetails.value = response as PersonDetails;
-        console.log(response as PersonDetails);
+        console.log('PERSON:', response as PersonDetails, 'PERSON VALUE REF:', personDetails.value);
         // ... handle the fetched data
     } catch (err) {
         error.value = err as string;

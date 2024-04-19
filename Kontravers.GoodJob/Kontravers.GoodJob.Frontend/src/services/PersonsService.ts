@@ -5,16 +5,6 @@ class PersonsService {
         try {
             const response = await axios.get(import.meta.env.VITE_API_URL + '/person', { withCredentials: true });
             console.log('Person: ', response.data);
-            return response.data.items;
-        } catch (error) {
-            console.error('Error fetching persons:', error);
-            throw error;
-        }
-    }
-    async getPersonDetails(id: String): Promise<PersonDetails> {
-        try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/person/' + id);
-            console.log('Person Details:', response.data);
             return response.data;
         } catch (error) {
             console.error('Error fetching persons:', error);
