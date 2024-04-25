@@ -1,5 +1,5 @@
 <template>
-    <div v-if="personDetails">
+    <div v-if="personDetails && Object.keys(personDetails).length > 0">
         <Card class="mb-4">
             <template #content class="text-left">
                 <span class="text-left">
